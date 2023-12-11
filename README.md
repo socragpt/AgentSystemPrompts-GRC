@@ -1,5 +1,5 @@
 # Start Here
-The information below is intended to be used for coordinating AI agents. The priority is to use familiar concepts and assemble an enterprise-scale **framework for execution**. By establishing expectations upfront, the behavior of a agents can be measured against a baseline. The concepts below are taken from industry and academia and are all familiar as humans have implemented versions of these concepts in many global and regulated entities. Can AI Agents act in a discipined way? Or, will they rebel against the "buacracy" of the system?
+The information below is intended to be used for coordinating AI agents. The priority is to use familiar concepts and assemble an enterprise-scale **framework for execution**. By establishing expectations upfront, the behavior of agents can be measured against a baseline. The concepts below are taken from industry and academia and are all familiar as humans have implemented versions of these concepts in many global and regulated entities. Can AI Agents act in a discipined way? Or, will they rebel against the "buacracy" of the system?
 
 # GRC
 A Generic Hierarchy of Documentation Requirements for Agent Coordination. 
