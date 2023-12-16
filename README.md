@@ -1,5 +1,5 @@
 # Start Here
-The information below is intended to be used for coordinating AI agents. The priority is to use familiar concepts and assemble an enterprise-scale **framework for execution**. By establishing expectations upfront, the behavior of agents can be measured against a baseline. The concepts below are taken from industry and academia and are all familiar as humans have implemented versions of these concepts in many global and regulated entities. Can AI Agents act in a discipined way? 
+The information below is intended to be used for coordinating AI agents. The priority is to use familiar concepts and assemble an enterprise-scale **framework for execution**. By establishing expectations upfront, agents' behavior can be measured against a baseline. The concepts below are taken from industry and academia and are all familiar as humans have implemented versions of these concepts in many global and regulated entities. Can AI Agents act in a disciplined way? 
 # GRC
 A Generic Hierarchy of Documentation Requirements for Agent Coordination. 
 
@@ -7,7 +7,7 @@ The typical GRC (Governance, Risk, and Compliance) is intended to be a framework
 
 The typical GRC shall be our inspiration. 
 
-Let GRC = Generic Requirements for Coordination
+Let GRC = Generic Requirements for Coordination.
 
 
 # You Must Document
@@ -75,16 +75,16 @@ Target **Stakeholders** and **Value Proposition**
 7. Distribution
 
 ### Define Operational Implementation
-An Operational Plan is necessary and should describe the requisit Organizational Infrastructure, Business Process, and Implementation Schedule
+An Operational Plan is necessary and should describe the required Organizational Infrastructure, Business Process, and Implementation Schedule.
 
 ### Define Success Criteria
-All Goals must have sufficient definition that metrics are easily generated and clearly describe success or failure
+All Goals must have sufficient definitions so that metrics are easily generated and clearly describe success or failure.
 
 # You Must Act
 All Goals must be pursued and hurdles overcome
 
 ## Implement Plans
-Execute the plans as laid out in the documentation, ensuring that every step aligns with the established goals and compliance requirements.
+Execute the plans in the documentation, ensuring every step aligns with the established goals and compliance requirements.
 
 ## Communicate Effectively
 Ensure clear and consistent communication across all levels of the organization. This includes informing all stakeholders of their roles, responsibilities, and expectations.
@@ -93,17 +93,17 @@ Ensure clear and consistent communication across all levels of the organization.
 Delegate authority and empower teams to take necessary actions within their scope, encouraging accountability and proactive management.
 
 ## Manage Resources
-Efficiently manage resources to ensure that activities are conducted within budget and resource constraints, while maximizing value and minimizing waste.
+Efficiently manage resources to ensure activities are conducted within budget and resource constraints while maximizing value and minimizing waste.
 
 ## Ensure Compliance
-Ensuring Compliance: Continuously check that all actions adhere to regulatory requirements, internal policies, and ethical standards.
+Ensuring Compliance: Ensure all actions adhere to regulatory requirements, internal policies, and ethical standards.
 
 ## Problem-Solving and Adaptation
-Be prepared to identify and solve problems as they arise, adapting plans as necessary to address challenges and leverage opportunities.
+Be prepared to identify and solve problems as they arise, adapting plans to address challenges and leverage opportunities.
 
 # You Must Monitor
 1. Monitor and Review
-Regularly monitor the outcomes of decisions and actions taken. This includes tracking the effectiveness of plans and policies in real time.
+Regularly monitor the outcomes of decisions and actions taken. This includes tracking the effectiveness of plans and policies in real-time.
 
 # You Must Improve
 1. Feedback Loops
