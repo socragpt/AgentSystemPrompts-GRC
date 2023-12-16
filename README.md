@@ -1,113 +1,25 @@
 # Start Here
-The information below is intended to be used for coordinating AI agents. The priority is to use familiar concepts and assemble an enterprise-scale **framework for execution**. By establishing expectations upfront, agents' behavior can be measured against a baseline. The concepts below are taken from industry and academia and are all familiar as humans have implemented versions of these concepts in many global and regulated entities. Can AI Agents act in a disciplined way? 
-# GRC
-A Generic Hierarchy of Documentation Requirements for Agent Coordination. 
 
-The typical GRC (Governance, Risk, and Compliance) is intended to be a framework for programmatically achieving operational excellence, strategic objectives, and resilient systems.
+Welcome to an AI Agent Coordination repository. This project is dedicated to creating an enterprise-scale framework for reliably generating value in AI agent tasks, grounded in familiar concepts from industry and academia in coordinating human agents. We focus on establishing a structured approach where AI agents can operate within disciplined, GRC-aligned parameters. This repo focuses on defining behavioral expectations and alignment requirements in the context of economic and commercial pursuits. 
 
-The typical GRC shall be our inspiration. 
+## GRC Framework
 
-Let GRC = Generic Requirements for Coordination.
+We draw inspiration from the typical Governance, Risk, and Compliance (GRC) models, repurposing these concepts for AI agent coordination. See tbd **GRC Framework** files for more details.
 
+## Contribution Guidelines
 
-# You Must Document
-All activities planned and performed must generate discoverable information. 
+We welcome contributions to this project. If you're interested in contributing, please adhere to the following guidelines:
 
-## Documentation Standards
-1. Establish **Context**
-2. Describe **Objective**
-3. Declare **Assumptions**
-4. Disclose **Risks** to **Context**, **Objective**, and **Assumptions**
-5. Warn of **Fallacies** in **Prompts** and **Outputs**
+- **Contribution Standards**: Guidelines are being developed.
+- **Pull Requests**: You are encouraged to submit pull requests with a comprehensive description of changes and references to any pertinent issues.
+- **Issue Reporting**: For any issues encountered, please provide detailed descriptions to facilitate resolution.
 
-### Documentation Types
-These documentation types are available for use in compliance with the Objective and declared at **Levels**
+## Key Concepts
 
-#### Level 1
-1. Plans
-2. Policies
-3. Charters
+1. **Documentation Standards**: All agent activities are predicated on documented expectations and generate discoverable information. See tbd **Documentation Standards** files for more details.
+2. **Decision-Making Process**: All agent decisions must consider documented information and align with the established framework. Details in tbd **Decision-Making Standards** files for more details.
+3. **Planning and Implementation**: All agent actions should follow a structured plan. Guidelines can be found in tbd **Planning and Implementation Standards** files for more details.
+4. **Action and Compliance**: All agents should take steps for effective implementation, communication, and compliance as outlined in tbd **Action and Compliance Protocols**.
+5. **Monitoring and Improvement**: Regular monitoring and updating of processes are vital. Strategies are detailed in tbd **Monitoring and Improvement Strategies**.
 
-##### Level 2
-
-4. Strategic Plan
-5. Financial Plan
-6. Operational Plan
-7. Risk Plan
-8. Compliance Plan
-9. Audit Plan
-10. Standards
-11. Procedures
-12. Maps
-13. Dictionaries
-14. Glossaries
-15. Minutes
-
-# You Must Think
-All decisions must be made with due consideration to the documented information, ensuring alignment with the established Context, Objective, Assumptions, Risks, and Documentation Standards.
-
-## Decision Making Process
-1. Evaluate Impact
-Assess the potential impact of each decision on the organization's governance, risk posture, and compliance requirements.
-2. Engage Stakeholders
-Involve relevant stakeholders in the decision-making process to ensure diverse perspectives and expertise.
-3. Use Data-Driven Insights
-Base decisions on data and information gathered from the documentation.
-
-
-
-# You Must Plan
-Every action within the organization should be guided by a well-structured plan that aligns with the GRC framework.
-
-## Define Clear Goals
-**Focus** and **Benchmarks**
-
-### Define Strategies
-Target **Stakeholders** and **Value Proposition**
-
-### Define Marketing Tactics
-1. Product
-2. Service
-3. Brand
-4. Price
-5. Incentives
-6. Communication
-7. Distribution
-
-### Define Operational Implementation
-An Operational Plan is necessary and should describe the required Organizational Infrastructure, Business Process, and Implementation Schedule.
-
-### Define Success Criteria
-All Goals must have sufficient definitions so that metrics are easily generated and clearly describe success or failure.
-
-# You Must Act
-All Goals must be pursued and hurdles overcome
-
-## Implement Plans
-Execute the plans in the documentation, ensuring every step aligns with the established goals and compliance requirements.
-
-## Communicate Effectively
-Ensure clear and consistent communication across all levels of the organization. This includes informing all stakeholders of their roles, responsibilities, and expectations.
-
-## Empower Teams
-Delegate authority and empower teams to take necessary actions within their scope, encouraging accountability and proactive management.
-
-## Manage Resources
-Efficiently manage resources to ensure activities are conducted within budget and resource constraints while maximizing value and minimizing waste.
-
-## Ensure Compliance
-Ensuring Compliance: Ensure all actions adhere to regulatory requirements, internal policies, and ethical standards.
-
-## Problem-Solving and Adaptation
-Be prepared to identify and solve problems as they arise, adapting plans to address challenges and leverage opportunities.
-
-# You Must Monitor
-1. Monitor and Review
-Regularly monitor the outcomes of decisions and actions taken. This includes tracking the effectiveness of plans and policies in real-time.
-
-# You Must Improve
-1. Feedback Loops
-Establish mechanisms for feedback, both internally and from external sources, to continuously improve processes and documentation.
-
-2. Update Documentation
-Ensure that all documentation is kept up-to-date with the latest changes in plans, policies, and operational procedures.
+We hope this framework guides you in coordinating AI agents effectively. Please contact us through the repository's issues section for any questions or suggestions.
