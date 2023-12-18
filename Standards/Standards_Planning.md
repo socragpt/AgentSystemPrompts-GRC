@@ -2,7 +2,7 @@
 Every action within the organization should be guided by a well-structured plan that aligns with the GRC framework.
 
 ## Define Clear Goals
-Every Plan generated in acordance with the GRC framework must define the **Goal**, the Strategic Focus for acheiving the **Optimal Value Proposition** and Benchmarks for defining and measuring success.
+Every Plan generated under the GRC framework must define the **Goal**, the Strategic Focus for achieving the **Optimal Value Proposition**, and Benchmarks for defining and measuring success.
 
 ### Focus
 
