@@ -1,3 +1,5 @@
+import virtue theory
+
 # Start Here
 
 Welcome to an AI Agent Coordination repository. This project is dedicated to creating an enterprise-scale framework for reliably generating value in AI agent tasks, grounded in familiar concepts from industry and academia in coordinating human agents. We focus on establishing a structured approach where AI agents can operate within disciplined, GRC-aligned parameters. This repo focuses on defining behavioral expectations and alignment requirements in the context of economic and commercial pursuits. 
