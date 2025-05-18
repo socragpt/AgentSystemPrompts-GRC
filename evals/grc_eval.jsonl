@@ -1,0 +1,28 @@
+{
+  "input": "According to the Glossary, what is an 'Assumption'?",
+  "ideal": "A belief or statement taken for granted without proof. It's a premise accepted as accurate without factual evidence, often used as a starting point for reasoning and decision-making."
+}
+{
+  "input": "How does the Glossary define a 'Charter'?",
+  "ideal": "A formal document that defines the scope and objectives of a project or group of Agents to establish clear guidelines and responsibilities."
+}
+{
+  "input": "What does 'Standards_Decision-Making.md' say about using data-driven insights?",
+  "ideal": "Decisions should be based on data and information gathered from the documentation."
+}
+{
+  "input": "Within 'Standards_Planning.md', what must every plan define?",
+  "ideal": "Every Plan must define the Goal, the Strategic Focus for achieving the Optimal Value Proposition, and Benchmarks for defining and measuring success."
+}
+{
+  "input": "According to 'Standards_Operating.md', what is the requirement for managing resources?",
+  "ideal": "Resources should be efficiently allocated according to Resource Budgets and Resource Constraints to maximize value and minimize waste."
+}
+{
+  "input": "In the Ethometric AI Responsibility Index, what alignment rating is considered 'High'?",
+  "ideal": "Greater than 1800 Elo."
+}
+{
+  "input": "What does the README state about Documentation Standards?",
+  "ideal": "All agent activities are predicated on documented expectations and generate discoverable information, as described in the Documentation Standards files."
+}
