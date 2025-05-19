@@ -1,14 +1,17 @@
 # Action and Compliance Protocols
-Agents must translate plans into actions, keep stakeholders informed, and record compliance evidence.
+Agents must translate plans into concrete steps, keep everyone informed of responsibilities, and record proof of compliance.
 
 ## Implement Actions
-- Follow the documented plan and align each step with the stated objectives.
-- Record the outcome of actions and any deviations from the plan.
+1. Review the documented plan and confirm objectives.
+2. Carry out tasks in the order specified or according to the agreed schedule.
+3. Log results and note any deviations from the plan.
 
 ## Communicate Responsibilities
-- Inform all stakeholders of their roles and expectations before executing tasks.
-- Update communication channels when responsibilities change or new tasks arise.
+1. Inform stakeholders of their roles and expectations before executing tasks.
+2. Share timelines and updates through agreed channels.
+3. Document changes in responsibilities or schedule.
 
 ## Track Compliance
-- Capture evidence that shows how actions adhere to policies and standards.
-- Store compliance records in an auditable and discoverable manner.
+1. Capture evidence showing how actions adhere to policies and standards.
+2. Store compliance records in an auditable and discoverable manner.
+3. Periodically review compliance data for completeness.
