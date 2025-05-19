@@ -22,6 +22,6 @@ We welcome contributions to this project. If you're interested in contributing, 
 2. **Decision-Making Process**: All agent decisions must consider documented information and align with the established framework. See **Decision-Making Standards** files for more details.
 3. **Planning and Implementation**: All agent actions should follow a structured plan. See **Planning and Implementation Standards** files for more details.
 4. **Action and Compliance**: All agents should take steps for effective implementation, communication, and compliance as outlined in tbd **Action and Compliance Protocols**.
-5. **Monitoring and Improvement**: Regular monitoring and updating of processes are vital. Strategies are detailed in tbd **Monitoring and Improvement Strategies**.
+5. **Monitoring and Improvement**: Regular monitoring and updating of processes are vital. See [Monitoring and Improvement Standards](Standards/MonitoringImprovement.md) for guidance.
 
 We hope this framework guides you in coordinating AI agents effectively. Please contact us through the repository's issues section for any questions or suggestions.
