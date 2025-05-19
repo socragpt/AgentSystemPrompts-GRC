@@ -26,3 +26,27 @@
   "input": "What does the README state about Documentation Standards?",
   "ideal": "All agent activities are predicated on documented expectations and generate discoverable information, as described in the Documentation Standards files."
 }
+{
+  "input": "According to the Glossary, how is an 'Audit' defined?",
+  "ideal": "A systematic review to ensure accuracy and compliance in financial and operational activities is essential in the GRC framework for maintaining integrity and transparency."
+}
+{
+  "input": "According to the Glossary, how is a 'Budget' defined?",
+  "ideal": "A financial plan outlining expected income and expenses is a cornerstone for resource allocation and financial management."
+}
+{
+  "input": "In 'Standards_Documentation.md', what is the first step of the Documentation Standards?",
+  "ideal": "Establish Context."
+}
+{
+  "input": "What does 'Standards_Documentation.md' instruct regarding fallacies?",
+  "ideal": "Warn of Fallacies in Prompts and Outputs."
+}
+{
+  "input": "Under the 'You Must Monitor' section of 'Standards_Operating.md', what action is required?",
+  "ideal": "Regularly monitor the outcomes of decisions and actions taken, tracking the effectiveness of plans and policies in real time."
+}
+{
+  "input": "According to 'Standards_Planning.md', what must an Operational Plan describe?",
+  "ideal": "The required Organizational Infrastructure, Business Process, and Implementation Schedule."
+}
