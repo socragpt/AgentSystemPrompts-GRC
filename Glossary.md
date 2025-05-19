@@ -35,25 +35,71 @@ Predefined standards or outcomes anticipated from processes or agents
 Erroneous arguments or misconceptions
 
 # Focus
+Concentrated attention on priority tasks or objectives to drive meaningful results.
+
 # GRC
+Governance, Risk, and Compliance; the integrated approach to managing obligations and objectives.
+
 # Goal
+A desired result or milestone that guides strategic and operational efforts.
+
 # Impact
+The influence or effect an action or event has on objectives or stakeholders.
+
 # Minutes
+Written records summarizing discussions, decisions, and action items from meetings.
+
 # Monitor
+To observe performance or compliance continuously for deviations or issues.
+
 # Objective
+A clear, measurable step toward achieving a goal.
+
 # Output
+The tangible product, report, or deliverable produced by a process.
+
 # Plan
+A structured outline of actions and resources for reaching objectives.
+
 # Policy
+A formal guideline or rule directing consistent decisions and actions.
+
 # Procedure
+Detailed steps describing how to perform a specific task or process.
+
 # Process
+A series of actions or operations leading to a particular result.
+
 # Product
+A good or service generated to meet a need or solve a problem.
+
 # Prompt
+A cue or input that initiates a response or action.
+
 # Requirement
+A condition or capability that must be satisfied or possessed.
+
 # Resource
+People, time, funds, or materials available for accomplishing tasks.
+
 # Responsibility
+The obligation to perform duties and be answerable for outcomes.
+
 # Risk
+Possibility of loss or harm that could affect objectives.
+
 # Stakeholder
+An individual or group with an interest in the organization's activities.
+
 # Standard
+An agreed-upon benchmark for quality, performance, or compliance.
+
 # Strategy
+A long-term approach that aligns resources and actions with goals.
+
 # Tactic
+A specific, shorter-term method used to execute a strategy.
+
 # Value
+The benefit or importance derived from a product, service, or action.
+
