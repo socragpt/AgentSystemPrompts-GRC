@@ -6,7 +6,7 @@ Welcome to an AI Agent Coordination repository. This project is dedicated to cre
 
 ## GRC Framework
 
-We draw inspiration from the typical Governance, Risk, and Compliance (GRC) models, repurposing these concepts for AI agent coordination. See tbd **GRC Framework** files for more details.
+We draw inspiration from the typical Governance, Risk, and Compliance (GRC) models, repurposing these concepts for AI agent coordination. See the [GRC Framework](Standards/GRCFramework.md) for more details.
 
 ## Contribution Guidelines
 
