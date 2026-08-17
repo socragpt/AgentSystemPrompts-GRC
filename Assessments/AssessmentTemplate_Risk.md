@@ -57,7 +57,17 @@ Residual Risk can be estimated by combining the inherent risk score with the inv
 Residual Risk = Inherent Risk × (6 - Control Effectiveness)
 ```
 
-The resulting value is mapped back to the rating scale to determine the final risk level.
+Unless an organization defines different approved bands, map the resulting value as follows:
+
+| Residual Score | Rating |
+| -------------- | ------ |
+| 1–4 | Low |
+| 5–8 | Minor |
+| 9–12 | Moderate |
+| 13–16 | Major |
+| 17–25 | Severe |
+
+The assessment must identify the scoring owner, evidence, risk tolerance, and rationale. A numerical score supports judgment; it does not replace review of impact, affected stakeholders, or uncertainty.
 
 ### Example Risk Table
 
@@ -65,7 +75,7 @@ The resulting value is mapped back to the rating scale to determine the final ri
 | --------------- | ------------- | -------------------- | ------------- |
 | Example Process | 4 | 3 | 12 |
 
-Residual risk scores above the organization's tolerance may trigger additional mitigation steps, such as stronger controls or risk transfer.
+The example produces a residual score of 12, which maps to **Moderate** under the default bands. Residual risk scores above the organization's approved tolerance require an assigned response and owner.
 
 ### Risk Response
 

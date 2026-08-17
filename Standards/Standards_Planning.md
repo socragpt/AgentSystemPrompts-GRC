@@ -5,10 +5,10 @@ Every action within the organization should be guided by a well-structured plan 
 Every Plan generated under the GRC framework must define the **Goal**, the Strategic Focus for achieving the **Optimal Value Proposition**, and Benchmarks for defining and measuring success.
 
 ### Focus
-
+Define the priority outcomes, exclusions, and tradeoffs that keep the Plan within its authorized scope.
 
 ### Benchmarks
-
+For each success criterion, define a baseline, target, measurement method, owner, and review interval.
 ### Define Strategies
 Target **Stakeholders** and **Value Proposition**
 

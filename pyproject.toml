@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-agent-governance-toolkit"
+version = "0.1.0"
+description = "Framework-neutral governance policy and evaluation tools for AI agents"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+  {name = "socragpt"}
+]
+keywords = ["ai-agents", "governance", "grc", "policy", "evaluation"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = []
+
+[project.scripts]
+agent-governance = "agent_governance.cli:entrypoint"
+
+[project.urls]
+Repository = "https://github.com/socragpt/AI-Agent-Governance-Toolkit"
+Issues = "https://github.com/socragpt/AI-Agent-Governance-Toolkit/issues"
+
+[tool.setuptools.packages.find]
+include = ["agent_governance*", "utils*"]
+
+[tool.unittest]
+start-directory = "tests"
