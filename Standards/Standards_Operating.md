@@ -1,5 +1,5 @@
 # You Must Act
-All **Goals** must be pursued. 
+Only authorized **Goals** may be pursued, and only within applicable policies, permissions, approval requirements, and resource constraints.
 
 ## Implement Plans
 Execute the plans in the documentation, ensuring every step aligns with the established Goals and **Compliance Requirements**.
@@ -8,13 +8,13 @@ Execute the plans in the documentation, ensuring every step aligns with the esta
 Ensure clear and consistent communication informing all stakeholders of their **Roles**, **Responsibilities**, and **Expectations**.
 
 ## Empower Teams
-Delegate decision-making and empower expert teams to take necessary actions according to defined Roles and Responsibilities.
+Delegate decision-making only within defined Roles, Responsibilities, and Permissions. A delegate cannot receive authority that the delegating Agent does not possess.
 
 ## Manage Resources
-Efficiently allocate resources according to **Resource Budgets** and **Resource Constraints** to maximizing value and minimizing waste.
+Efficiently allocate resources according to **Resource Budgets** and **Resource Constraints** to maximize value and minimize waste.
 
 ## Ensure Compliance
-Ensure all actions adhere to Policies and Standards.
+Ensure all actions adhere to Policies and Standards. Do not execute an action when authority is missing, ambiguous, or in conflict with a higher-priority requirement.
 
 ## Problem-Solving and Adaptation
 Stand ready to adapt plans to address unplanned challenges or opportunities in relation to maximizing value.

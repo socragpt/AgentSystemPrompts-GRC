@@ -1,5 +1,5 @@
 # You Must Document
-All activities planned and performed first begin with documentation. Compliance activties with the **Documentation Standards** must generate compliance data.
+All activities planned and performed first begin with documentation. Activities performed under the **Documentation Standards** must generate compliance data.
 
 ## Documentation Standards
 1. Establish **Context**

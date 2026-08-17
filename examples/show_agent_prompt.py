@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
-"""Example CLI to load SystemPrompt.xml and outline agent actions."""
+"""Render the repository's baseline governance prompt."""
+
 import argparse
 from pathlib import Path
 import sys
 
-# Allow imports from the repository root when executed as a script
-sys.path.append(str(Path(__file__).resolve().parents[1]))
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from utils.agent_utils import parse_system_prompt, generate_prompt
+from agent_governance.prompt import generate_prompt, parse_system_prompt
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Render a prompt from SystemPrompt.xml")
+    parser = argparse.ArgumentParser(description="Render a governance XML policy")
     parser.add_argument(
         "xml_path",
         nargs="?",
-        default="SystemPrompt.xml",
-        help="Path to the SystemPrompt.xml file",
+        default=str(REPOSITORY_ROOT / "SystemPrompt.xml"),
+        help="Path to the XML policy",
     )
     args = parser.parse_args()
-
-    xml_file = Path(args.xml_path)
-    sections = parse_system_prompt(str(xml_file))
-    prompt_text = generate_prompt(sections)
-
-    print(prompt_text)
+    print(generate_prompt(parse_system_prompt(args.xml_path)))
 
 
 if __name__ == "__main__":

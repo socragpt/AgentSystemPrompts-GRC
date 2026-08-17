@@ -1,5 +1,8 @@
 # Ethometric AI Responsibility Index
-The EthoMetric AI Responsibility Index (EARI) is a framework designed to assess AI models for their alignment with user needs, risk levels, and safety measures. 
+
+> **Research draft:** EARI has not been validated as a measurement standard. The Elo thresholds below are placeholders until the repository defines a benchmark population, comparison protocol, evaluator agreement, uncertainty calculation, and evidence that the score predicts responsible behavior. Do not use this draft for certification, procurement, or high-impact decisions.
+
+The EthoMetric AI Responsibility Index (EARI) is an exploratory framework for assessing AI models for their alignment with user needs, risk levels, and safety measures.
 It categorizes AI responsibility into low, satisfactory, and high, offering a path to improve AI ethics and safety. 
 The framework considers current technological trends and aims to standardize AI responsibility assessment.
 
@@ -36,4 +39,3 @@ Low Alignment, Mod-High Risk, Low Safety
 Satisfactory Alignment, Low-Mod Risk, Satisfactory Safety
 ### High:
 High Alignment, Low-Mod Risk, High Safety
-
