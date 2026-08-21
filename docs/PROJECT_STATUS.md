@@ -93,16 +93,25 @@ CI passed on Python 3.9, 3.11, and 3.13.
 ## Documentation Clarity Pass
 
 An STE-inspired clear-language pass updated 17 human-authored documentation
-files. The pass preserves normative keywords, requirement and reason codes,
-commands, links, identifiers, policy semantics, and implemented-versus-planned
-boundaries. It does not change source code, schemas, machine-readable fixtures,
-templates, research drafts, or runtime behavior.
+files and landed directly on `main` as `b68a526` on 2026-08-21. The pass
+preserves normative keywords, requirement and reason codes, commands, links,
+identifiers, policy semantics, and implemented-versus-planned boundaries. It
+does not change source code, schemas, machine-readable fixtures, templates,
+research drafts, or runtime behavior.
 
 The editable install, byte compilation, strict XML validation, policy
 validation, decision evaluation, 13 documentation-recall examples, Markdown
 link checks, and all 57 tests pass locally. The checker findings that remain are
 advisory results for Markdown structure, protected normative language, or terms
-of art.
+of art. The post-push
+[`main` CI run](https://github.com/socragpt/agent-governance-harness/actions/runs/32537306117)
+passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
+smoke tests.
+
+That CI run emitted non-blocking deprecation annotations because
+`actions/checkout@v4` and `actions/setup-python@v5` target Node.js 20 while the
+runner forces Node.js 24. Track this as workflow maintenance; it did not affect
+the verified result.
 
 ## Decisions That Should Survive Handoffs
 
