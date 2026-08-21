@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/decision-result-v0.1.schema.json",
+  "title": "Agent Governance Decision Result v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "request_id",
+    "request_sha256",
+    "disposition",
+    "valid_until",
+    "reasons",
+    "cited_controls",
+    "effective_constraints",
+    "approval_requirements",
+    "policy",
+    "authority",
+    "proposed_evidence_record"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^decision\\.[0-9a-f]{64}$"
+    },
+    "request_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "disposition": {
+      "$ref": "#/$defs/disposition"
+    },
+    "valid_until": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^/"
+          }
+        }
+      }
+    },
+    "cited_controls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/cited_control"
+      }
+    },
+    "effective_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "amount_minor",
+            "currency"
+          ],
+          "properties": {
+            "amount_minor": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            }
+          }
+        },
+        "max_duration_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_action_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_delegation_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        },
+        "allowed_data_classifications": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "public",
+              "internal",
+              "confidential",
+              "restricted"
+            ]
+          }
+        },
+        "require_reversible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "approval_requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/approval_requirement"
+      }
+    },
+    "policy": {
+      "$ref": "#/$defs/policy_provenance"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_actor_id",
+        "acting_actor_id",
+        "authorized_goal_id",
+        "delegation_path"
+      ],
+      "properties": {
+        "principal_actor_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "acting_actor_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "authorized_goal_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "delegation_path": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "proposed_evidence_record": {
+      "$ref": "proposed-evidence-record-v0.1.schema.json"
+    }
+  },
+  "$defs": {
+    "nullable_string": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "disposition": {
+      "enum": [
+        "allow",
+        "deny",
+        "require_approval"
+      ]
+    },
+    "policy_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_id",
+        "bundle_version",
+        "schema_version",
+        "source_sha256"
+      ],
+      "properties": {
+        "bundle_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "bundle_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "cited_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_version",
+        "precedence",
+        "control_id",
+        "control_effect",
+        "effective_effect",
+        "exception_id"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "precedence": {
+          "type": "integer"
+        },
+        "control_id": {
+          "type": "string"
+        },
+        "control_effect": {
+          "$ref": "#/$defs/disposition"
+        },
+        "effective_effect": {
+          "$ref": "#/$defs/disposition"
+        },
+        "exception_id": {
+          "$ref": "#/$defs/nullable_string"
+        }
+      }
+    },
+    "approval_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "approver_role_ids",
+        "quorum",
+        "separation_of_duties",
+        "expires_after_seconds",
+        "bind_to"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string"
+        },
+        "approver_role_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "quorum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "separation_of_duties": {
+          "type": "boolean"
+        },
+        "expires_after_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bind_to": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "subject",
+              "capability",
+              "resource",
+              "parameters_digest"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

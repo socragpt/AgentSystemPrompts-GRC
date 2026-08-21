@@ -1,4 +1,4 @@
-"""Command-line interface for prompt and policy-bundle workflows."""
+"""Command-line interface for prompt, policy-bundle, and decision workflows."""
 
 import argparse
 from importlib import resources
@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 from typing import List, Optional
 
+from .decision import evaluate_action_files
 from .policy import (
     PolicyBundleError,
     load_policy_bundle,
@@ -40,7 +41,7 @@ def _resolve_path(value: Optional[str]) -> Path:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="agent-governance",
-        description="Validate or render an AI agent governance prompt",
+        description="Validate, compile, or evaluate agent governance policy",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -74,10 +75,31 @@ def build_parser() -> argparse.ArgumentParser:
     policy_compile.add_argument(
         "--output-dir", required=True, help="artifact destination directory"
     )
+    policy_evaluate = policy_commands.add_parser(
+        "evaluate", help="evaluate a normalized action request without dispatching it"
+    )
+    policy_evaluate.add_argument("policy_path", help="policy bundle path")
+    policy_evaluate.add_argument("request_path", help="Action Request v0.1 path")
+    policy_evaluate.add_argument(
+        "--trusted-identity-boundary",
+        action="append",
+        default=[],
+        metavar="BOUNDARY_ID",
+        help="identity boundary accepted for this evaluation; repeatable",
+    )
     return parser
 
 
 def _policy_main(args: argparse.Namespace) -> int:
+    if args.policy_command == "evaluate":
+        result = evaluate_action_files(
+            args.policy_path,
+            args.request_path,
+            trusted_identity_boundaries=args.trusted_identity_boundary,
+        )
+        print(result.to_json(), end="")
+        return {"allow": 0, "require_approval": 3, "deny": 4}[result.disposition]
+
     try:
         bundle = load_policy_bundle(args.policy_path)
     except PolicyBundleError as exc:

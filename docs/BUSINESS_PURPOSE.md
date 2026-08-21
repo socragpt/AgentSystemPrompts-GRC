@@ -114,20 +114,22 @@ revenue, or product tiers.
 
 The business case should be earned through technical proof:
 
-1. **Define — policy specification and compiler (v0.1 implemented).** Versioned schemas and a
-   deterministic compiler. Invalid policy fails at a precise location, and
-   identical input produces identical artifacts.
-2. **Enforce — decisions and evidence.** Proposed actions return `allow`,
-   `deny`, or `require_approval`. Denied actions cannot dispatch, and each
-   outcome cites the controls that produced it.
-3. **Prove — behavioral evaluation and integration.** Adversarial evaluations
+1. **Define — policy specification and compiler (v0.1 implemented).** Versioned
+   schemas and a deterministic compiler. Invalid policy fails at a precise
+   location, and identical input produces identical artifacts.
+2. **Decide — decision and evidence proposal (v0.1 implemented).** Normalized
+   requests return `allow`, `deny`, or `require_approval` with stable reasons,
+   controls, constraints, provenance, and proposal-only evidence.
+3. **Enforce — approval and pre-dispatch reference.** Exact-bound approval and
+   one trusted adapter demonstrate that denied or unresolved actions cannot
+   dispatch and that execution remains within returned constraints.
+4. **Prove — behavioral evaluation and integration.** Adversarial evaluations
    and an end-to-end agent integration demonstrate that continuous integration
    can detect meaningful governance regressions before release.
 
-The immediate next proof is a decision-only enforcement slice: evaluate a
-proposed actor/capability/resource request against compiled policy and return
-`allow`, `deny`, or `require_approval` with the exact matched controls. Tool
-dispatch should remain out of scope until that decision contract is tested.
+The immediate next proof is the smallest approval-and-enforcement slice built
+on Decision Contract v0.1. It should verify an exact-bound approval and mediate
+one narrow tool call without moving framework-specific semantics into the core.
 
 ## Boundaries
 
@@ -135,5 +137,7 @@ The harness is not a certification, a substitute for legal advice, or a
 guarantee that an AI system is safe or compliant. Future mappings to external
 governance and security frameworks would indicate conceptual alignment only.
 
-For the implementation status and project contract, see the [README](../README.md),
-[Safety Model](SAFETY_MODEL.md), and [Roadmap](../ROADMAP.md).
+For the durable product contract, see the [Product Charter](PRODUCT_CHARTER.md)
+and [Product Specification](PRODUCT_SPEC.md). For current implementation and
+delivery state, see the [README](../README.md), [Safety Model](SAFETY_MODEL.md),
+[Project Status](PROJECT_STATUS.md), and [Roadmap](../ROADMAP.md).

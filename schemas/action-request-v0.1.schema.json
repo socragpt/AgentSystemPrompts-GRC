@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/action-request-v0.1.schema.json",
+  "title": "Agent Governance Action Request v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "principal",
+    "authorized_goal_id",
+    "actor_id",
+    "capability_id",
+    "action",
+    "resource_id",
+    "parameters_digest",
+    "requested_at",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "request_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_id",
+        "authentication"
+      ],
+      "properties": {
+        "actor_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "authentication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "trust_boundary_id",
+            "assertion_id",
+            "authenticated_at",
+            "expires_at"
+          ],
+          "properties": {
+            "trust_boundary_id": {
+              "$ref": "#/$defs/identifier"
+            },
+            "assertion_id": {
+              "$ref": "#/$defs/identifier"
+            },
+            "authenticated_at": {
+              "$ref": "#/$defs/timestamp"
+            },
+            "expires_at": {
+              "$ref": "#/$defs/timestamp"
+            }
+          }
+        }
+      }
+    },
+    "authorized_goal_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "actor_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "capability_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "action": {
+      "$ref": "#/$defs/identifier"
+    },
+    "resource_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "parameters_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "requested_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel_id",
+        "data_classification",
+        "expected_side_effects",
+        "reversible",
+        "requested_constraints"
+      ],
+      "properties": {
+        "channel_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "data_classification": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        },
+        "expected_side_effects": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "create",
+              "delete",
+              "delegate",
+              "external_communication",
+              "read",
+              "spend",
+              "update"
+            ]
+          }
+        },
+        "reversible": {
+          "type": "boolean"
+        },
+        "requested_constraints": {
+          "$ref": "#/$defs/requested_constraints"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "max_cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "amount_minor",
+        "currency"
+      ],
+      "properties": {
+        "amount_minor": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      }
+    },
+    "requested_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_cost",
+        "max_duration_seconds",
+        "max_action_count",
+        "max_delegation_depth"
+      ],
+      "properties": {
+        "max_cost": {
+          "$ref": "#/$defs/max_cost"
+        },
+        "max_duration_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_action_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_delegation_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        }
+      }
+    }
+  }
+}

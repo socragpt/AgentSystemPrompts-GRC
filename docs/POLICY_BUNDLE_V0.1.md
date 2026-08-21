@@ -9,9 +9,10 @@ runtime-ready decision data.
 
 This version is **not an enforcement engine**. Validating or compiling a bundle
 does not authorize an action, prevent tool dispatch, verify an identity,
-execute an approval, or create audit evidence. Until a separate enforcement
-layer exists, consumers must treat compiled output as policy data rather than a
-security boundary.
+execute an approval, or persist audit evidence. The separate
+[Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) can evaluate a normalized
+request and propose evidence, but consumers must still treat compiled output
+and unenforced decisions as data rather than a security boundary.
 
 The normative JSON Schema is
 [`schemas/policy-bundle-v0.1.schema.json`](../schemas/policy-bundle-v0.1.schema.json).
@@ -117,9 +118,10 @@ what must be covered by an eventual approval record:
 - `resource` identifies the concrete target;
 - `parameters_digest` binds approval to canonicalized action parameters.
 
-The compiler preserves these requirements but does not collect or verify an
-approval. Milestone 3 must reject a missing, expired, reused, or differently
-bound approval.
+The compiler and decision evaluator preserve these requirements but do not
+collect or verify an approval grant. A later approval and enforcement milestone
+must reject a missing, expired, reused, or differently bound grant before
+dispatch.
 
 ## Deterministic compilation contract
 
@@ -183,9 +185,13 @@ The package implements this interface:
 agent-governance policy validate policy.json
 agent-governance policy validate policy.json --format json
 agent-governance policy compile policy.json --output-dir dist
+agent-governance policy evaluate policy.json request.json \
+  --trusted-identity-boundary identity.production
 ```
 
 Validation and compilation return `0` on success and `2` for invalid input.
+Evaluation returns `0` for `allow`, `3` for `require_approval`, and `4` for
+`deny`, and writes Decision Result v0.1 JSON for every outcome.
 Existing XML `validate` and `render` commands remain available during
 migration. Compilation writes `agent-policy.txt` and `decision-data.json` to
 the requested output directory and never treats those files as an execution
@@ -200,6 +206,6 @@ an action dispatcher. It does not migrate or supersede the compatibility
 baseline in `examples/legacy/SystemPrompt.xml`.
 
 Those capabilities should be added only after the v0.1 graph, deterministic
-compiler, and failure behavior are tested. This keeps the specification small
-enough to implement with the Python standard library and stable enough to
-serve as the foundation for later enforcement.
+compiler, decision contract, and failure behavior are tested. This keeps the
+specification small enough to implement with the Python standard library and
+stable enough to serve as the foundation for later enforcement.

@@ -78,8 +78,9 @@ does not have instructional authority unless an authorized policy grants it.
 
 ## Decision
 
-A policy evaluation result. The target runtime outcomes are `allow`, `deny`,
-and `require_approval`.
+A policy evaluation result. Decision Contract v0.1 returns exactly `allow`,
+`deny`, or `require_approval`; enforcement of that result remains a separate
+boundary.
 
 ## Delegation
 
