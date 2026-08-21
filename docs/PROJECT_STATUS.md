@@ -48,7 +48,7 @@ The alpha foundation implements:
   outcome;
 - deterministic JSONL documentation-recall evaluations;
 - repository-contract, decision, policy, prompt, and evaluation tests; and
-- merged-foundation and draft Slice B CI across supported Python versions,
+- merged-foundation and merged Slice B CI across supported Python versions,
   plus a local installed-wheel smoke test for the Slice B evaluator.
 
 The alpha foundation does **not** implement:
@@ -65,7 +65,7 @@ The alpha foundation does **not** implement:
 - behavioral or adversarial model evaluation; or
 - certification or compliance guarantees.
 
-## Active Change Set
+## Delivered Milestones
 
 Pull request
 [#17](https://github.com/socragpt/agent-governance-harness/pull/17) merged
@@ -82,13 +82,13 @@ Pull request
 
 PR #17 and post-merge `main` CI passed on Python 3.9, 3.11, and 3.13.
 
-Draft pull request
-[#18](https://github.com/socragpt/agent-governance-harness/pull/18) publishes
-the Slice B change set from `codex/slice-b-decision-contract`, based on current
-`main` at `8335966`. It contains the preserved product-direction and continuity
-documentation plus the decision-contract implementation described above. The
-complete local verification baseline and PR CI on Python 3.9, 3.11, and 3.13
-pass. The PR remains unmerged and is awaiting review.
+Pull request
+[#18](https://github.com/socragpt/agent-governance-harness/pull/18) merged the
+Slice B change set from `codex/slice-b-decision-contract` into `main` as
+`5699933` on 2026-08-21. It delivered the preserved product-direction and
+continuity documentation plus the decision-contract implementation described
+above. The complete local verification baseline, PR CI, and post-merge `main`
+CI pass on Python 3.9, 3.11, and 3.13.
 
 ## Decisions That Should Survive Handoffs
 
@@ -129,8 +129,8 @@ pass. The PR remains unmerged and is awaiting review.
 
 ## Recommended Next Milestone
 
-Proceed to the smallest coherent Slice C approval-and-enforcement reference
-after draft PR #18 receives review and merges.
+Proceed to the smallest coherent Slice C approval-and-enforcement reference.
+Slice B merged through PR #18 and no longer blocks this work.
 
 1. Specify Approval Grant v0.1 binding the principal, actor, goal, capability,
    action, resource, canonical parameters, decision, policy digest, scope,
@@ -185,8 +185,8 @@ The current suite contains 57 tests. On 2026-08-21 the full local checks passed,
 including Markdown links, all three decision outcomes, malformed-file denial,
 SDK/CLI parity, deterministic conformance fixtures, and an installed-wheel CLI
 and SDK smoke test outside the repository. The wheel was built without runtime
-dependencies. Draft PR #18 CI passes on Python 3.9, 3.11, and 3.13; `main`
-remains at merged commit `8335966` until the draft is reviewed and merged.
+dependencies. PR #18 and post-merge `main` CI pass on Python 3.9, 3.11, and
+3.13. The verified `main` merge commit is `5699933`.
 
 ## Handoff Checklist
 
