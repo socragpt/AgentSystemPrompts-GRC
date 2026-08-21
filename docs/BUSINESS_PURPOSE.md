@@ -8,10 +8,10 @@ organizations authorize autonomous actions, enforce explicit constraints, and
 retain evidence explaining what happened and why.
 
 The project is currently an early alpha. It provides a governance baseline,
-policy and assessment templates, a prompt renderer, a command-line interface,
-and a deterministic evaluation harness. Runtime enforcement, approval
-workflows, and append-only decision evidence are planned capabilities, not
-current production features.
+an experimental multi-actor policy schema, a deterministic validator and
+compiler, policy and assessment templates, a command-line interface, and an
+evaluation harness. Runtime enforcement, approval workflows, and append-only
+decision evidence are planned capabilities, not current production features.
 
 ## The business problem
 
@@ -70,7 +70,7 @@ value in four ways:
   instead of rebuilding governance each time.
 - **Consistent control:** Apply the same authority and constraint rules across
   models, tools, and operating teams.
-- **Audit-ready proof:** Record which policy governed a decision, its
+- **Audit-ready evidence:** Record which policy governed a decision, its
   disposition, any approval, and the execution result.
 - **Lower switching cost:** Keep governance portable when models, agent
   frameworks, or tool stacks change.
@@ -90,7 +90,7 @@ tissue across them:
 - evidence tied to policy versions and approvals; and
 - portable controls that can follow the organization across its AI stack.
 
-The defensible capability is making governance executable and provable, rather
+The defensible capability is making governance executable and testable, rather
 than leaving it only as documentation or application-specific logic.
 
 ## Commercial hypothesis
@@ -114,7 +114,7 @@ revenue, or product tiers.
 
 The business case should be earned through technical proof:
 
-1. **Define — policy specification and compiler.** Versioned schemas and a
+1. **Define — policy specification and compiler (v0.1 implemented).** Versioned schemas and a
    deterministic compiler. Invalid policy fails at a precise location, and
    identical input produces identical artifacts.
 2. **Enforce — decisions and evidence.** Proposed actions return `allow`,
@@ -124,9 +124,10 @@ The business case should be earned through technical proof:
    and an end-to-end agent integration demonstrate that continuous integration
    can detect meaningful governance regressions before release.
 
-The immediate next proof is the versioned policy specification and compiler:
-one structured source of truth that produces deterministic artifacts and
-runtime-ready decision data.
+The immediate next proof is a decision-only enforcement slice: evaluate a
+proposed actor/capability/resource request against compiled policy and return
+`allow`, `deny`, or `require_approval` with the exact matched controls. Tool
+dispatch should remain out of scope until that decision contract is tested.
 
 ## Boundaries
 

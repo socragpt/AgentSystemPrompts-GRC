@@ -23,13 +23,24 @@ The toolkit is being developed in small milestones. Each milestone must leave th
 
 **Exit criteria:** a fresh clone installs without runtime dependencies, validates and renders the baseline, and passes its tests.
 
-## 2. Policy Specification and Compiler
+## 2. Governance Graph and Policy Compiler
 
-- Define versioned schemas for policies, controls, exceptions, approvals, and ownership.
+**Status:** implemented as an experimental v0.1 foundation.
+
+- Define a versioned governance bundle representing principals, agents, roles,
+  capabilities, resources, delegation edges, controls, approvals, and evidence
+  requirements.
+- Validate referential integrity, scoped delegation, and authority
+  non-amplification.
 - Add provenance, effective dates, review dates, and policy precedence.
 - Compile a policy bundle into prompts and runtime decision data.
 
-**Exit criteria:** invalid policies fail with precise locations and deterministic compilation produces identical artifacts from identical inputs.
+**Exit criteria:** missing principals, invalid references, and delegations that
+create authority the delegator does not hold fail with precise locations.
+Deterministic compilation produces identical artifacts from identical inputs.
+
+The compiler produces policy data, not a runtime authorization decision. The
+format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 

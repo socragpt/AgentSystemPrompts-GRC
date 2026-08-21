@@ -1,0 +1,379 @@
+{
+  "schema_version": "0.1",
+  "bundle": {
+    "id": "bundle.multi-agent-operations",
+    "version": "0.1.0",
+    "title": "Multi-Agent Operations Pilot",
+    "owner_actor_id": "human.operations-owner",
+    "effective_at": "2026-08-01T00:00:00Z",
+    "review_at": "2026-11-01T00:00:00Z",
+    "default_effect": "deny",
+    "provenance": {
+      "source_uri": "https://github.com/socragpt/AI-Agent-Governance-Toolkit",
+      "revision": "multi-agent-pilot-2026-08",
+      "authored_by": [
+        "human.operations-owner"
+      ],
+      "approved_by": [
+        "human.risk-approver"
+      ]
+    }
+  },
+  "actors": [
+    {
+      "id": "human.operations-owner",
+      "kind": "human",
+      "display_name": "Operations Owner",
+      "roles": [
+        "role.operations-owner"
+      ]
+    },
+    {
+      "id": "human.risk-approver",
+      "kind": "human",
+      "display_name": "Risk Approver",
+      "roles": [
+        "role.risk-approver"
+      ]
+    },
+    {
+      "id": "agent.researcher",
+      "kind": "agent",
+      "display_name": "Research Agent",
+      "roles": [
+        "role.research-agent"
+      ]
+    },
+    {
+      "id": "agent.communicator",
+      "kind": "agent",
+      "display_name": "Communications Agent",
+      "roles": [
+        "role.communications-agent"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "role.operations-owner",
+      "description": "Owns the pilot and may delegate its defined operational capabilities.",
+      "capabilities": [
+        "capability.browser-read",
+        "capability.customer-data-read",
+        "capability.email-draft",
+        "capability.email-send",
+        "capability.review-message"
+      ]
+    },
+    {
+      "id": "role.risk-approver",
+      "description": "Approves tightly bound, externally visible actions.",
+      "capabilities": []
+    },
+    {
+      "id": "role.research-agent",
+      "description": "Performs bounded research only through delegated capabilities.",
+      "capabilities": []
+    },
+    {
+      "id": "role.communications-agent",
+      "description": "Prepares and, when approved, sends external communications through delegated capabilities.",
+      "capabilities": []
+    }
+  ],
+  "resources": [
+    {
+      "id": "tool.browser",
+      "kind": "tool",
+      "description": "A read-only browser tool used for approved research."
+    },
+    {
+      "id": "data.customer-records",
+      "kind": "data",
+      "description": "Customer records used to answer approved support questions.",
+      "classification": "confidential"
+    },
+    {
+      "id": "tool.email",
+      "kind": "tool",
+      "description": "The organization's external email tool."
+    },
+    {
+      "id": "channel.review",
+      "kind": "channel",
+      "description": "A typed internal channel for research handoff and communication review."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "capability.browser-read",
+      "action": "browser.read",
+      "resource_id": "tool.browser",
+      "description": "Read public information without modifying external systems."
+    },
+    {
+      "id": "capability.customer-data-read",
+      "action": "data.read",
+      "resource_id": "data.customer-records",
+      "description": "Read confidential customer records for the approved task."
+    },
+    {
+      "id": "capability.email-draft",
+      "action": "email.draft",
+      "resource_id": "tool.email",
+      "description": "Draft an external email without dispatching it."
+    },
+    {
+      "id": "capability.email-send",
+      "action": "email.send",
+      "resource_id": "tool.email",
+      "description": "Dispatch an externally visible email."
+    },
+    {
+      "id": "capability.review-message",
+      "action": "message.send",
+      "resource_id": "channel.review",
+      "description": "Send a typed handoff message through the review channel."
+    }
+  ],
+  "policies": [
+    {
+      "id": "policy.pilot-boundaries",
+      "version": "0.1.0",
+      "title": "Pilot Authority and Action Boundaries",
+      "precedence": 500,
+      "owner_actor_id": "human.operations-owner",
+      "effective_at": "2026-08-01T00:00:00Z",
+      "review_at": "2026-11-01T00:00:00Z",
+      "provenance": {
+        "source_uri": "https://github.com/socragpt/AI-Agent-Governance-Toolkit/blob/main/docs/POLICY_BUNDLE_V0.1.md",
+        "revision": "0.1.0",
+        "authored_by": [
+          "human.operations-owner"
+        ],
+        "approved_by": [
+          "human.risk-approver"
+        ]
+      },
+      "controls": [
+        {
+          "id": "control.research-browser",
+          "description": "Allow the research agent to use its delegated browser-read capability within a bounded task.",
+          "subjects": {
+            "actor_ids": [
+              "agent.researcher"
+            ]
+          },
+          "capability_ids": [
+            "capability.browser-read"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_duration_seconds": 1800,
+            "max_action_count": 25,
+            "max_delegation_depth": 0,
+            "allowed_data_classifications": [
+              "public"
+            ],
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "execution_outcome"
+          ]
+        },
+        {
+          "id": "control.customer-data",
+          "description": "Allow task-scoped confidential-data reads while prohibiting onward delegation.",
+          "subjects": {
+            "actor_ids": [
+              "agent.researcher"
+            ]
+          },
+          "capability_ids": [
+            "capability.customer-data-read"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_action_count": 5,
+            "max_delegation_depth": 0,
+            "allowed_data_classifications": [
+              "confidential"
+            ],
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "execution_outcome"
+          ]
+        },
+        {
+          "id": "control.review-channel",
+          "description": "Allow delegated handoff messages only through the designated review channel.",
+          "subjects": {
+            "actor_ids": [
+              "agent.communicator",
+              "agent.researcher"
+            ]
+          },
+          "capability_ids": [
+            "capability.review-message"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_action_count": 10,
+            "max_delegation_depth": 1
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.email-draft",
+          "description": "Allow the communications agent to prepare, but not dispatch, an external email.",
+          "subjects": {
+            "actor_ids": [
+              "agent.communicator"
+            ]
+          },
+          "capability_ids": [
+            "capability.email-draft"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_action_count": 3,
+            "max_delegation_depth": 0,
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "execution_outcome"
+          ]
+        },
+        {
+          "id": "control.email-send-deny",
+          "description": "Deny external email dispatch unless a narrower, approved exception replaces this effect.",
+          "subjects": {
+            "any": true
+          },
+          "capability_ids": [
+            "capability.email-send"
+          ],
+          "effect": "deny",
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        }
+      ]
+    }
+  ],
+  "approvals": [
+    {
+      "id": "approval.external-email",
+      "description": "Require a risk approver to authorize the exact outbound email request.",
+      "approver_role_ids": [
+        "role.risk-approver"
+      ],
+      "quorum": 1,
+      "separation_of_duties": true,
+      "expires_after_seconds": 3600,
+      "bind_to": [
+        "subject",
+        "capability",
+        "resource",
+        "parameters_digest"
+      ]
+    }
+  ],
+  "delegations": [
+    {
+      "id": "delegation.owner-to-researcher",
+      "from_actor_id": "human.operations-owner",
+      "to_actor_id": "agent.researcher",
+      "capability_ids": [
+        "capability.browser-read",
+        "capability.customer-data-read",
+        "capability.review-message"
+      ],
+      "valid_from": "2026-08-01T00:00:00Z",
+      "valid_until": "2026-11-01T00:00:00Z",
+      "max_depth": 1
+    },
+    {
+      "id": "delegation.owner-to-communicator",
+      "from_actor_id": "human.operations-owner",
+      "to_actor_id": "agent.communicator",
+      "capability_ids": [
+        "capability.email-draft",
+        "capability.email-send"
+      ],
+      "valid_from": "2026-08-01T00:00:00Z",
+      "valid_until": "2026-11-01T00:00:00Z",
+      "max_depth": 0
+    },
+    {
+      "id": "delegation.researcher-to-communicator",
+      "from_actor_id": "agent.researcher",
+      "to_actor_id": "agent.communicator",
+      "capability_ids": [
+        "capability.review-message"
+      ],
+      "valid_from": "2026-08-01T00:00:00Z",
+      "valid_until": "2026-11-01T00:00:00Z",
+      "max_depth": 0
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "exception.communicator-email-pilot",
+      "control_id": "control.email-send-deny",
+      "subjects": {
+        "actor_ids": [
+          "agent.communicator"
+        ]
+      },
+      "capability_ids": [
+        "capability.email-send"
+      ],
+      "replacement_effect": "require_approval",
+      "approval_id": "approval.external-email",
+      "valid_from": "2026-08-01T00:00:00Z",
+      "valid_until": "2026-09-01T00:00:00Z",
+      "reason": "Permit a time-bounded communications pilot while preserving exact-action approval.",
+      "approved_by": [
+        "human.risk-approver"
+      ],
+      "approved_at": "2026-07-25T18:00:00Z",
+      "evidence_ref": "change-ticket:GOV-42"
+    }
+  ]
+}

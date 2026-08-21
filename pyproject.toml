@@ -35,5 +35,8 @@ Issues = "https://github.com/socragpt/AI-Agent-Governance-Toolkit/issues"
 [tool.setuptools.packages.find]
 include = ["agent_governance*", "utils*"]
 
+[tool.setuptools.package-data]
+agent_governance = ["SystemPrompt.xml"]
+
 [tool.unittest]
 start-directory = "tests"

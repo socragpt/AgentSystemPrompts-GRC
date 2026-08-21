@@ -38,6 +38,35 @@ class EvaluationTests(unittest.TestCase):
         self.assertGreater(score, 0.0)
         self.assertLess(score, 1.0)
 
+    def test_distinct_unicode_responses_do_not_match(self):
+        score = evaluate_responses(
+            [{"input": "Question", "ideal": "安全"}],
+            [{"input": "Question", "output": "危険"}],
+        )[0]
+
+        self.assertFalse(score.exact_match)
+        self.assertEqual(0.0, score.token_f1)
+
+    def test_direct_api_rejects_duplicate_response_inputs(self):
+        with self.assertRaisesRegex(DatasetError, "duplicate input"):
+            evaluate_responses(
+                [{"input": "Question", "ideal": "Answer"}],
+                [
+                    {"input": "Question", "output": "First"},
+                    {"input": "Question", "output": "Second"},
+                ],
+            )
+
+    def test_direct_api_rejects_duplicate_dataset_inputs(self):
+        with self.assertRaisesRegex(DatasetError, "duplicate input"):
+            evaluate_responses(
+                [
+                    {"input": "Question", "ideal": "First"},
+                    {"input": "Question", "ideal": "Second"},
+                ],
+                [{"input": "Question", "output": "Answer"}],
+            )
+
     def test_multiline_json_object_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "invalid.jsonl"
