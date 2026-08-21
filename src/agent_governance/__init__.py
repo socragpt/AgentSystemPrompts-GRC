@@ -1,4 +1,4 @@
-"""AI Agent Governance Toolkit public API."""
+"""Agent Governance Harness public API."""
 
 from .policy import (
     CompiledPolicy,

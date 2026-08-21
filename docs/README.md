@@ -11,14 +11,14 @@ human-readable guidance, templates, and research drafts.
   governance harness, trust boundaries, governance graph, and decision flow.
 - [Safety Model](SAFETY_MODEL.md) defines the instruction hierarchy, safety
   invariants, threat model, and intended decision outcomes.
-- [Roadmap](../ROADMAP.md) separates implemented foundation work from planned
-  policy compilation, enforcement, evidence, and behavioral evaluation.
+- [Roadmap](../ROADMAP.md) separates implemented policy validation and
+  compilation from planned enforcement, evidence, and behavioral evaluation.
 
 ## Implemented Alpha
 
-- [`SystemPrompt.xml`](../SystemPrompt.xml) is the canonical alpha governance
-  baseline.
-- [`agent_governance/`](../agent_governance/) contains the parser, validator,
+- [`examples/legacy/SystemPrompt.xml`](../examples/legacy/SystemPrompt.xml) is
+  the compatibility XML governance baseline.
+- [`src/agent_governance/`](../src/agent_governance/) contains the parser, validator,
   policy compiler, prompt renderer, evaluation functions, and command-line
   interface.
 - [Policy Bundle v0.1](POLICY_BUNDLE_V0.1.md) documents the experimental
@@ -38,28 +38,29 @@ evidence storage.
 
 ## Governance Guidance
 
-- [Glossary](../Glossary.md)
-- [GRC Framework](../Standards/GRCFramework.md)
-- [Decision-Making Standard](../Standards/Standards_Decision-Making.md)
-- [Documentation Standard](../Standards/Standards_Documentation.md)
-- [Operating Standard](../Standards/Standards_Operating.md)
-- [Monitoring and Improvement Standard](../Standards/MonitoringImprovement.md)
-- [Action and Compliance Evidence Protocols](../Standards/ActionCompliance.md)
+- [Glossary](GLOSSARY.md)
+- [GRC Framework](standards/grc-framework.md)
+- [Decision-Making Standard](standards/decision-making.md)
+- [Documentation Standard](standards/documentation.md)
+- [Operating Standard](standards/operating.md)
+- [Planning Standard](standards/planning.md)
+- [Monitoring and Improvement Standard](standards/monitoring-improvement.md)
+- [Action and Compliance Evidence Protocols](standards/action-compliance-evidence.md)
 
 These documents describe policy and target operating expectations. Their
 presence in the repository does not mean the current package enforces them.
 
 ## Templates
 
-- [Data Protection Policy, Standard, and Procedure](../Standards/PolicyTemplates.md)
-- [Strategic Plan](../Plans/PlanTemplates_Strategy.md)
-- [Risk Assessment](../Assessments/AssessmentTemplate_Risk.md)
+- [Data Protection Policy, Standard, and Procedure](templates/policies/data-protection-policy.md)
+- [Strategic Plan](templates/plans/strategic-plan.md)
+- [Risk Assessment](templates/assessments/risk-assessment.md)
 
 ## Research Drafts
 
-- [Ethometric AI Responsibility Index](../Assessments/EARI.md) is explicitly an
+- [Ethometric AI Responsibility Index](research/ethometric-ai-responsibility-index.md) is explicitly an
   unvalidated measurement proposal.
-- [License Warranty Proposal](../Legal/Apache3Idea.md) is a speculative research
+- [License Warranty Proposal](research/apache-3-license-proposal.md) is a speculative research
   note. It is not the repository license and does not modify it.
 
 The repository is distributed under the [MIT License](../LICENSE).

@@ -9,7 +9,7 @@
     "review_at": "2026-11-01T00:00:00Z",
     "default_effect": "deny",
     "provenance": {
-      "source_uri": "https://github.com/socragpt/AI-Agent-Governance-Toolkit",
+      "source_uri": "https://github.com/socragpt/agent-governance-harness",
       "revision": "multi-agent-pilot-2026-08",
       "authored_by": [
         "human.operations-owner"
@@ -146,7 +146,7 @@
       "effective_at": "2026-08-01T00:00:00Z",
       "review_at": "2026-11-01T00:00:00Z",
       "provenance": {
-        "source_uri": "https://github.com/socragpt/AI-Agent-Governance-Toolkit/blob/main/docs/POLICY_BUNDLE_V0.1.md",
+        "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/docs/POLICY_BUNDLE_V0.1.md",
         "revision": "0.1.0",
         "authored_by": [
           "human.operations-owner"

@@ -14,7 +14,7 @@ from agent_governance.prompt import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = ROOT / "SystemPrompt.xml"
+BASELINE = ROOT / "examples" / "legacy" / "SystemPrompt.xml"
 
 
 class PromptTests(unittest.TestCase):

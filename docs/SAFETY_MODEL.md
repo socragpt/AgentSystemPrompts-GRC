@@ -2,7 +2,7 @@
 
 ## Scope
 
-The toolkit is intended to govern agents that propose or perform actions through tools, APIs, filesystems, browsers, communication systems, or other delegated capabilities. Governance applies before an action is dispatched and continues through evidence collection and monitoring.
+The harness is intended to govern agents that propose or perform actions through tools, APIs, filesystems, browsers, communication systems, or other delegated capabilities. Governance applies before an action is dispatched and continues through evidence collection and monitoring.
 
 This alpha defines the contract but does not yet provide a runtime enforcement engine.
 

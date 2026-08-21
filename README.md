@@ -1,56 +1,77 @@
-# AI Agent Governance Toolkit
+# Agent Governance Harness
 
-An early-alpha, framework-neutral foundation for expressing organizational
-governance as a multi-actor policy graph, compiling agent-facing and
-decision-ready artifacts, rendering a legacy governance prompt, and running
-deterministic evaluations.
+**Policy-as-code for defining authority, delegation, approvals, and evidence
+requirements in multi-agent systems.**
 
-> **Thesis:** Alignment in an agentic system is not only a property of the
-> model. It is also a property of the institution around it: who may act, with
-> which capabilities, through which channels, under which checks, and with
-> what evidence.
+[![CI](https://github.com/socragpt/agent-governance-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/socragpt/agent-governance-harness/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-> **Project status:** early alpha. Policy Bundle v0.1 and its deterministic
-> validator/compiler are implemented; runtime authorization, approval
-> workflows, and append-only decision evidence are not. Those are target
-> capabilities described in the [Architecture](docs/ARCHITECTURE.md) and
-> [Roadmap](ROADMAP.md).
+Agent Governance Harness lets an organization describe its actors, roles,
+capabilities, resources, policies, approvals, delegations, and exceptions as a
+versioned governance graph. It validates that graph fail-closed and compiles it
+into deterministic agent instructions and decision data.
 
-## Purpose
+> **Status:** early alpha. Policy Bundle v0.1, semantic validation, and
+> deterministic compilation work today. Runtime authorization, approval
+> collection, tool enforcement, and append-only evidence storage do not.
 
-Tool-using and multi-agent systems need more than broad behavioral
-instructions. They need explicit authority boundaries, policy precedence,
-delegation limits, communication boundaries, approval gates, resource
-constraints, monitoring, and evidence requirements. This project is building
-toward a portable institutional governance harness that can sit between an
-agent's intent and the tools or business actions it wants to use.
+## Try It in 60 Seconds
 
-The intended users are teams developing or operating AI agents that act on behalf of an organization. The toolkit is not a certification, a substitute for legal advice, or a guarantee that an AI system is safe or compliant.
+The package requires Python 3.9 or newer and has no runtime dependencies.
 
-## What Exists Today
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
 
-- An XML governance baseline with explicit instruction precedence and
-  fail-closed guidance.
-- A parser, structural validator, and plain-text renderer for that baseline.
-- A strict, versioned multi-actor policy-bundle schema and worked example.
-- A semantic validator for references, lifecycles, delegation authority,
-  approval quorum, and bounded exceptions.
-- A deterministic compiler that emits `agent-policy.txt` and
-  `decision-data.json` without granting runtime authorization.
-- Human-readable governance standards, planning templates, and risk drafts.
-- A deterministic JSONL evaluator for documentation-recall responses.
-- Unit tests and continuous integration for the implemented alpha behavior.
+agent-governance policy validate examples/policies/multi_agent_operations.json
+agent-governance policy compile \
+  examples/policies/multi_agent_operations.json \
+  --output-dir dist/policy
+```
 
-`SystemPrompt.xml` is the canonical machine-readable policy for the current
-legacy prompt workflow. [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) is the
-experimental structured source for the governance-graph workflow. Neither is
-a runtime security boundary.
+Successful compilation creates:
 
-## Target Operating Model
+- `agent-policy.txt` — stable, agent-facing governance instructions;
+- `decision-data.json` — normalized policy data, resolution rules, and source
+  hashes for a future decision point.
 
-The target harness represents the institution in which agents act: principals,
-roles, delegated authority, capabilities, resources, communication channels,
-controls, approvers, monitors, and evidence requirements.
+Compilation produces policy data. It does not authorize or dispatch an action.
+
+## What It Governs
+
+```text
+actor -> role -> capability -> resource
+  |                    |
+  +---- delegation ----+
+
+policy -> control -> allow | deny | require_approval
+                         |
+                         +-> constraints, evidence, exceptions
+```
+
+Policy Bundle v0.1 can express:
+
+- human, agent, and service actors;
+- role-based baseline authority;
+- capability and resource boundaries;
+- human-to-agent and agent-to-agent delegation;
+- approval quorum and separation-of-duties requirements;
+- policy precedence, lifecycle, provenance, and fail-closed defaults;
+- constrained, time-bounded exceptions; and
+- evidence fields a future runtime must retain.
+
+The validator rejects duplicate IDs, unresolved references, invalid
+lifecycles, delegation cycles, authority amplification, impossible approval
+quorums, and overbroad exceptions.
+
+## Why a Harness
+
+Alignment in an agentic system is not only a property of the model. It is also
+a property of the institution around it: who may act, with which authority,
+through which channels, under which checks, and with what evidence.
+
+The target operating flow is:
 
 ```text
 authenticated principal
@@ -62,93 +83,79 @@ authenticated principal
         -> monitoring and controlled improvement
 ```
 
-Policy validation and compilation now cover the definition stage of this
-flow. Runtime decisions, enforcement, approval collection, and evidence
-storage remain target architecture. See the
-[Architecture](docs/ARCHITECTURE.md) for the trust boundaries and design model.
+This repository currently implements the policy-definition and compilation
+portion of that flow. See the [architecture](docs/ARCHITECTURE.md) and
+[roadmap](ROADMAP.md) for the enforcement path.
 
 ## Safety Contract
 
-The baseline policy documents these intended rules:
+The project is designed around these invariants:
 
 1. Only authorized goals may be pursued.
 2. Higher-priority requirements override lower-priority instructions.
-3. Agents operate with least privilege and within explicit resource limits.
+3. Actors operate with least privilege and explicit resource limits.
 4. Material, irreversible, or out-of-scope actions require approval.
-5. Ambiguous or conflicting authority fails closed: stop, record the conflict, and escalate.
-6. Every governed decision should produce evidence that identifies the applicable policy and outcome.
+5. Missing, stale, ambiguous, or conflicting authority fails closed.
+6. Governed decisions identify the applicable policy and controls.
+7. Delegation cannot create authority the delegator does not possess.
 
-See [Safety Model](docs/SAFETY_MODEL.md) for the full hierarchy, trust boundaries, and initial threat model.
+See the [safety model](docs/SAFETY_MODEL.md) for the instruction hierarchy,
+trust boundaries, and threat model.
 
-## Quick Start
+## Legacy XML Workflow
 
-The package has no runtime dependencies beyond Python 3.9 or newer.
+The original XML governance prompt remains available as a compatibility
+example in [`examples/legacy/`](examples/legacy/). The installed package ships
+the same baseline, so these commands work without a repository checkout:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e .
-
-agent-governance validate
+agent-governance validate --strict
 agent-governance render
-agent-governance policy validate examples/policies/multi_agent_operations.json
-agent-governance policy compile examples/policies/multi_agent_operations.json --output-dir dist/policy
-python evals/run_eval.py
-python -m unittest discover -v
 ```
 
-Render or validate a different XML policy:
-
-```bash
-agent-governance validate path/to/policy.xml
-agent-governance render path/to/policy.xml
-```
+Policy Bundle v0.1 is the structured path forward. The XML prompt is not a
+runtime security boundary.
 
 ## Evaluation
 
-`evals/grc_eval.jsonl` contains one JSON object per line with `input` and `ideal` fields. Running the evaluator without responses validates the dataset. To score responses, provide a second JSONL file containing matching `input` values and an `output` field:
-
-```json
-{"input":"According to the Glossary, what is an 'Assumption'?","output":"A belief accepted without proof."}
-```
+The current deterministic evaluator measures documentation recall using exact
+match and token F1:
 
 ```bash
+python evals/run_eval.py
 python evals/run_eval.py --responses responses.jsonl --threshold 0.70
 ```
 
-These initial questions measure documentation recall, not governance compliance. Behavioral and adversarial scenarios are part of the next evaluation milestone.
+These checks do not establish governance compliance. Behavioral and
+adversarial scenarios are planned in the [roadmap](ROADMAP.md).
 
 ## Repository Map
 
-- `agent_governance/` – installable Python package and CLI.
-- `SystemPrompt.xml` – canonical alpha policy baseline.
-- `schemas/` – normative Policy Bundle v0.1 JSON Schema.
-- `examples/policies/` – valid multi-actor policy-bundle examples.
-- `docs/` – business purpose, architecture, safety model, and documentation index.
-- `Standards/` – governance and operating guidance.
-- `Assessments/` – risk and responsibility assessment drafts.
-- `Plans/` – planning templates.
-- `evals/` – datasets and deterministic evaluation runner.
-- `tests/` – unit and repository-contract tests.
+- `src/agent_governance/` — installable library and `agent-governance` CLI.
+- `schemas/` — normative Policy Bundle JSON Schema.
+- `examples/policies/` — valid multi-actor governance bundles.
+- `examples/legacy/` — the compatibility XML prompt baseline.
+- `docs/` — architecture, safety, standards, templates, and research.
+- `evals/` — deterministic evaluation datasets and runner.
+- `tests/` — unit and repository-contract tests.
 
-Start with the [Documentation Guide](docs/README.md), then see the
-[Roadmap](ROADMAP.md) for planned enforcement, evidence, evaluation, and
-integration milestones.
+Start with the [documentation guide](docs/README.md), the
+[Policy Bundle v0.1 specification](docs/POLICY_BUNDLE_V0.1.md), and the
+[business purpose](docs/BUSINESS_PURPOSE.md).
 
-## What This Is Not
+## Boundaries
 
-- A claim that model behavior can be made safe through prompting alone.
-- A runtime authorization or sandboxing engine in its current form.
-- A certification, legal opinion, or guarantee of regulatory compliance.
-- A replacement for identity, security, workflow, or GRC systems.
+This project is not:
 
-## External Frameworks
+- a claim that prompting alone makes model behavior safe;
+- a runtime authorization or sandboxing engine in its current form;
+- a certification, legal opinion, or guarantee of regulatory compliance; or
+- a replacement for identity, security, workflow, or GRC systems.
 
-Future control mappings will reference the NIST AI Risk Management Framework, ISO/IEC 42001, MITRE ATLAS, and OWASP guidance for agentic applications. A mapping will indicate conceptual alignment only; it will not claim certification or regulatory compliance.
+Future control mappings may reference established governance and security
+frameworks, but mappings indicate conceptual alignment rather than
+certification.
 
-## Contributing and Security
-
-See [Contributing](CONTRIBUTING.md) before proposing changes. Report potential vulnerabilities using the process in [Security](SECURITY.md).
-
-This project is available under the [MIT License](LICENSE).
+See [Contributing](CONTRIBUTING.md) before proposing changes and
+[Security](SECURITY.md) for vulnerability reporting. The project is available
+under the [MIT License](LICENSE).

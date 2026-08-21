@@ -196,7 +196,8 @@ authorization.
 Policy Bundle v0.1 does not define a general condition-expression language,
 YAML input, imports, inheritance, cross-bundle precedence, remote policy
 resolution, signatures, a registry, an approval service, an evidence store, or
-an action dispatcher. It does not migrate or supersede `SystemPrompt.xml`.
+an action dispatcher. It does not migrate or supersede the compatibility
+baseline in `examples/legacy/SystemPrompt.xml`.
 
 Those capabilities should be added only after the v0.1 graph, deterministic
 compiler, and failure behavior are tested. This keeps the specification small

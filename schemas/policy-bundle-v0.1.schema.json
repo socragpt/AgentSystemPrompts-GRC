@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/socragpt/AI-Agent-Governance-Toolkit/schemas/policy-bundle-v0.1.schema.json",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/policy-bundle-v0.1.schema.json",
   "title": "AI Agent Governance Policy Bundle v0.1",
   "description": "A strict, multi-actor governance graph that can be compiled into agent-facing instructions and runtime-ready decision data. The schema does not implement enforcement.",
   "type": "object",
