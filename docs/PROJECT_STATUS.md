@@ -48,9 +48,8 @@ The alpha foundation implements:
   outcome;
 - deterministic JSONL documentation-recall evaluations;
 - repository-contract, decision, policy, prompt, and evaluation tests; and
-- merged-foundation CI and installed-wheel smoke tests across supported Python
-  versions, plus a local installed-wheel smoke test for the uncommitted Slice B
-  evaluator.
+- merged-foundation and draft Slice B CI across supported Python versions,
+  plus a local installed-wheel smoke test for the Slice B evaluator.
 
 The alpha foundation does **not** implement:
 
@@ -81,14 +80,15 @@ Pull request
 - standards, templates, research, and glossary content consolidated under
   `docs/`.
 
-There are no open GitHub pull requests. PR #17 and post-merge `main` CI passed
-on Python 3.9, 3.11, and 3.13.
+PR #17 and post-merge `main` CI passed on Python 3.9, 3.11, and 3.13.
 
-The Slice B change set is prepared on `codex/slice-b-decision-contract`, based
-on current `origin/main` at `8335966`. It contains the preserved
-product-direction and continuity documentation plus the decision-contract
-implementation described above. These changes have passed the complete local
-verification baseline but have not yet run in GitHub CI.
+Draft pull request
+[#18](https://github.com/socragpt/agent-governance-harness/pull/18) publishes
+the Slice B change set from `codex/slice-b-decision-contract`, based on current
+`main` at `8335966`. It contains the preserved product-direction and continuity
+documentation plus the decision-contract implementation described above. The
+complete local verification baseline and PR CI on Python 3.9, 3.11, and 3.13
+pass. The PR remains unmerged and is awaiting review.
 
 ## Decisions That Should Survive Handoffs
 
@@ -130,7 +130,7 @@ verification baseline but have not yet run in GitHub CI.
 ## Recommended Next Milestone
 
 Proceed to the smallest coherent Slice C approval-and-enforcement reference
-after the uncommitted Slice B change receives review.
+after draft PR #18 receives review and merges.
 
 1. Specify Approval Grant v0.1 binding the principal, actor, goal, capability,
    action, resource, canonical parameters, decision, policy digest, scope,
@@ -185,8 +185,8 @@ The current suite contains 57 tests. On 2026-08-21 the full local checks passed,
 including Markdown links, all three decision outcomes, malformed-file denial,
 SDK/CLI parity, deterministic conformance fixtures, and an installed-wheel CLI
 and SDK smoke test outside the repository. The wheel was built without runtime
-dependencies. GitHub CI reflects merged commit `8335966`, not the current
-Slice B branch.
+dependencies. Draft PR #18 CI passes on Python 3.9, 3.11, and 3.13; `main`
+remains at merged commit `8335966` until the draft is reviewed and merged.
 
 ## Handoff Checklist
 
