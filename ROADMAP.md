@@ -44,7 +44,21 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
+**Status:** the Slice B decision contract is implemented; identity verification,
+approval grants, enforcement, and durable evidence remain planned.
+
+Implemented:
+
 - Evaluate a proposed action and return `allow`, `deny`, or `require_approval`.
+- Expose identical decision semantics through the Python SDK and CLI.
+- Return stable reasons, effective constraints, policy provenance, and a
+  proposal-only evidence record.
+
+Remaining:
+
+- Expose the shared evaluator through a language-neutral sidecar or service.
+- Add a guided initializer, generated scenarios, and explicitly non-enforcing
+  shadow mode for progressive adoption.
 - Enforce tool, data, delegation, budget, time, and reversibility constraints.
 - Produce append-only, redacted decision evidence tied to policy versions.
 
@@ -61,6 +75,9 @@ format may change before the first stable release.
 ## 5. Reference Integrations and Release Governance
 
 - Build one end-to-end tool-using agent example.
+- Publish one framework or tool adapter that demonstrates normalization,
+  decision enforcement, approval binding, and evidence reporting without
+  redefining core semantics.
 - Crosswalk controls to established governance and security frameworks without claiming certification.
 - Add versioned releases, changelogs, compatibility policy, and maintainer review rules.
 

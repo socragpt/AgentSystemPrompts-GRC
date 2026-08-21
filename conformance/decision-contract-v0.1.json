@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1",
+  "policy_path": "examples/policies/multi_agent_operations.json",
+  "trusted_identity_boundaries": [
+    "identity.reference"
+  ],
+  "cases": [
+    {
+      "id": "decision.allow.browser-read",
+      "request_path": "examples/requests/browser_read_allowed.json",
+      "expected": {
+        "disposition": "allow",
+        "reason_codes": [
+          "control.allow"
+        ],
+        "cited_control_ids": [
+          "control.research-browser"
+        ],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "decision.require-approval.email-send",
+      "request_path": "examples/requests/email_send_requires_approval.json",
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "exception.applied",
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.email-send-deny"
+        ],
+        "approval_requirement_ids": [
+          "approval.external-email"
+        ]
+      }
+    },
+    {
+      "id": "decision.deny.unmapped-action",
+      "request_path": "examples/requests/unmapped_action_denied.json",
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "authority.capability_not_found"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    }
+  ]
+}

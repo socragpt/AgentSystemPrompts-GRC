@@ -5,6 +5,16 @@ human-readable guidance, templates, and research drafts.
 
 ## Start Here
 
+- [Product Charter](PRODUCT_CHARTER.md) is the stable north star for purpose,
+  principles, boundaries, tradeoffs, and the anti-drift test.
+- [Product Specification](PRODUCT_SPEC.md) defines target users, workflows,
+  product surfaces, deployment modes, requirement IDs, acceptance scenarios,
+  and what a complete reference product means.
+- [Project Status](PROJECT_STATUS.md) is the living handoff record for current
+  capabilities, active work, decisions, and next priorities.
+- [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) defines the implemented
+  normalized request, decision, reason-code, constraint, and proposed-evidence
+  contracts and their enforcement boundary.
 - [Business Purpose](BUSINESS_PURPOSE.md) explains the problem, intended users,
   value hypothesis, and proof milestones.
 - [Target Architecture](ARCHITECTURE.md) describes the planned institutional
@@ -35,6 +45,10 @@ human-readable guidance, templates, and research drafts.
 The alpha compiler produces policy data. It does not implement runtime
 authorization, approval workflows, pre-dispatch enforcement, or append-only
 evidence storage.
+
+The separate Decision Contract v0.1 evaluator returns advisory policy decisions
+and proposal-only evidence. It does not authenticate callers, dispatch actions,
+enforce constraints, or retain evidence.
 
 ## Governance Guidance
 
@@ -67,6 +81,10 @@ The repository is distributed under the [MIT License](../LICENSE).
 
 ## Project Information
 
+- [Product Charter](PRODUCT_CHARTER.md)
+- [Product Specification](PRODUCT_SPEC.md)
+- [Project Status](PROJECT_STATUS.md)
+- [Agent Working Agreement](../AGENTS.md)
 - [Contributing](../CONTRIBUTING.md)
 - [Security](../SECURITY.md)
 - [Roadmap](../ROADMAP.md)

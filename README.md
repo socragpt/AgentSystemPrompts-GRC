@@ -9,11 +9,13 @@ requirements in multi-agent systems.**
 Agent Governance Harness lets an organization describe its actors, roles,
 capabilities, resources, policies, approvals, delegations, and exceptions as a
 versioned governance graph. It validates that graph fail-closed and compiles it
-into deterministic agent instructions and decision data.
+into deterministic agent instructions and decision data, then evaluates
+versioned normalized action requests against the same policy semantics.
 
-> **Status:** early alpha. Policy Bundle v0.1, semantic validation, and
-> deterministic compilation work today. Runtime authorization, approval
-> collection, tool enforcement, and append-only evidence storage do not.
+> **Status:** early alpha. Policy Bundle v0.1, semantic validation,
+> deterministic compilation, and the side-effect-free Decision Contract v0.1
+> evaluator work today. Identity verification, approval collection, tool
+> enforcement, and durable evidence storage do not.
 
 ## Try It in 60 Seconds
 
@@ -28,15 +30,22 @@ agent-governance policy validate examples/policies/multi_agent_operations.json
 agent-governance policy compile \
   examples/policies/multi_agent_operations.json \
   --output-dir dist/policy
+
+agent-governance policy evaluate \
+  examples/policies/multi_agent_operations.json \
+  examples/requests/browser_read_allowed.json \
+  --trusted-identity-boundary identity.reference
 ```
 
 Successful compilation creates:
 
 - `agent-policy.txt` — stable, agent-facing governance instructions;
 - `decision-data.json` — normalized policy data, resolution rules, and source
-  hashes for a future decision point.
+  hashes used by the decision contract.
 
 Compilation produces policy data. It does not authorize or dispatch an action.
+The evaluator separately returns an advisory governance decision and proposed
+evidence. No current component enforces that decision before dispatch.
 
 ## What It Governs
 
@@ -83,9 +92,19 @@ authenticated principal
         -> monitoring and controlled improvement
 ```
 
-This repository currently implements the policy-definition and compilation
-portion of that flow. See the [architecture](docs/ARCHITECTURE.md) and
-[roadmap](ROADMAP.md) for the enforcement path.
+This repository currently implements policy definition, compilation, and the
+side-effect-free decision portion of that flow. See the
+[Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md),
+[architecture](docs/ARCHITECTURE.md), and [roadmap](ROADMAP.md) for the
+enforcement path.
+
+The [Product Charter](docs/PRODUCT_CHARTER.md) is the durable statement of
+purpose and anti-drift test. The [Product Specification](docs/PRODUCT_SPEC.md)
+translates it into target workflows, requirement IDs, and acceptance scenarios.
+The target delivery model is one shared governance engine exposed through a
+guided initializer, CLI, embedded SDK, service, and enforcement adapters. Only
+the policy CLI/compiler and shared Python SDK/CLI decision evaluator are
+implemented in the current alpha.
 
 ## Safety Contract
 
@@ -116,10 +135,10 @@ agent-governance render
 Policy Bundle v0.1 is the structured path forward. The XML prompt is not a
 runtime security boundary.
 
-## Evaluation
+## Documentation-Recall Evaluation
 
-The current deterministic evaluator measures documentation recall using exact
-match and token F1:
+The separate evaluation utility measures documentation recall using exact match
+and token F1:
 
 ```bash
 python evals/run_eval.py
@@ -132,15 +151,20 @@ adversarial scenarios are planned in the [roadmap](ROADMAP.md).
 ## Repository Map
 
 - `src/agent_governance/` — installable library and `agent-governance` CLI.
-- `schemas/` — normative Policy Bundle JSON Schema.
+- `schemas/` — normative policy, request, decision, and evidence JSON Schemas.
+- `conformance/` — shared decision cases for SDK, CLI, and future service surfaces.
 - `examples/policies/` — valid multi-actor governance bundles.
+- `examples/requests/` — allow, deny, and approval-gated Action Request v0.1 examples.
 - `examples/legacy/` — the compatibility XML prompt baseline.
 - `docs/` — architecture, safety, standards, templates, and research.
 - `evals/` — deterministic evaluation datasets and runner.
 - `tests/` — unit and repository-contract tests.
 
-Start with the [documentation guide](docs/README.md), the
-[Policy Bundle v0.1 specification](docs/POLICY_BUNDLE_V0.1.md), and the
+Start with the [Product Charter](docs/PRODUCT_CHARTER.md), the
+[Product Specification](docs/PRODUCT_SPEC.md), the
+[documentation guide](docs/README.md), the
+[Policy Bundle v0.1 specification](docs/POLICY_BUNDLE_V0.1.md), the
+[Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md), and the
 [business purpose](docs/BUSINESS_PURPOSE.md).
 
 ## Boundaries
@@ -148,7 +172,8 @@ Start with the [documentation guide](docs/README.md), the
 This project is not:
 
 - a claim that prompting alone makes model behavior safe;
-- a runtime authorization or sandboxing engine in its current form;
+- an identity provider, action dispatcher, enforcement point, or sandbox in its
+  current form;
 - a certification, legal opinion, or guarantee of regulatory compliance; or
 - a replacement for identity, security, workflow, or GRC systems.
 

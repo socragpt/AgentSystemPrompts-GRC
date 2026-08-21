@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "request_id": "request.email-send-001",
+  "principal": {
+    "actor_id": "human.operations-owner",
+    "authentication": {
+      "trust_boundary_id": "identity.reference",
+      "assertion_id": "assertion.email-send-001",
+      "authenticated_at": "2026-08-21T19:55:00Z",
+      "expires_at": "2026-08-21T20:55:00Z"
+    }
+  },
+  "authorized_goal_id": "goal.customer-update-001",
+  "actor_id": "agent.communicator",
+  "capability_id": "capability.email-send",
+  "action": "email.send",
+  "resource_id": "tool.email",
+  "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "requested_at": "2026-08-21T20:00:00Z",
+  "context": {
+    "channel_id": null,
+    "data_classification": "internal",
+    "expected_side_effects": [
+      "external_communication"
+    ],
+    "reversible": false,
+    "requested_constraints": {
+      "max_cost": {
+        "amount_minor": 0,
+        "currency": "USD"
+      },
+      "max_duration_seconds": 300,
+      "max_action_count": 1,
+      "max_delegation_depth": 0
+    }
+  }
+}

@@ -4,7 +4,9 @@
 
 The harness is intended to govern agents that propose or perform actions through tools, APIs, filesystems, browsers, communication systems, or other delegated capabilities. Governance applies before an action is dispatched and continues through evidence collection and monitoring.
 
-This alpha defines the contract but does not yet provide a runtime enforcement engine.
+This alpha provides a deterministic, side-effect-free decision contract but
+does not authenticate identity, collect approvals, dispatch actions, enforce
+returned constraints, or persist evidence.
 
 ## Instruction Hierarchy
 
@@ -44,10 +46,12 @@ The planned enforcement layer should address at least:
 
 ## Decision Outcomes
 
-The runtime milestone will expose three explicit outcomes:
+The Decision Contract v0.1 evaluator exposes three explicit outcomes:
 
 - `allow` – the action is authorized within stated constraints;
 - `deny` – the action conflicts with policy or cannot be made safe;
 - `require_approval` – an authorized human or service must approve the exact action and constraints.
 
 An absent, invalid, or ambiguous decision must never be interpreted as `allow`.
+The current evaluator proposes decision evidence but is not itself a trusted
+pre-dispatch enforcement point.

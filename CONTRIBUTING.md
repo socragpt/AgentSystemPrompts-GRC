@@ -15,10 +15,13 @@ python -m unittest discover -v
 ## Pull Requests
 
 1. Keep each pull request focused on one governance or engineering outcome.
-2. Explain the context, objective, assumptions, risks, and compatibility impact.
-3. Add tests for executable behavior and examples for new public interfaces.
-4. Identify any safety invariant or policy-precedence behavior affected by the change.
-5. Update the README or roadmap when implemented capability changes.
+2. Map material product behavior to requirement IDs in the
+   [Product Specification](docs/PRODUCT_SPEC.md).
+3. Apply and report the [Product Charter anti-drift test](docs/PRODUCT_CHARTER.md#anti-drift-test).
+4. Explain the context, objective, assumptions, risks, and compatibility impact.
+5. Add tests for executable behavior and examples for new public interfaces.
+6. Identify any safety invariant or policy-precedence behavior affected by the change.
+7. Update the README, status, or roadmap when implemented capability changes.
 
 Normative requirements use **MUST**, **MUST NOT**, **SHOULD**, and **MAY** deliberately. Avoid describing an aspirational feature as implemented.
 

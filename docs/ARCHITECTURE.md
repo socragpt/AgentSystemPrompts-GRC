@@ -4,10 +4,11 @@
 
 This document describes the architecture the harness is building toward. The
 current early alpha parses, validates, and renders an XML governance baseline;
-validates and deterministically compiles Policy Bundle v0.1; and provides
+validates and deterministically compiles Policy Bundle v0.1; evaluates Action
+Request v0.1 through one shared Python SDK/CLI decision core; and provides
 deterministic documentation-recall evaluation utilities. It does not yet
-implement the runtime decision point, approval gates, tool dispatch controls,
-or evidence store described below.
+authenticate identity, collect approvals, gate tool dispatch, expose a decision
+service, or persist evidence.
 
 ## Governance as a System Property
 
@@ -66,6 +67,97 @@ institutional relationship. It does need stable identifiers, explicit
 references, deterministic precedence, and validation that rejects broken or
 authority-amplifying relationships.
 
+## Product Architecture
+
+The target product separates authoring and operations from the runtime action
+path while sharing one semantic core.
+
+```text
+CONTROL PLANE
+
+wizard / templates -> policy-as-code -> validator / simulator -> policy registry
+                                               |
+                                               v
+                                      immutable policy version
+
+RUNTIME GOVERNANCE PLANE
+
+agent framework -> adapter -> normalized action request -> decision engine
+                                                            |
+                                    deny <-------------------+
+                                                            |
+                              approval broker <--- require_approval
+                                                            |
+                                                            v
+                                                  enforcement point
+                                                            |
+                                                            v
+                                                        tool / API
+                                                            |
+                                                            v
+                                                  evidence adapter
+```
+
+### Shared semantic core
+
+The policy loader, schema and semantic validator, canonicalizer, authority and
+delegation resolver, control resolver, constraint combiner, decision evaluator,
+reason codes, and evidence builder form one core library. The CLI, SDK, sidecar,
+service, wizard, and adapters call this library or conform to its versioned
+protocol and shared fixtures.
+
+No presentation or deployment surface may implement an independent policy
+interpretation.
+
+### Control plane
+
+The control plane supports policy initialization, editing, validation,
+simulation, review, publication, activation, revocation, rollback, and
+inspection. Its durable outputs are reviewable policy files, scenario fixtures,
+immutable versions, and provenance—not opaque wizard state.
+
+### Runtime governance plane
+
+The runtime plane normalizes a proposed action, evaluates authority and policy,
+verifies any required approval, gates dispatch, and emits linked evidence. It
+must remain deterministic before execution and explicit about which execution
+properties can be enforced by a particular adapter.
+
+### Adapters
+
+An enforcement adapter has three responsibilities:
+
+1. translate a framework- or tool-specific call into the normalized action
+   contract without discarding security-relevant information;
+2. prevent dispatch unless a valid decision and approval authorize the exact
+   call within returned constraints; and
+3. report the execution result and observable side effects for evidence.
+
+Adapters do not grant authority, resolve policy differently, or silently
+convert unsupported fields into permissive defaults.
+
+## Deployment Architecture
+
+The same core supports progressive deployment:
+
+- **Embedded SDK:** in-process evaluation for the reference Python path and
+  low-friction pilots.
+- **Local sidecar or gateway:** a language-neutral boundary near the governed
+  application or tool.
+- **Shared service:** a multi-application decision point with policy registry,
+  availability, authentication, tenancy, caching, and operational controls.
+
+Shadow mode may evaluate and record decisions without blocking existing
+dispatch. It must be explicitly labeled as non-enforcing. An organization can
+promote scoped capabilities from validation, to shadow observation, to
+enforcement without changing the underlying policy semantics.
+
+“Plug and play” ends at the application's real trust boundaries. An
+organization must still map identities, capabilities, resources, and approval
+owners, and it must place an adapter where the relevant action can be
+intercepted. The setup wizard and starter profiles reduce this integration work;
+they cannot infer legitimate authority on the organization's behalf.
+
 ## Decision Lifecycle
 
 The target operating flow is:
@@ -104,9 +196,9 @@ approval, effective date, validation result, and rollback path.
 | Policy source | Compatibility XML baseline plus experimental Policy Bundle v0.1 | Stable, versioned governance bundles |
 | Validation | XML structure plus v0.1 shape, reference, lifecycle, and delegation checks | Cross-bundle and runtime-context validation |
 | Compilation | Plain-text XML rendering plus deterministic v0.1 policy artifacts | Stable artifacts consumed by enforcement integrations |
-| Decisions | Documented intended outcomes | `allow`, `deny`, and `require_approval` decision point |
+| Decisions | Side-effect-free Action Request v0.1 evaluator through Python SDK and CLI | The same evaluator exposed through a trusted decision service and adapters |
 | Enforcement | Not implemented | Pre-dispatch tool and action gating |
-| Evidence | Human-readable requirements | Structured, append-only, redacted decision evidence |
+| Evidence | Proposal-only structured record for every evaluator outcome | Append-only, redacted decision and execution evidence |
 | Evaluation | Documentation recall | Behavioral and adversarial governance scenarios |
 
 ## Non-Goals
