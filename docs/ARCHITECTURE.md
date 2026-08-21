@@ -2,7 +2,7 @@
 
 ## Status and Scope
 
-This document describes the architecture the toolkit is building toward. The
+This document describes the architecture the harness is building toward. The
 current early alpha parses, validates, and renders an XML governance baseline;
 validates and deterministically compiles Policy Bundle v0.1; and provides
 deterministic documentation-recall evaluation utilities. It does not yet
@@ -11,7 +11,7 @@ or evidence store described below.
 
 ## Governance as a System Property
 
-The toolkit treats governance as a property of the system around an agent, not
+The harness treats governance as a property of the system around an agent, not
 as a promise made by the model alone. The target governance harness represents
 the institution in which agents act: who holds authority, how authority is
 delegated, which capabilities and channels are available, which controls
@@ -101,7 +101,7 @@ approval, effective date, validation result, and rollback path.
 
 | Area | Current alpha | Target architecture |
 | --- | --- | --- |
-| Policy source | `SystemPrompt.xml` plus experimental Policy Bundle v0.1 | Stable, versioned governance bundles |
+| Policy source | Compatibility XML baseline plus experimental Policy Bundle v0.1 | Stable, versioned governance bundles |
 | Validation | XML structure plus v0.1 shape, reference, lifecycle, and delegation checks | Cross-bundle and runtime-context validation |
 | Compilation | Plain-text XML rendering plus deterministic v0.1 policy artifacts | Stable artifacts consumed by enforcement integrations |
 | Decisions | Documented intended outcomes | `allow`, `deny`, and `require_approval` decision point |
@@ -111,7 +111,7 @@ approval, effective date, validation result, and rollback path.
 
 ## Non-Goals
 
-The toolkit is not intended to replace model safety work, identity systems,
+The harness is not intended to replace model safety work, identity systems,
 sandboxing, workflow engines, security monitoring, or GRC systems. It aims to
 provide portable governance definitions and decision evidence that those
 systems can consume or enforce.

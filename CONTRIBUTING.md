@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions should make the toolkit more explicit, testable, and enforceable.
+Contributions should make the harness more explicit, testable, and enforceable.
 
 ## Development Setup
 
@@ -24,4 +24,8 @@ Normative requirements use **MUST**, **MUST NOT**, **SHOULD**, and **MAY** delib
 
 ## Policy Changes
 
-Changes to `SystemPrompt.xml` must receive the same review as code. A policy change should state its owner, intended effect, failure mode, and how the behavior can be evaluated.
+Changes to `examples/legacy/SystemPrompt.xml` or the packaged copy in
+`src/agent_governance/SystemPrompt.xml` must receive the same review as code.
+A policy change should state its owner, intended effect, failure mode, and how
+the behavior can be evaluated. The repository contract test requires those two
+compatibility copies to remain byte-identical.

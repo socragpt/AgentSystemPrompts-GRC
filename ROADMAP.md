@@ -1,6 +1,6 @@
 # Roadmap
 
-The toolkit is being developed in small milestones. Each milestone must leave the repository usable and testable.
+The harness is being developed in small milestones. Each milestone must leave the repository usable and testable.
 
 ## 0. Product and Safety Contract
 
@@ -10,7 +10,7 @@ The toolkit is being developed in small milestones. Each milestone must leave th
 - Distinguish implemented capabilities from planned enforcement.
 - Mark experimental measurement concepts clearly.
 
-**Exit criteria:** the README and safety model state what the toolkit does, what it does not do, and how instruction conflicts are resolved.
+**Exit criteria:** the README and safety model state what the harness does, what it does not do, and how instruction conflicts are resolved.
 
 ## 1. Engineering Foundation
 

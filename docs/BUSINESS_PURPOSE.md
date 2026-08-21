@@ -2,7 +2,7 @@
 
 ## Govern the action, not just the answer
 
-The AI Agent Governance Toolkit is intended to become a policy-and-evidence
+Agent Governance Harness is intended to become a policy-and-evidence
 control layer for tool-using AI agents. Its business purpose is to help
 organizations authorize autonomous actions, enforce explicit constraints, and
 retain evidence explaining what happened and why.
@@ -33,7 +33,7 @@ governance requires a shared contract that can express:
 
 ## Who it serves
 
-The toolkit addresses a shared accountability problem across three groups:
+The harness addresses a shared accountability problem across three groups:
 
 - **Build:** AI product and platform teams need reusable governance instead of
   hard-coding policy separately into every agent.
@@ -80,9 +80,9 @@ performance.
 
 ## Differentiation
 
-The toolkit does not need to replace the model, agent framework, security
+The harness does not need to replace the model, agent framework, security
 product, or governance, risk, and compliance system. Those products typically
-optimize a single layer. The toolkit's proposed differentiation is connective
+optimize a single layer. The harness's proposed differentiation is connective
 tissue across them:
 
 - authority checked before execution;
@@ -131,7 +131,7 @@ dispatch should remain out of scope until that decision contract is tested.
 
 ## Boundaries
 
-The toolkit is not a certification, a substitute for legal advice, or a
+The harness is not a certification, a substitute for legal advice, or a
 guarantee that an AI system is safe or compliant. Future mappings to external
 governance and security frameworks would indicate conceptual alignment only.
 

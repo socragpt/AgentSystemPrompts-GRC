@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPOSITORY_ROOT))
+sys.path.insert(0, str(REPOSITORY_ROOT / "src"))
 
 from agent_governance.prompt import generate_prompt, parse_system_prompt
 
@@ -16,7 +16,7 @@ def main() -> None:
     parser.add_argument(
         "xml_path",
         nargs="?",
-        default=str(REPOSITORY_ROOT / "SystemPrompt.xml"),
+        default=str(REPOSITORY_ROOT / "examples" / "legacy" / "SystemPrompt.xml"),
         help="Path to the XML policy",
     )
     args = parser.parse_args()

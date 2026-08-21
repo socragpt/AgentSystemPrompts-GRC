@@ -27,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .
       - name: Compile Python sources
-        run: python -m compileall -q agent_governance utils examples evals tests
+        run: python -m compileall -q src examples evals tests
       - name: Validate policy and evaluation data
         run: |
           agent-governance validate --strict
