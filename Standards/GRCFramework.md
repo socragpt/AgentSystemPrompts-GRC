@@ -2,6 +2,10 @@
 
 This document summarizes the core concepts of Governance, Risk, and Compliance (GRC) and explains how these principles apply to AI agent coordination.
 
+> **Status:** This document provides design guidance for the target governance
+> harness. It does not describe runtime controls implemented by the current
+> alpha.
+
 ## Governance
 Governance defines the structure for decision-making and accountability. In the context of AI agents, governance establishes how agents interact with human stakeholders and with one another.
 
@@ -23,7 +27,8 @@ Compliance ensures adherence to policies, standards, and external regulations. A
 
 ### Key Points
 1. **Policy Adherence** – Agents reference current policies when making decisions.
-2. **Record Keeping** – Actions and results are logged to demonstrate compliance.
+2. **Record Keeping** – Decisions, actions, and results are logged so authorized
+   reviewers can assess conformance.
 3. **Audit Support** – Agents provide data required for internal or external audits.
 
 ## Roles and Responsibilities
@@ -39,7 +44,10 @@ Roles describe who performs tasks, and responsibilities define what each role mu
 ## Mapping to AI Agent Coordination
 1. **Clear Hierarchy** – Agents respect decision boundaries defined under Governance.
 2. **Shared Risk Awareness** – Agents exchange risk data and align on mitigation steps.
-3. **Automated Compliance Checks** – Agents continuously validate actions against documented policies.
+3. **Policy Decision Points** – The target governance harness evaluates
+   proposed actions against applicable policy before dispatch.
 4. **Feedback Loops** – Governance leads and managers review agent outputs to refine strategies.
 
-By integrating these concepts, AI agents can act consistently, transparently, and in alignment with organizational objectives.
+These are target design requirements rather than claims about implemented
+runtime behavior. If realized and validated, they can help agents act more
+consistently and transparently within organizational objectives.

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 import re
+import unicodedata
 from typing import Dict, List
 
 
@@ -87,7 +88,16 @@ def _require_unique_inputs(records: List[Dict[str, str]], path: str) -> None:
 def normalize(text: str) -> str:
     """Normalize text for deterministic, case-insensitive scoring."""
 
-    return " ".join(re.findall(r"[a-z0-9]+", text.lower()))
+    normalized = unicodedata.normalize("NFKC", text).casefold()
+    return " ".join(re.findall(r"[^\W_]+", normalized, flags=re.UNICODE))
+
+
+def _normalized_equal(left: str, right: str) -> bool:
+    left_normalized = normalize(left)
+    right_normalized = normalize(right)
+    if left_normalized or right_normalized:
+        return left_normalized == right_normalized
+    return left.strip().casefold() == right.strip().casefold()
 
 
 def token_f1(ideal: str, output: str) -> float:
@@ -96,7 +106,7 @@ def token_f1(ideal: str, output: str) -> float:
     ideal_tokens = normalize(ideal).split()
     output_tokens = normalize(output).split()
     if not ideal_tokens or not output_tokens:
-        return float(ideal_tokens == output_tokens)
+        return float(_normalized_equal(ideal, output))
     overlap = sum((Counter(ideal_tokens) & Counter(output_tokens)).values())
     if overlap == 0:
         return 0.0
@@ -110,6 +120,8 @@ def evaluate_responses(
 ) -> List[ExampleScore]:
     """Match responses by input and return deterministic scores."""
 
+    _require_unique_inputs(dataset, "dataset")
+    _require_unique_inputs(responses, "responses")
     response_map = {record["input"]: record["output"] for record in responses}
     dataset_inputs = {record["input"] for record in dataset}
     missing = dataset_inputs - response_map.keys()
@@ -128,7 +140,7 @@ def evaluate_responses(
                 input=example["input"],
                 ideal=ideal,
                 output=output,
-                exact_match=normalize(ideal) == normalize(output),
+                exact_match=_normalized_equal(ideal, output),
                 token_f1=token_f1(ideal, output),
             )
         )

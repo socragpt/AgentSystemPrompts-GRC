@@ -1,0 +1,720 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/AI-Agent-Governance-Toolkit/schemas/policy-bundle-v0.1.schema.json",
+  "title": "AI Agent Governance Policy Bundle v0.1",
+  "description": "A strict, multi-actor governance graph that can be compiled into agent-facing instructions and runtime-ready decision data. The schema does not implement enforcement.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle",
+    "actors",
+    "roles",
+    "resources",
+    "capabilities",
+    "policies",
+    "approvals",
+    "delegations",
+    "exceptions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "bundle": {
+      "$ref": "#/$defs/bundle"
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/actor"
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/role"
+      }
+    },
+    "resources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/resource"
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    },
+    "policies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/policy"
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/approval"
+      }
+    },
+    "delegations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/delegation"
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exception"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "utcTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "idList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_uri",
+        "revision",
+        "authored_by",
+        "approved_by"
+      ],
+      "properties": {
+        "source_uri": {
+          "type": "string",
+          "format": "uri",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "authored_by": {
+          "$ref": "#/$defs/idList"
+        },
+        "approved_by": {
+          "$ref": "#/$defs/idList"
+        }
+      }
+    },
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "title",
+        "owner_actor_id",
+        "effective_at",
+        "review_at",
+        "default_effect",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/semver"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "owner_actor_id": {
+          "$ref": "#/$defs/id"
+        },
+        "effective_at": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "review_at": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "default_effect": {
+          "const": "deny"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "display_name",
+        "roles"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "human",
+            "agent",
+            "service"
+          ]
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "capabilities"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "tool",
+            "data",
+            "channel",
+            "service"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "classification": {
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "data"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "classification"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "classification"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action",
+        "resource_id",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "action": {
+          "$ref": "#/$defs/id"
+        },
+        "resource_id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "subjectSelector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "const": true
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "actor_ids": {
+              "$ref": "#/$defs/idList"
+            },
+            "role_ids": {
+              "$ref": "#/$defs/idList"
+            }
+          }
+        }
+      ]
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "max_cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "amount_minor",
+            "currency"
+          ],
+          "properties": {
+            "amount_minor": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            }
+          }
+        },
+        "max_duration_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_action_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_delegation_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        },
+        "allowed_data_classifications": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "public",
+              "internal",
+              "confidential",
+              "restricted"
+            ]
+          }
+        },
+        "require_reversible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "subjects",
+        "capability_ids",
+        "effect",
+        "evidence_fields"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "subjects": {
+          "$ref": "#/$defs/subjectSelector"
+        },
+        "capability_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "effect": {
+          "enum": [
+            "allow",
+            "deny",
+            "require_approval"
+          ]
+        },
+        "approval_id": {
+          "$ref": "#/$defs/id"
+        },
+        "constraints": {
+          "$ref": "#/$defs/constraints"
+        },
+        "evidence_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "request",
+              "actor",
+              "capability",
+              "resource",
+              "parameters_digest",
+              "matched_controls",
+              "policy_version",
+              "disposition",
+              "approval",
+              "execution_outcome"
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "effect": {
+                "const": "require_approval"
+              }
+            },
+            "required": [
+              "effect"
+            ]
+          },
+          "then": {
+            "required": [
+              "approval_id"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "approval_id"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "title",
+        "precedence",
+        "owner_actor_id",
+        "effective_at",
+        "review_at",
+        "provenance",
+        "controls"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/semver"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "precedence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "owner_actor_id": {
+          "$ref": "#/$defs/id"
+        },
+        "effective_at": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "review_at": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "controls": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/control"
+          }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "approver_role_ids",
+        "quorum",
+        "separation_of_duties",
+        "expires_after_seconds",
+        "bind_to"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "approver_role_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "quorum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "separation_of_duties": {
+          "type": "boolean"
+        },
+        "expires_after_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bind_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "subject",
+              "capability",
+              "resource",
+              "parameters_digest"
+            ]
+          }
+        }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "from_actor_id",
+        "to_actor_id",
+        "capability_ids",
+        "valid_from",
+        "valid_until",
+        "max_depth"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "from_actor_id": {
+          "$ref": "#/$defs/id"
+        },
+        "to_actor_id": {
+          "$ref": "#/$defs/id"
+        },
+        "capability_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "valid_until": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        }
+      }
+    },
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "control_id",
+        "subjects",
+        "capability_ids",
+        "replacement_effect",
+        "valid_from",
+        "valid_until",
+        "reason",
+        "approved_by",
+        "approved_at",
+        "evidence_ref"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "control_id": {
+          "$ref": "#/$defs/id"
+        },
+        "subjects": {
+          "$ref": "#/$defs/subjectSelector"
+        },
+        "capability_ids": {
+          "$ref": "#/$defs/idList"
+        },
+        "replacement_effect": {
+          "enum": [
+            "allow",
+            "require_approval"
+          ]
+        },
+        "approval_id": {
+          "$ref": "#/$defs/id"
+        },
+        "valid_from": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "valid_until": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "approved_by": {
+          "$ref": "#/$defs/idList"
+        },
+        "approved_at": {
+          "$ref": "#/$defs/utcTimestamp"
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "replacement_effect": {
+                "const": "require_approval"
+              }
+            },
+            "required": [
+              "replacement_effect"
+            ]
+          },
+          "then": {
+            "required": [
+              "approval_id"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "approval_id"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

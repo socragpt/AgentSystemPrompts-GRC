@@ -31,6 +31,18 @@ jobs:
       - name: Validate policy and evaluation data
         run: |
           agent-governance validate --strict
+          agent-governance policy validate examples/policies/multi_agent_operations.json
           python evals/run_eval.py
       - name: Run tests
         run: python -m unittest discover -v
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Smoke test installed wheel
+        run: |
+          python -m venv "${{ runner.temp }}/wheel-smoke"
+          "${{ runner.temp }}/wheel-smoke/bin/python" -m pip install --no-deps dist/*.whl
+          cd "${{ runner.temp }}"
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" validate --strict
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" render > rendered-policy.txt
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy validate "${{ github.workspace }}/examples/policies/multi_agent_operations.json"
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy compile "${{ github.workspace }}/examples/policies/multi_agent_operations.json" --output-dir compiled-policy

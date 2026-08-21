@@ -1,105 +1,233 @@
-# Key Terms 
-A practical GRC framework maintains a lexicon of defined terms to ensure consistent interpretation.
+# Key Terms
 
-# Assumption 
+This glossary gives the repository a shared vocabulary for governance, risk,
+compliance, and agentic systems. Some terms describe the target architecture
+and do not imply that the capability is implemented in the current alpha.
+
+## Agent
+
+A software actor that proposes or performs actions under authority delegated
+by a principal.
+
+## Approval
+
+An authorization by an eligible principal or service for an exact action,
+scope, and set of constraints.
+
+## Assumption
+
 A belief or statement taken for granted without proof. It's a premise accepted as accurate without factual evidence, often used as a starting point for reasoning and decision-making.
 
-# Audit
- A systematic review to ensure accuracy and compliance in financial and operational activities is essential in the GRC framework for maintaining integrity and transparency.
+## Audit
 
-# Benchmark
-A standard reference point to measure performance for assessing progress toward strategic goals and objectives.
+A systematic review to ensure accuracy and compliance in financial and operational activities is essential in the GRC framework for maintaining integrity and transparency.
 
-# Budget
+## Authority
+
+A bounded grant to perform specified actions over specified resources under
+stated constraints.
+
+## Benchmark
+
+A standard reference point used to measure performance or progress toward a
+goal.
+
+## Budget
+
 A financial plan outlining expected income and expenses is a cornerstone for resource allocation and financial management.
- 
-# Charter
+
+## Capability
+
+A technical means by which an agent can affect a resource, call a tool, or
+communicate with another actor.
+
+## Channel
+
+A defined path for messages or actions with known participants, permitted data
+types, and applicable controls.
+
+## Charter
+
 A formal document that defines the scope and objectives of a project or group of Agents to establish clear guidelines and responsibilities.
 
-# Compliance
-Adhering to laws, regulations, policies, and standards to ensure legal and ethical conduct in organizational operations.
+## Compliance
 
-# Constraint
-Limitations or restrictions that impact the execution of plans and strategies
+Conformance with applicable laws, regulations, policies, and standards.
+Evidence may support a compliance assessment but does not by itself establish
+or certify compliance.
 
-# Context
-The specific circumstances and background influencing an event or decision
+## Constraint
 
-# Data
-Facts and statistics used for analysis, forming the basis for informed decision-making
+A limitation or condition that bounds an action, decision, resource, or
+delegation.
 
-# Expectation
-Predefined standards or outcomes anticipated from processes or agents
+## Context
 
-# Fallacy
-Erroneous arguments or misconceptions
+The circumstances and background that affect how an event, instruction, or
+decision should be interpreted.
 
-# Focus
-Concentrated attention on priority tasks or objectives to drive meaningful results.
+## Control
 
-# GRC
-Governance, Risk, and Compliance; the integrated approach to managing obligations and objectives.
+A policy-backed rule or mechanism intended to prevent, detect, constrain, or
+record risk-relevant behavior.
 
-# Goal
+## Data
+
+Facts, records, or observations used for analysis and decision-making. Data
+does not have instructional authority unless an authorized policy grants it.
+
+## Decision
+
+A policy evaluation result. The target runtime outcomes are `allow`, `deny`,
+and `require_approval`.
+
+## Delegation
+
+The bounded assignment of existing authority from one actor to another. A
+delegation cannot create authority the delegating actor does not possess.
+
+## Evidence Record
+
+A structured record connecting a proposed action and outcome to the actor,
+authority, policy version, applicable controls, approvals, and execution
+result.
+
+## Expectation
+
+A predefined standard or outcome anticipated from a process or agent.
+
+## Fallacy
+
+An error in reasoning that can produce an unsound conclusion or decision.
+
+## Focus
+
+Concentrated attention on priority outcomes, exclusions, and tradeoffs.
+
+## Goal
+
 A desired result or milestone that guides strategic and operational efforts.
 
-# Impact
-The influence or effect an action or event has on objectives or stakeholders.
+## Governance Harness
 
-# Minutes
-Written records summarizing discussions, decisions, and action items from meetings.
+The external system of policies, permissions, decision points, communication
+boundaries, monitors, and evidence mechanisms surrounding one or more agents.
 
-# Monitor
-To observe performance or compliance continuously for deviations or issues.
+## GRC
 
-# Objective
+Governance, Risk, and Compliance: an integrated approach to managing
+objectives, uncertainty, obligations, and accountability.
+
+## Impact
+
+The effect an action or event has on objectives, resources, or stakeholders.
+
+## Least Privilege
+
+The principle that an actor receives only the capabilities and access needed
+for an authorized purpose, for no longer than required.
+
+## Minutes
+
+Written records summarizing discussions, decisions, and action items from a
+meeting.
+
+## Monitor
+
+A component or role that observes decisions, actions, evidence, or outcomes
+and reports deviations from approved expectations.
+
+## Objective
+
 A clear, measurable step toward achieving a goal.
 
-# Output
-The tangible product, report, or deliverable produced by a process.
+## Output
 
-# Plan
-A structured outline of actions and resources for reaching objectives.
+The tangible product, report, record, or deliverable produced by a process.
 
-# Policy
-A formal guideline or rule directing consistent decisions and actions.
+## Plan
 
-# Procedure
+A structured outline of authorized actions and resources for reaching an
+objective.
+
+## Policy
+
+A formal rule or set of rules governing consistent decisions and actions.
+
+## Policy Bundle
+
+A versioned, structured collection of governance entities, relationships,
+controls, provenance, and lifecycle metadata intended for validation and
+compilation.
+
+## Principal
+
+An authenticated person, service, or organization that originates, holds, or
+delegates authority.
+
+## Procedure
+
 Detailed steps describing how to perform a specific task or process.
 
-# Process
-A series of actions or operations leading to a particular result.
+## Process
 
-# Product
+A series of actions or operations leading to a result.
+
+## Product
+
 A good or service generated to meet a need or solve a problem.
 
-# Prompt
-A cue or input that initiates a response or action.
+## Prompt
 
-# Requirement
-A condition or capability that must be satisfied or possessed.
+An input that requests or shapes a model response. A prompt is not, by itself,
+proof of authority or enforcement.
 
-# Resource
-People, time, funds, or materials available for accomplishing tasks.
+## Requirement
 
-# Responsibility
-The obligation to perform duties and be answerable for outcomes.
+A condition or capability that must be satisfied.
 
-# Risk
-Possibility of loss or harm that could affect objectives.
+## Resource
 
-# Stakeholder
-An individual or group with an interest in the organization's activities.
+Data, systems, funds, time, credentials, people, or materials used to perform
+an action.
 
-# Standard
-An agreed-upon benchmark for quality, performance, or compliance.
+## Responsibility
 
-# Strategy
+The obligation to perform assigned duties and be answerable for outcomes.
+
+## Risk
+
+The possibility that uncertainty, action, or inaction will adversely affect
+objectives or stakeholders.
+
+## Role
+
+A named set of responsibilities and bounded permissions assignable to an
+actor.
+
+## Stakeholder
+
+An individual or group with an interest in or affected by an organization's
+activities.
+
+## Standard
+
+An agreed requirement or benchmark for quality, performance, or conformance.
+
+## Strategy
+
 A long-term approach that aligns resources and actions with goals.
 
-# Tactic
+## Tactic
+
 A specific, shorter-term method used to execute a strategy.
 
-# Value
-The benefit or importance derived from a product, service, or action.
+## Tool
 
+An external capability through which an agent can read data, communicate, or
+change state.
+
+## Value
+
+The benefit or importance derived from a product, service, decision, or
+action.
