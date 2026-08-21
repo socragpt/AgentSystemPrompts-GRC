@@ -197,8 +197,8 @@ Decisions and evidence must account for permitted execution paths.
 ### 5. Decision and execution are separate
 
 Policy validation and decision generation do not dispatch an action. A trusted
-enforcement point must mediate the actual capability, and it must not reinterpret
-an absent or invalid decision as approval.
+enforcement point must mediate the actual capability. It must not reinterpret an
+absent or invalid decision as approval.
 
 ### 6. Trust is explicit and non-transitive
 
@@ -329,10 +329,10 @@ all of these questions before acceptance:
 8. Does the proposal reuse the shared policy and decision semantics, or create
    a competing interpretation in a UI, SDK, service, or adapter?
 
-A proposal is presumptively out of scope when it adds general agent
-orchestration, model features, dashboards, compliance content, or integrations
-without strengthening a named governance contract or proving a chartered
-workflow.
+A proposal is presumptively out of scope if it adds general agent orchestration,
+model features, dashboards, compliance content, or integrations. This
+presumption does not apply if the proposal strengthens a named governance
+contract or proves a chartered workflow.
 
 ## Document Authority
 
@@ -377,9 +377,10 @@ broad framing that:
 
 This project turns that framing into a narrower engineering proposition:
 portable authority policy, deterministic decisions, pre-dispatch enforcement,
-and policy-linked evidence. It does not claim that harnesses solve alignment,
-that institutional mechanisms cannot themselves fail, or that agent behavior
-can be governed without ongoing human responsibility and empirical testing.
+and policy-linked evidence. It does not claim that harnesses solve alignment or
+that institutional mechanisms cannot themselves fail. It also does not claim
+that agent behavior can be governed without ongoing human responsibility and
+empirical testing.
 
 ## Charter Change Control
 

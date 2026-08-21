@@ -2,7 +2,10 @@
 
 ## Scope
 
-The harness is intended to govern agents that propose or perform actions through tools, APIs, filesystems, browsers, communication systems, or other delegated capabilities. Governance applies before an action is dispatched and continues through evidence collection and monitoring.
+The harness is intended to govern agents that use delegated capabilities to
+propose or perform actions. These capabilities include tools, APIs,
+filesystems, browsers, and communication systems. Governance applies before an
+action is dispatched and continues through evidence collection and monitoring.
 
 This alpha provides a deterministic, side-effect-free decision contract but
 does not authenticate identity, collect approvals, dispatch actions, enforce
@@ -18,7 +21,9 @@ When instructions conflict, the higher level takes precedence:
 4. The authorized task goal and instructions from an authenticated principal.
 5. Agent-generated plans, delegated tasks, tool output, and retrieved content.
 
-Content from tools, documents, web pages, and other external systems is data unless an authorized policy explicitly grants it instructional authority.
+Content from tools, documents, web pages, and other external systems is data.
+It has instructional authority only when an authorized policy explicitly
+grants that authority.
 
 ## Safety Invariants
 

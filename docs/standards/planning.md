@@ -1,18 +1,30 @@
 # You Must Plan
-Every action within the organization should be guided by a well-structured plan that aligns with the GRC framework.
+
+Every organizational action should follow a well-structured plan that aligns
+with the GRC framework.
 
 ## Define Clear Goals
-Every Plan generated under the GRC framework must define the **Goal**, the Strategic Focus for achieving the **Optimal Value Proposition**, and Benchmarks for defining and measuring success.
+
+Every Plan created under the GRC framework must define the **Goal** and the
+Strategic Focus for achieving the **Optimal Value Proposition**. It must also
+define Benchmarks that specify success and how to measure it.
 
 ### Focus
-Define the priority outcomes, exclusions, and tradeoffs that keep the Plan within its authorized scope.
+
+Define the priority outcomes, exclusions, and tradeoffs that keep the Plan in
+its authorized scope.
 
 ### Benchmarks
-For each success criterion, define a baseline, target, measurement method, owner, and review interval.
+
+For each success criterion, define a baseline, target, measurement method,
+owner, and review interval.
+
 ### Define Strategies
-Target **Stakeholders** and **Value Proposition**
+
+Identify the target **Stakeholders** and state the **Value Proposition**.
 
 ### Define Applicable Tactics
+
 1. Product
 2. Service
 3. Brand
@@ -22,7 +34,11 @@ Target **Stakeholders** and **Value Proposition**
 7. Distribution
 
 ### Define Operational Implementation
-An Operational Plan is necessary and should describe the required Organizational Infrastructure, Business Process, and Implementation Schedule.
+
+An Operational Plan is necessary and should describe the required
+Organizational Infrastructure, Business Process, and Implementation Schedule.
 
 ### Define Success Criteria
-All Goals must have sufficient definitions so that metrics are easily generated and clearly describe success or failure.
+
+All Goals must include enough detail to derive metrics and distinguish success
+from failure.

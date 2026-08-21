@@ -5,8 +5,9 @@
 Decision Contract v0.1 is the experimental Slice B contract for evaluating one
 normalized proposed action against one valid Policy Bundle v0.1. The reference
 Python evaluator is deterministic and side-effect-free. It returns exactly
-`allow`, `deny`, or `require_approval`, cites the controlling policy objects,
-returns effective constraints, and proposes a structured evidence record.
+`allow`, `deny`, or `require_approval`. The result cites the controlling policy
+objects, returns effective constraints, and proposes a structured evidence
+record.
 
 The evaluator does **not** authenticate identities, collect or verify approval
 grants, dispatch actions, enforce returned constraints, or persist evidence. An
@@ -44,9 +45,9 @@ are invalid so security-relevant input is not silently ignored.
 when the caller explicitly includes its boundary in
 `trusted_identity_boundaries` and the assertion is current at `requested_at`.
 This is a trust-boundary contract, not cryptographic identity verification. A
-trusted adapter or service remains responsible for verifying the assertion and
-supplying accurate timestamps; passing an arbitrary boundary ID does not make a
-self-assertion trustworthy.
+trusted adapter or service remains responsible for verifying the assertion. It
+remains responsible for supplying accurate timestamps. Passing an arbitrary
+boundary ID does not make a self-assertion trustworthy.
 
 `context.requested_constraints` always declares maximum cost, duration, action
 count, and onward delegation depth. A caller that expects no monetary spend
@@ -158,12 +159,12 @@ be clarified without changing code meaning.
 
 ## Proposed Evidence Record v0.1
 
-Every result embeds one proposal-only record linking request and parameter
-digests, principal assertion metadata, action identifiers, policy provenance,
-decision ID, disposition, reason codes, cited controls, constraints, and
-approval requirements, including the decision validity bound. Fields
-unavailable because input was malformed are
-`null`, but the denial itself is still represented.
+Every result embeds one proposal-only record. The record links request and
+parameter digests, principal assertion metadata, and action identifiers. It
+also links policy provenance, decision ID, disposition, reason codes, cited
+controls, constraints, approval requirements, and the decision validity bound.
+Fields unavailable because input was malformed are `null`, but the denial
+itself is still represented.
 
 `proposal_only: true` is a mandatory boundary marker. The evaluator does not
 append, sign, retain, redact, or integrity-protect the record in an external

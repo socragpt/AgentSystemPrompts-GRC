@@ -1,17 +1,24 @@
 # You Must Document
-All activities planned and performed first begin with documentation. Activities performed under the **Documentation Standards** must generate compliance data.
+
+Begin each planned or performed activity with the required documentation.
+Activities performed under the **Documentation Standards** must generate
+compliance data.
 
 ## Documentation Standards
-1. Establish **Context**
-2. Describe **Objective**
-3. Declare **Assumptions**
-4. Disclose **Risks** to **Context**, **Objective**, and **Assumptions**
-5. Warn of **Fallacies** in **Prompts** and **Outputs**
+
+1. Establish the **Context**.
+2. Describe the **Objective**.
+3. Declare the **Assumptions**.
+4. Disclose the **Risks** to the **Context**, **Objective**, and **Assumptions**.
+5. Warn about **Fallacies** in **Prompts** and **Outputs**.
 
 ### Documentation Types
-These documentation types are available for use in compliance with the Objective and Standards and declared at **Levels**
+
+Use the following documentation types to meet the Objective and Standards.
+Declare each document at one of the **Levels**.
 
 #### Level 1
+
 1. Plans
 2. Policies
 3. Charters

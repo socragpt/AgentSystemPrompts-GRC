@@ -16,11 +16,13 @@ scope, and set of constraints.
 
 ## Assumption
 
-A belief or statement taken for granted without proof. It's a premise accepted as accurate without factual evidence, often used as a starting point for reasoning and decision-making.
+A belief or statement accepted as true without proof and used as a premise for
+reasoning or decision-making.
 
 ## Audit
 
-A systematic review to ensure accuracy and compliance in financial and operational activities is essential in the GRC framework for maintaining integrity and transparency.
+A systematic review of financial or operational activities against defined
+criteria to assess accuracy, integrity, or compliance.
 
 ## Authority
 
@@ -34,7 +36,7 @@ goal.
 
 ## Budget
 
-A financial plan outlining expected income and expenses is a cornerstone for resource allocation and financial management.
+A defined limit or allocation for money, time, actions, or other resources.
 
 ## Capability
 
@@ -48,7 +50,8 @@ types, and applicable controls.
 
 ## Charter
 
-A formal document that defines the scope and objectives of a project or group of Agents to establish clear guidelines and responsibilities.
+A formal document that defines the scope, objectives, guidelines, and
+responsibilities of a project or group of agents.
 
 ## Compliance
 
@@ -63,8 +66,8 @@ delegation.
 
 ## Context
 
-The circumstances and background that affect how an event, instruction, or
-decision should be interpreted.
+The circumstances and background that shape the interpretation of an event,
+instruction, or decision.
 
 ## Control
 
@@ -95,7 +98,7 @@ result.
 
 ## Expectation
 
-A predefined standard or outcome anticipated from a process or agent.
+A defined standard or anticipated outcome for a process or agent.
 
 ## Fallacy
 
@@ -208,8 +211,8 @@ actor.
 
 ## Stakeholder
 
-An individual or group with an interest in or affected by an organization's
-activities.
+An individual or group that has an interest in or is affected by an
+organization's activities.
 
 ## Standard
 

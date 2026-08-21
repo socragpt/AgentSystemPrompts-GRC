@@ -19,9 +19,9 @@ requirement.
 Agent Governance Harness is a framework-neutral policy decision and evidence
 layer for tool-using and multi-agent systems. It consumes authenticated actor
 context, a normalized proposed action, applicable policy, and any bound
-approval; produces an explicit governance decision; enables a trusted
-enforcement point to gate dispatch; and records evidence that connects intent,
-authority, decision, execution, and policy version.
+approval. It produces an explicit governance decision and enables a trusted
+enforcement point to gate dispatch. It also records evidence that connects
+intent, authority, decision, execution, and policy version.
 
 The core product is the contract and reference implementation for this
 governance path—not a general agent runtime.
@@ -399,8 +399,8 @@ CLI, examples, packaging, and tests. This is the current alpha foundation.
 
 Versioned action request, deterministic evaluator, three explicit outcomes,
 matched controls, effective constraints, stable reason codes, and proposed
-evidence record exposed through the Python SDK and CLI. This is the next
-milestone.
+evidence record exposed through the Python SDK and CLI. This milestone is
+implemented in the current alpha.
 
 ### Slice C — Approval and enforcement reference
 

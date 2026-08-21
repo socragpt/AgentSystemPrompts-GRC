@@ -88,7 +88,21 @@ Slice B change set from `codex/slice-b-decision-contract` into `main` as
 `5699933` on 2026-08-21. It delivered the preserved product-direction and
 continuity documentation plus the decision-contract implementation described
 above. The complete local verification baseline, PR CI, and post-merge `main`
-CI pass on Python 3.9, 3.11, and 3.13.
+CI passed on Python 3.9, 3.11, and 3.13.
+
+## Documentation Clarity Pass
+
+An STE-inspired clear-language pass updated 17 human-authored documentation
+files. The pass preserves normative keywords, requirement and reason codes,
+commands, links, identifiers, policy semantics, and implemented-versus-planned
+boundaries. It does not change source code, schemas, machine-readable fixtures,
+templates, research drafts, or runtime behavior.
+
+The editable install, byte compilation, strict XML validation, policy
+validation, decision evaluation, 13 documentation-recall examples, Markdown
+link checks, and all 57 tests pass locally. The checker findings that remain are
+advisory results for Markdown structure, protected normative language, or terms
+of art.
 
 ## Decisions That Should Survive Handoffs
 
@@ -129,7 +143,7 @@ CI pass on Python 3.9, 3.11, and 3.13.
 
 ## Recommended Next Milestone
 
-Proceed to the smallest coherent Slice C approval-and-enforcement reference.
+Implement the smallest coherent Slice C approval-and-enforcement reference.
 Slice B merged through PR #18 and no longer blocks this work.
 
 1. Specify Approval Grant v0.1 binding the principal, actor, goal, capability,
@@ -185,8 +199,8 @@ The current suite contains 57 tests. On 2026-08-21 the full local checks passed,
 including Markdown links, all three decision outcomes, malformed-file denial,
 SDK/CLI parity, deterministic conformance fixtures, and an installed-wheel CLI
 and SDK smoke test outside the repository. The wheel was built without runtime
-dependencies. PR #18 and post-merge `main` CI pass on Python 3.9, 3.11, and
-3.13. The verified `main` merge commit is `5699933`.
+dependencies. PR #18 and post-merge `main` CI passed on Python 3.9, 3.11, and
+3.13. The verified Slice B implementation merge commit is `5699933`.
 
 ## Handoff Checklist
 

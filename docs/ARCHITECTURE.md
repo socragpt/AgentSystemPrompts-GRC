@@ -3,12 +3,12 @@
 ## Status and Scope
 
 This document describes the architecture the harness is building toward. The
-current early alpha parses, validates, and renders an XML governance baseline;
-validates and deterministically compiles Policy Bundle v0.1; evaluates Action
-Request v0.1 through one shared Python SDK/CLI decision core; and provides
-deterministic documentation-recall evaluation utilities. It does not yet
-authenticate identity, collect approvals, gate tool dispatch, expose a decision
-service, or persist evidence.
+current early alpha parses, validates, and renders an XML governance baseline.
+It also validates and deterministically compiles Policy Bundle v0.1. One shared
+Python SDK/CLI decision core evaluates Action Request v0.1. The alpha also
+provides deterministic documentation-recall evaluation utilities. It does not
+yet authenticate identity, collect approvals, gate tool dispatch, expose a
+decision service, or persist evidence.
 
 ## Governance as a System Property
 

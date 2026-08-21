@@ -11,8 +11,8 @@ This version is **not an enforcement engine**. Validating or compiling a bundle
 does not authorize an action, prevent tool dispatch, verify an identity,
 execute an approval, or persist audit evidence. The separate
 [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) can evaluate a normalized
-request and propose evidence, but consumers must still treat compiled output
-and unenforced decisions as data rather than a security boundary.
+request and propose evidence. Consumers must still treat compiled output and
+unenforced decisions as data rather than a security boundary.
 
 The normative JSON Schema is
 [`schemas/policy-bundle-v0.1.schema.json`](../schemas/policy-bundle-v0.1.schema.json).

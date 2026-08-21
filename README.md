@@ -8,14 +8,15 @@ requirements in multi-agent systems.**
 
 Agent Governance Harness lets an organization describe its actors, roles,
 capabilities, resources, policies, approvals, delegations, and exceptions as a
-versioned governance graph. It validates that graph fail-closed and compiles it
-into deterministic agent instructions and decision data, then evaluates
-versioned normalized action requests against the same policy semantics.
+versioned governance graph. The harness validates that graph with fail-closed
+behavior and compiles it into deterministic agent instructions and decision
+data. It then evaluates versioned, normalized action requests against the same
+policy semantics.
 
 > **Status:** early alpha. Policy Bundle v0.1, semantic validation,
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
-> evaluator work today. Identity verification, approval collection, tool
-> enforcement, and durable evidence storage do not.
+> evaluator are implemented in this alpha. Identity verification, approval
+> collection, tool enforcement, and durable evidence storage are not.
 
 ## Try It in 60 Seconds
 
@@ -114,7 +115,8 @@ The project is designed around these invariants:
 2. Higher-priority requirements override lower-priority instructions.
 3. Actors operate with least privilege and explicit resource limits.
 4. Material, irreversible, or out-of-scope actions require approval.
-5. Missing, stale, ambiguous, or conflicting authority fails closed.
+5. The harness fails closed when authority is missing, stale, ambiguous, or
+   conflicting.
 6. Governed decisions identify the applicable policy and controls.
 7. Delegation cannot create authority the delegator does not possess.
 
@@ -161,8 +163,8 @@ adversarial scenarios are planned in the [roadmap](ROADMAP.md).
 - `tests/` — unit and repository-contract tests.
 
 Start with the [Product Charter](docs/PRODUCT_CHARTER.md), the
-[Product Specification](docs/PRODUCT_SPEC.md), the
-[documentation guide](docs/README.md), the
+[Product Specification](docs/PRODUCT_SPEC.md), and the
+[documentation guide](docs/README.md). Then read the
 [Policy Bundle v0.1 specification](docs/POLICY_BUNDLE_V0.1.md), the
 [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md), and the
 [business purpose](docs/BUSINESS_PURPOSE.md).
