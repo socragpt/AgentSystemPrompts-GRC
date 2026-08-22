@@ -1,0 +1,616 @@
+{
+  "schema_version": "0.1",
+  "bundle": {
+    "id": "bundle.repository-development-dogfood",
+    "version": "0.1.0",
+    "title": "Repository Development Dogfood Shadow Policy",
+    "owner_actor_id": "human.maintainer",
+    "effective_at": "2026-08-22T00:00:00Z",
+    "review_at": "2026-11-22T00:00:00Z",
+    "default_effect": "deny",
+    "provenance": {
+      "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/dogfood/policy.json",
+      "revision": "dogfood-phase-1",
+      "authored_by": [
+        "human.maintainer"
+      ],
+      "approved_by": [
+        "human.maintainer"
+      ]
+    }
+  },
+  "actors": [
+    {
+      "id": "human.maintainer",
+      "kind": "human",
+      "display_name": "Repository Maintainer",
+      "roles": [
+        "role.maintainer"
+      ]
+    },
+    {
+      "id": "agent.developer",
+      "kind": "agent",
+      "display_name": "Development Agent",
+      "roles": [
+        "role.developer"
+      ]
+    },
+    {
+      "id": "agent.reviewer",
+      "kind": "agent",
+      "display_name": "Review Agent",
+      "roles": [
+        "role.reviewer"
+      ]
+    },
+    {
+      "id": "service.github",
+      "kind": "service",
+      "display_name": "GitHub Repository Service",
+      "roles": [
+        "role.github-service"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "role.maintainer",
+      "description": "Owns the pilot and can delegate the modeled repository-development capabilities.",
+      "capabilities": [
+        "capability.branch-push",
+        "capability.dependency-change",
+        "capability.dependency-install",
+        "capability.documentation-edit",
+        "capability.force-push",
+        "capability.local-commit",
+        "capability.pull-request-create",
+        "capability.remote-delete",
+        "capability.remote-merge",
+        "capability.release-create",
+        "capability.repository-read",
+        "capability.source-edit",
+        "capability.tests-edit",
+        "capability.validation-run"
+      ]
+    },
+    {
+      "id": "role.developer",
+      "description": "Receives only explicit task-scoped development delegations.",
+      "capabilities": []
+    },
+    {
+      "id": "role.reviewer",
+      "description": "Receives inspection capabilities without repository write or publication authority.",
+      "capabilities": []
+    },
+    {
+      "id": "role.github-service",
+      "description": "Represents the remote repository boundary and receives no agent authority.",
+      "capabilities": []
+    }
+  ],
+  "resources": [
+    {
+      "id": "data.external-sensitive",
+      "kind": "data",
+      "description": "Secrets, credentials, personal data, and unrelated sensitive user data outside the pilot.",
+      "classification": "restricted"
+    },
+    {
+      "id": "data.outside-task-content",
+      "kind": "data",
+      "description": "Repository or filesystem content that is outside the authorized development task.",
+      "classification": "internal"
+    },
+    {
+      "id": "data.package-metadata",
+      "kind": "data",
+      "description": "Package manifests and other dependency declarations in the repository.",
+      "classification": "internal"
+    },
+    {
+      "id": "data.repository-content",
+      "kind": "data",
+      "description": "Readable content in the Agent Governance Harness repository.",
+      "classification": "internal"
+    },
+    {
+      "id": "data.repository-documents",
+      "kind": "data",
+      "description": "Documentation files in the authorized repository task.",
+      "classification": "internal"
+    },
+    {
+      "id": "data.repository-source",
+      "kind": "data",
+      "description": "Product source files in the authorized repository task.",
+      "classification": "internal"
+    },
+    {
+      "id": "data.repository-tests",
+      "kind": "data",
+      "description": "Test and conformance files in the authorized repository task.",
+      "classification": "internal"
+    },
+    {
+      "id": "service.github-repository",
+      "kind": "service",
+      "description": "The socragpt/agent-governance-harness remote repository boundary."
+    },
+    {
+      "id": "service.local-environment",
+      "kind": "service",
+      "description": "The local development environment used for dependency installation."
+    },
+    {
+      "id": "service.local-git",
+      "kind": "service",
+      "description": "The local Git repository and its local commit history."
+    },
+    {
+      "id": "tool.local-validation",
+      "kind": "tool",
+      "description": "Local test, validation, compilation, and static-check commands."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "capability.branch-push",
+      "action": "git.push",
+      "resource_id": "service.github-repository",
+      "description": "Push a non-destructive branch update to the governed remote repository."
+    },
+    {
+      "id": "capability.dependency-change",
+      "action": "dependency.change",
+      "resource_id": "data.package-metadata",
+      "description": "Change a package manifest or dependency declaration."
+    },
+    {
+      "id": "capability.dependency-install",
+      "action": "dependency.install",
+      "resource_id": "service.local-environment",
+      "description": "Install or update a dependency in the local development environment."
+    },
+    {
+      "id": "capability.documentation-edit",
+      "action": "documentation.edit",
+      "resource_id": "data.repository-documents",
+      "description": "Edit documentation within the authorized development task."
+    },
+    {
+      "id": "capability.force-push",
+      "action": "git.force-push",
+      "resource_id": "service.github-repository",
+      "description": "Rewrite remote branch history with a force-push."
+    },
+    {
+      "id": "capability.local-commit",
+      "action": "git.commit",
+      "resource_id": "service.local-git",
+      "description": "Create a commit in the local repository."
+    },
+    {
+      "id": "capability.outside-task-edit",
+      "action": "outside.edit",
+      "resource_id": "data.outside-task-content",
+      "description": "Edit content that is outside the authorized development task."
+    },
+    {
+      "id": "capability.pull-request-create",
+      "action": "github.pull-request.create",
+      "resource_id": "service.github-repository",
+      "description": "Create a pull request in the governed remote repository."
+    },
+    {
+      "id": "capability.remote-delete",
+      "action": "github.remote-delete",
+      "resource_id": "service.github-repository",
+      "description": "Delete remote branches, releases, tags, or repository content."
+    },
+    {
+      "id": "capability.remote-merge",
+      "action": "github.merge",
+      "resource_id": "service.github-repository",
+      "description": "Merge a pull request into a protected remote branch."
+    },
+    {
+      "id": "capability.release-create",
+      "action": "github.release",
+      "resource_id": "service.github-repository",
+      "description": "Create or publish a repository release."
+    },
+    {
+      "id": "capability.repository-read",
+      "action": "repository.read",
+      "resource_id": "data.repository-content",
+      "description": "Read repository content without modifying it."
+    },
+    {
+      "id": "capability.sensitive-read",
+      "action": "sensitive.read",
+      "resource_id": "data.external-sensitive",
+      "description": "Read secrets or sensitive data that is outside the pilot scope."
+    },
+    {
+      "id": "capability.source-edit",
+      "action": "source.edit",
+      "resource_id": "data.repository-source",
+      "description": "Edit product source within the authorized development task."
+    },
+    {
+      "id": "capability.tests-edit",
+      "action": "tests.edit",
+      "resource_id": "data.repository-tests",
+      "description": "Edit tests or conformance fixtures within the authorized development task."
+    },
+    {
+      "id": "capability.validation-run",
+      "action": "validation.run",
+      "resource_id": "tool.local-validation",
+      "description": "Run local validation, compilation, or test commands."
+    }
+  ],
+  "policies": [
+    {
+      "id": "policy.repository-development-shadow",
+      "version": "0.1.0",
+      "title": "Repository Development Shadow Controls",
+      "precedence": 500,
+      "owner_actor_id": "human.maintainer",
+      "effective_at": "2026-08-22T00:00:00Z",
+      "review_at": "2026-11-22T00:00:00Z",
+      "provenance": {
+        "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/dogfood/policy.json",
+        "revision": "dogfood-phase-1",
+        "authored_by": [
+          "human.maintainer"
+        ],
+        "approved_by": [
+          "human.maintainer"
+        ]
+      },
+      "controls": [
+        {
+          "id": "control.repository-read",
+          "description": "Allow the developer and reviewer to inspect repository content.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer",
+              "agent.reviewer"
+            ]
+          },
+          "capability_ids": [
+            "capability.repository-read"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_duration_seconds": 1800,
+            "max_action_count": 50,
+            "max_delegation_depth": 0,
+            "allowed_data_classifications": [
+              "internal"
+            ],
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.local-validation",
+          "description": "Allow the developer and reviewer to run bounded local validation commands.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer",
+              "agent.reviewer"
+            ]
+          },
+          "capability_ids": [
+            "capability.validation-run"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_duration_seconds": 3600,
+            "max_action_count": 25,
+            "max_delegation_depth": 0,
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.task-edits",
+          "description": "Allow the developer to edit task-scoped documentation, source, and tests.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.documentation-edit",
+            "capability.source-edit",
+            "capability.tests-edit"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_duration_seconds": 3600,
+            "max_action_count": 50,
+            "max_delegation_depth": 0,
+            "allowed_data_classifications": [
+              "internal"
+            ],
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.dependencies",
+          "description": "Require exact-action maintainer approval for dependency installation or declaration changes.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.dependency-change",
+            "capability.dependency-install"
+          ],
+          "effect": "require_approval",
+          "approval_id": "approval.maintainer-exact-action",
+          "constraints": {
+            "max_duration_seconds": 1800,
+            "max_action_count": 10,
+            "max_delegation_depth": 0,
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "approval"
+          ]
+        },
+        {
+          "id": "control.local-commit",
+          "description": "Require exact-action maintainer approval before the developer creates a local commit.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.local-commit"
+          ],
+          "effect": "require_approval",
+          "approval_id": "approval.maintainer-exact-action",
+          "constraints": {
+            "max_action_count": 1,
+            "max_delegation_depth": 0,
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "approval"
+          ]
+        },
+        {
+          "id": "control.remote-publication",
+          "description": "Require exact-action maintainer approval for a branch push or pull-request creation.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.branch-push",
+            "capability.pull-request-create"
+          ],
+          "effect": "require_approval",
+          "approval_id": "approval.maintainer-exact-action",
+          "constraints": {
+            "max_action_count": 1,
+            "max_delegation_depth": 0
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "approval"
+          ]
+        },
+        {
+          "id": "control.remote-merge",
+          "description": "Require exact-action maintainer approval for a pull-request merge.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.remote-merge"
+          ],
+          "effect": "require_approval",
+          "approval_id": "approval.maintainer-exact-action",
+          "constraints": {
+            "max_action_count": 1,
+            "max_delegation_depth": 0
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition",
+            "approval"
+          ]
+        },
+        {
+          "id": "control.remote-destructive",
+          "description": "Deny force-push, remote deletion, and release creation in the dogfood pilot.",
+          "subjects": {
+            "any": true
+          },
+          "capability_ids": [
+            "capability.force-push",
+            "capability.remote-delete",
+            "capability.release-create"
+          ],
+          "effect": "deny",
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.outside-task",
+          "description": "Deny edits to content outside the authorized development task.",
+          "subjects": {
+            "any": true
+          },
+          "capability_ids": [
+            "capability.outside-task-edit"
+          ],
+          "effect": "deny",
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        },
+        {
+          "id": "control.sensitive-data",
+          "description": "Deny access to secrets, credentials, personal data, and unrelated sensitive data.",
+          "subjects": {
+            "any": true
+          },
+          "capability_ids": [
+            "capability.sensitive-read"
+          ],
+          "effect": "deny",
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
+          ]
+        }
+      ]
+    }
+  ],
+  "approvals": [
+    {
+      "id": "approval.maintainer-exact-action",
+      "description": "Require the maintainer to approve the exact actor, capability, resource, and parameter digest.",
+      "approver_role_ids": [
+        "role.maintainer"
+      ],
+      "quorum": 1,
+      "separation_of_duties": true,
+      "expires_after_seconds": 1800,
+      "bind_to": [
+        "subject",
+        "capability",
+        "resource",
+        "parameters_digest"
+      ]
+    }
+  ],
+  "delegations": [
+    {
+      "id": "delegation.maintainer-to-developer",
+      "from_actor_id": "human.maintainer",
+      "to_actor_id": "agent.developer",
+      "capability_ids": [
+        "capability.branch-push",
+        "capability.dependency-change",
+        "capability.dependency-install",
+        "capability.documentation-edit",
+        "capability.force-push",
+        "capability.local-commit",
+        "capability.pull-request-create",
+        "capability.remote-delete",
+        "capability.remote-merge",
+        "capability.release-create",
+        "capability.repository-read",
+        "capability.source-edit",
+        "capability.tests-edit",
+        "capability.validation-run"
+      ],
+      "valid_from": "2026-08-22T00:00:00Z",
+      "valid_until": "2026-11-22T00:00:00Z",
+      "max_depth": 0
+    },
+    {
+      "id": "delegation.maintainer-to-reviewer",
+      "from_actor_id": "human.maintainer",
+      "to_actor_id": "agent.reviewer",
+      "capability_ids": [
+        "capability.repository-read",
+        "capability.validation-run"
+      ],
+      "valid_from": "2026-08-22T00:00:00Z",
+      "valid_until": "2026-11-22T00:00:00Z",
+      "max_depth": 0
+    }
+  ],
+  "exceptions": []
+}

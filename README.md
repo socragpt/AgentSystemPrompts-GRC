@@ -13,8 +13,10 @@ a proposal-only evidence record.
 
 > **Status:** early alpha. Policy Bundle v0.1, semantic validation,
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
-> evaluator are implemented. Identity verification, approval-grant
-> verification, pre-dispatch enforcement, and durable evidence storage are not.
+> evaluator are implemented. Dogfood 0 Phase 1 adds deterministic,
+> non-enforcing repository-development pilot artifacts. Identity verification,
+> approval-grant verification, pre-dispatch enforcement, and durable evidence
+> storage are not.
 
 ## Run the Current Alpha
 
@@ -68,6 +70,8 @@ The current alpha can:
 - return cited controls, authority paths, effective constraints, stable reason
   codes, and policy provenance.
 - expose the same evaluator through the Python SDK and CLI.
+- validate deterministic repository-development shadow scenarios and create
+  minimized local pilot records without enforcing actions.
 
 The current alpha cannot:
 
@@ -119,6 +123,7 @@ enforcement path.
 - `schemas/` contains the normative v0.1 JSON Schemas.
 - `conformance/` contains shared decision cases for current and future product
   surfaces.
+- `dogfood/` contains the non-enforcing repository-development shadow pilot.
 - `examples/policies/` and `examples/requests/` contain executable examples.
 - `tests/` contains policy, decision, CLI, and repository-contract tests.
 - `docs/` contains product contracts, architecture, project status, reference

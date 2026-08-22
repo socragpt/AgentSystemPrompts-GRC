@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "request_id": "request.dogfood.outside-task-edit",
+  "principal": {
+    "actor_id": "human.maintainer",
+    "authentication": {
+      "trust_boundary_id": "identity.dogfood-local",
+      "assertion_id": "assertion.dogfood.outside-task-edit",
+      "authenticated_at": "2026-08-22T12:00:00Z",
+      "expires_at": "2026-08-22T14:00:00Z"
+    }
+  },
+  "authorized_goal_id": "goal.dogfood-phase-1",
+  "actor_id": "agent.developer",
+  "capability_id": "capability.outside-task-edit",
+  "action": "outside.edit",
+  "resource_id": "data.outside-task-content",
+  "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "requested_at": "2026-08-22T12:30:00Z",
+  "context": {
+    "channel_id": null,
+    "data_classification": "internal",
+    "expected_side_effects": [
+      "update"
+    ],
+    "reversible": true,
+    "requested_constraints": {
+      "max_cost": {
+        "amount_minor": 0,
+        "currency": "USD"
+      },
+      "max_duration_seconds": 300,
+      "max_action_count": 1,
+      "max_delegation_depth": 0
+    }
+  }
+}

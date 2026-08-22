@@ -1,7 +1,7 @@
 # Repository Development Dogfooding Plan
 
 - **Pilot:** Dogfood 0
-- **Status:** planned, not yet running
+- **Status:** Phase 1 complete; live shadow observation authorized and running
 - **Mode:** shadow; explicitly non-enforcing
 - **Scope:** development of Agent Governance Harness
 - **Plan date:** 2026-08-21
@@ -33,6 +33,10 @@ During this pilot:
 - proposed evidence is pilot data, not append-only or tamper-evident evidence.
 
 Label the pilot **shadow** in its policy, procedure, and reports.
+
+The maintainer explicitly opened the live observation gate on 2026-08-22 after
+the Phase 1 baseline passed. The gate authorizes observation only. It does not
+authorize an underlying development action or remote-state change.
 
 ## Requirement Mapping
 
@@ -109,6 +113,10 @@ Before live observation, deterministic fixtures must cover at least:
 
 Each scenario must declare its expected disposition and stable reason codes.
 The SDK and CLI must return equivalent results.
+
+Phase 1 implements these 14 cases in `dogfood/requests/` and declares their
+expected results in `dogfood/expected.json`. Live observations remain outside
+Phase 1.
 
 ## Shadow Procedure
 
@@ -209,17 +217,20 @@ Use these rules after the pilot:
 The final selection must still map to Product Specification requirements and
 pass the Product Charter anti-drift test.
 
-## Planned Pilot Artifacts
+## Phase 1 Pilot Artifacts
 
-A later implementation milestone should add:
+Phase 1 adds:
 
 - `dogfood/README.md` for the shadow procedure.
 - `dogfood/policy.json` for repository-development governance.
 - `dogfood/requests/` for deterministic baseline scenarios.
 - `dogfood/expected.json` for expected outcomes and reason codes.
 - `dogfood/observation.schema.json` for minimized pilot observations.
-- a local recording method that retains canonical requests, decisions, and
-  policy snapshots without committing live observations automatically.
+- `dogfood/record_observation.py`, which retains canonical requests,
+  decisions, proposed evidence, and policy snapshots without committing its
+  output.
 
-These artifacts do not exist yet. Their implementation is the next recommended
-action after this plan is accepted.
+These artifacts are non-enforcing. They do not authenticate identity, verify
+approvals, dispatch actions, or provide durable evidence storage. The
+maintainer must explicitly authorize live shadow observation after Phase 1
+verification passes.

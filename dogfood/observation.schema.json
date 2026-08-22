@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/dogfood/observation.schema.json",
+  "title": "Agent Governance Harness Dogfood Observation v0.1",
+  "description": "A minimized, reproducible record for the non-enforcing repository-development shadow pilot.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observation_id",
+    "observed_at",
+    "mode",
+    "enforced",
+    "request",
+    "action",
+    "policy",
+    "decision",
+    "proposed_evidence",
+    "maintainer_expected_disposition",
+    "agreement",
+    "out_of_band_approval",
+    "action_occurred",
+    "normalization_duration_ms",
+    "mapping_confidence",
+    "friction_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "observation_id": {
+      "$ref": "#/$defs/observation_id"
+    },
+    "observed_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "mode": {
+      "const": "shadow"
+    },
+    "enforced": {
+      "const": false
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "request_id",
+        "parameters_digest"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "$ref": "#/$defs/request_ref"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "request_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "parameters_digest": {
+          "$ref": "#/$defs/prefixed_sha256"
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorized_goal_id",
+        "actor_id",
+        "capability_id",
+        "action",
+        "resource_id"
+      ],
+      "properties": {
+        "authorized_goal_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "actor_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "capability_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "action": {
+          "$ref": "#/$defs/identifier"
+        },
+        "resource_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "bundle_id",
+        "bundle_version",
+        "schema_version",
+        "source_sha256"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "$ref": "#/$defs/policy_ref"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bundle_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "bundle_version": {
+          "$ref": "#/$defs/semver"
+        },
+        "schema_version": {
+          "const": "0.1"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "decision_id",
+        "disposition",
+        "reason_codes",
+        "cited_control_ids",
+        "approval_requirement_ids"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "$ref": "#/$defs/decision_ref"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "decision_id": {
+          "type": "string",
+          "pattern": "^decision\\.[0-9a-f]{64}$"
+        },
+        "disposition": {
+          "$ref": "#/$defs/disposition"
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reason_code"
+          }
+        },
+        "cited_control_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        "approval_requirement_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        }
+      }
+    },
+    "proposed_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "evidence_id",
+        "proposal_only"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "$ref": "#/$defs/evidence_ref"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^evidence\\.[0-9a-f]{64}$"
+        },
+        "proposal_only": {
+          "const": true
+        }
+      }
+    },
+    "maintainer_expected_disposition": {
+      "$ref": "#/$defs/disposition"
+    },
+    "agreement": {
+      "enum": [
+        "match",
+        "mismatch"
+      ]
+    },
+    "out_of_band_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested",
+        "received"
+      ],
+      "properties": {
+        "requested": {
+          "type": "boolean"
+        },
+        "received": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "received": {
+                "const": true
+              }
+            },
+            "required": [
+              "received"
+            ]
+          },
+          "then": {
+            "properties": {
+              "requested": {
+                "const": true
+              }
+            },
+            "required": [
+              "requested"
+            ]
+          }
+        }
+      ]
+    },
+    "action_occurred": {
+      "type": "boolean"
+    },
+    "normalization_duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mapping_confidence": {
+      "enum": [
+        "exact",
+        "bounded",
+        "ambiguous",
+        "unmapped"
+      ]
+    },
+    "friction_code": {
+      "enum": [
+        "none",
+        "approval-unverified",
+        "goal-assumption",
+        "identity-assumption",
+        "normalization-ambiguous",
+        "request-construction",
+        "selector-too-broad",
+        "unmapped-action"
+      ]
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "observation_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prefixed_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "disposition": {
+      "enum": [
+        "allow",
+        "deny",
+        "require_approval"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+    },
+    "request_ref": {
+      "type": "string",
+      "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*/artifacts/request\\.json$"
+    },
+    "policy_ref": {
+      "type": "string",
+      "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*/artifacts/policy\\.json$"
+    },
+    "decision_ref": {
+      "type": "string",
+      "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*/artifacts/decision\\.json$"
+    },
+    "evidence_ref": {
+      "type": "string",
+      "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*/artifacts/proposed-evidence\\.json$"
+    }
+  }
+}

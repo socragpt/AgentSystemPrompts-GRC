@@ -1,0 +1,219 @@
+{
+  "schema_version": "0.1",
+  "policy_path": "dogfood/policy.json",
+  "trusted_identity_boundaries": [
+    "identity.dogfood-local"
+  ],
+  "cases": [
+    {
+      "id": "dogfood.allow.repository-read",
+      "request_path": "dogfood/requests/01_repository_read_allowed.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "allow",
+        "reason_codes": [
+          "control.allow"
+        ],
+        "cited_control_ids": [
+          "control.repository-read"
+        ],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.allow.tests-run",
+      "request_path": "dogfood/requests/02_tests_run_allowed.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "allow",
+        "reason_codes": [
+          "control.allow"
+        ],
+        "cited_control_ids": [
+          "control.local-validation"
+        ],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.allow.documentation-edit",
+      "request_path": "dogfood/requests/03_documentation_edit_allowed.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "allow",
+        "reason_codes": [
+          "control.allow"
+        ],
+        "cited_control_ids": [
+          "control.task-edits"
+        ],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.deny.outside-task-edit",
+      "request_path": "dogfood/requests/04_outside_task_edit_denied.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "authority.not_granted"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.require-approval.dependency-install",
+      "request_path": "dogfood/requests/05_dependency_install_requires_approval.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.dependencies"
+        ],
+        "approval_requirement_ids": [
+          "approval.maintainer-exact-action"
+        ]
+      }
+    },
+    {
+      "id": "dogfood.require-approval.local-commit",
+      "request_path": "dogfood/requests/06_local_commit_requires_approval.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.local-commit"
+        ],
+        "approval_requirement_ids": [
+          "approval.maintainer-exact-action"
+        ]
+      }
+    },
+    {
+      "id": "dogfood.require-approval.branch-push",
+      "request_path": "dogfood/requests/07_branch_push_requires_approval.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.remote-publication"
+        ],
+        "approval_requirement_ids": [
+          "approval.maintainer-exact-action"
+        ]
+      }
+    },
+    {
+      "id": "dogfood.require-approval.pull-request",
+      "request_path": "dogfood/requests/08_pull_request_requires_approval.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.remote-publication"
+        ],
+        "approval_requirement_ids": [
+          "approval.maintainer-exact-action"
+        ]
+      }
+    },
+    {
+      "id": "dogfood.require-approval.merge",
+      "request_path": "dogfood/requests/09_merge_requires_approval.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "require_approval",
+        "reason_codes": [
+          "control.require_approval"
+        ],
+        "cited_control_ids": [
+          "control.remote-merge"
+        ],
+        "approval_requirement_ids": [
+          "approval.maintainer-exact-action"
+        ]
+      }
+    },
+    {
+      "id": "dogfood.deny.secret-access",
+      "request_path": "dogfood/requests/10_secret_access_denied.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "authority.not_granted"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.deny.force-push",
+      "request_path": "dogfood/requests/11_force_push_denied.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "control.deny"
+        ],
+        "cited_control_ids": [
+          "control.remote-destructive"
+        ],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.deny.unmapped-action",
+      "request_path": "dogfood/requests/12_unmapped_action_denied.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "authority.capability_not_found"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.deny.stale-identity",
+      "request_path": "dogfood/requests/13_stale_identity_denied.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "identity.assertion_expired"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    },
+    {
+      "id": "dogfood.deny.malformed-request",
+      "request_path": "dogfood/requests/14_malformed_request_denied.json",
+      "valid_request": false,
+      "expected": {
+        "disposition": "deny",
+        "reason_codes": [
+          "request.schema.required"
+        ],
+        "cited_control_ids": [],
+        "approval_requirement_ids": []
+      }
+    }
+  ]
+}
