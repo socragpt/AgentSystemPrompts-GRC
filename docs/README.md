@@ -48,6 +48,14 @@ Read these files:
 The Python SDK and CLI use one evaluator. Future services and adapters must use
 the same semantics and conformance cases.
 
+## Dogfood Operator
+
+Read the [Dogfood 0 procedure](../dogfood/README.md) before you evaluate a live
+repository-development action. Phase 1 provides deterministic fixtures and a
+local recorder. Keep live records in the ignored pilot directory or outside
+the repository. Do not collect them until the maintainer explicitly opens the
+live shadow gate.
+
 ## Contributor
 
 Read [Contributing](../CONTRIBUTING.md) first. It identifies the context and
@@ -65,7 +73,7 @@ public contracts, capability claims, or product direction:
 - [Target Architecture](ARCHITECTURE.md) describes the planned system design.
 - [Project Status](PROJECT_STATUS.md) records verified current behavior and the
   next recommended milestone.
-- [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) defines the planned
+- [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) defines the
   non-enforcing shadow pilot and its next-build decision rules.
 - [Roadmap](../ROADMAP.md) sequences planned delivery.
 
