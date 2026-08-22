@@ -44,8 +44,10 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract is implemented; identity verification,
-approval grants, enforcement, and durable evidence remain planned.
+**Status:** the Slice B decision contract is implemented. A non-enforcing
+repository-development dogfood pilot is the active next milestone. Identity
+verification, approval grants, enforcement, and durable evidence remain
+planned.
 
 Implemented:
 
@@ -61,6 +63,31 @@ Remaining:
   shadow mode for progressive adoption.
 - Enforce tool, data, delegation, budget, time, and reversibility constraints.
 - Produce append-only, redacted decision evidence tied to policy versions.
+
+### Dogfood 0 — repository-development shadow pilot
+
+Before selecting the next Slice C implementation, apply the current evaluator
+to real development actions in this repository. The pilot must remain
+explicitly non-enforcing and must preserve existing user, Codex, Git, and
+GitHub controls.
+
+The pilot will:
+
+- model repository-development authority in Policy Bundle v0.1.
+- cover deterministic allow, deny, approval, stale, malformed, and unmapped
+  scenarios.
+- observe at least 25 real material actions across at least six capability
+  categories.
+- measure mapping coverage, decision agreement, false allows, false blocks,
+  approval load, normalization effort, and evidence completeness.
+- use recorded findings to rank normalization, selectors, initialization,
+  approval grants, enforcement, and evidence retention.
+
+See the [Repository Development Dogfooding Plan](docs/DOGFOOD_PLAN.md).
+
+**Dogfood exit criteria:** Every baseline scenario passes. Every observed
+decision is reproducible from minimized artifacts. Maintainers can rank the next
+three product gaps from evidence.
 
 **Exit criteria:** denied actions cannot dispatch and every outcome cites the controls that produced it.
 

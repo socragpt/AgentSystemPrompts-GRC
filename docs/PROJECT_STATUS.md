@@ -4,192 +4,185 @@
 - **Status date:** 2026-08-21
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
+- **Verified `main`:** `baf580d6e3ec5195c55229de73c624510d506bbf`
 
-This is the durable handoff record for maintainers and fresh context windows.
-It records verified project state, not aspirations. If it conflicts with the
-implementation or tests, verify the code and update this document.
+This document records verified project state, current decisions, active work,
+and the next recommended action. Implementation and tests are authoritative if
+they disagree with this document.
 
 ## Executive Summary
 
 Agent Governance Harness is a framework-neutral policy-as-code foundation for
-governing tool-using and multi-agent systems. It represents actors, roles,
-capabilities, resources, delegations, controls, approvals, exceptions, and
-evidence requirements as a versioned governance graph.
+governing tool-using and multi-agent systems. The current alpha validates and
+deterministically compiles governance policy. It also evaluates normalized
+action requests through one side-effect-free Python SDK and CLI core.
 
-The repository validates and deterministically compiles governance policy and
-implements the side-effect-free Decision Contract v0.1 evaluator through one
-Python SDK/CLI core. It does not authenticate identity, collect or verify
-approval grants, block tool dispatch, or persist durable evidence. That
-decision-versus-enforcement boundary is central to the project's credibility
-and must remain explicit.
+The evaluator returns exactly `allow`, `deny`, or `require_approval`, with
+stable reasons, effective constraints, authority paths, policy provenance, and
+proposal-only evidence. It does not authenticate identity, verify approval
+grants, block tool dispatch, enforce execution constraints, or persist durable
+evidence.
+
+The active milestone is a non-enforcing repository-development dogfood pilot.
+The pilot will use real workflow evidence to select the next product build
+before the project commits to the full Slice C sequence.
 
 ## Verified Current State
 
 The alpha foundation implements:
 
-- an installable Python package with no runtime dependencies;
-- the `agent-governance` command-line interface;
-- a compatibility XML governance prompt parser, validator, and renderer;
-- Policy Bundle v0.1 JSON Schema and a multi-agent example;
+- an installable Python package with no runtime dependencies.
+- the `agent-governance` command-line interface.
+- a compatibility XML governance prompt parser, validator, and renderer.
+- Policy Bundle v0.1 JSON Schema and a multi-agent example.
 - semantic validation for identifiers, references, lifecycle dates,
-  delegation authority, delegation cycles, approval quorum, and exceptions;
-- deterministic compilation to `agent-policy.txt` and `decision-data.json`;
-- versioned Action Request, Decision Result, and Proposed Evidence Record v0.1
-  JSON Schemas;
-- canonical request-parameter bindings over an unambiguous JSON subset;
-- a deterministic, side-effect-free evaluator returning exactly `allow`,
-  `deny`, or `require_approval` with stable reasons, cited controls, effective
-  constraints, authority paths, approval requirements, deterministic validity
-  bounds, and policy provenance;
-- identical evaluator semantics through the Python SDK and
-  `agent-governance policy evaluate` CLI;
-- portable allow, deny, and approval-gated conformance fixtures and examples;
+  delegation authority, delegation cycles, approval quorum, and exceptions.
+- deterministic compilation to `agent-policy.txt` and `decision-data.json`.
+- Action Request, Decision Result, and Proposed Evidence Record v0.1 JSON
+  Schemas.
+- canonical request-parameter bindings over an unambiguous JSON subset.
+- a deterministic, side-effect-free evaluator with exact policy, authority,
+  constraint, and lifecycle checks.
+- identical evaluator semantics through the Python SDK and CLI.
+- portable allow, deny, and approval-gated conformance fixtures.
 - a proposal-only evidence record for validation failures and every decision
-  outcome;
-- deterministic JSONL documentation-recall evaluations;
-- repository-contract, decision, policy, prompt, and evaluation tests; and
-- merged-foundation and merged Slice B CI across supported Python versions,
-  plus a local installed-wheel smoke test for the Slice B evaluator.
+  outcome.
+- deterministic JSONL documentation-recall evaluation utilities.
+- repository-contract, decision, policy, prompt, and evaluation tests.
+- a human-first documentation path for users, policy authors, integrators,
+  contributors, maintainers, and coding agents.
 
 The alpha foundation does **not** implement:
 
-- authenticated identity-to-principal binding;
-- cryptographic verification of the identity assertion named by a request;
-- approval grant creation, collection, verification, expiry, reuse, or quorum
-  workflows;
-- pre-dispatch tool or API enforcement;
-- a language-neutral decision service or sidecar;
-- append-only, integrity-protected decision evidence;
-- policy publication, activation, revocation, or rollback;
-- provider-neutral agent-framework adapters;
-- behavioral or adversarial model evaluation; or
+- authenticated identity-to-principal binding.
+- cryptographic verification of identity assertions.
+- approval grant creation, collection, verification, expiry, revocation,
+  reuse, or quorum workflows.
+- pre-dispatch tool or API enforcement.
+- a language-neutral decision service or sidecar.
+- append-only, integrity-protected decision evidence.
+- policy publication, activation, revocation, or rollback.
+- provider-neutral agent-framework adapters.
+- behavioral or adversarial model evaluation.
 - certification or compliance guarantees.
 
-## Delivered Milestones
-
-Pull request
-[#17](https://github.com/socragpt/agent-governance-harness/pull/17) merged
-`agent/repository-clarity` into `main` as `8335966` on 2026-08-21. It delivered:
-
-- product and repository name: **Agent Governance Harness** /
-  `agent-governance-harness`;
-- Python distribution: `agent-governance-harness`;
-- preserved import and CLI: `agent_governance` and `agent-governance`;
-- conventional package location: `src/agent_governance/`;
-- compatibility XML location: `examples/legacy/SystemPrompt.xml`; and
-- standards, templates, research, and glossary content consolidated under
-  `docs/`.
-
-PR #17 and post-merge `main` CI passed on Python 3.9, 3.11, and 3.13.
+## Recently Delivered
 
 Pull request
 [#18](https://github.com/socragpt/agent-governance-harness/pull/18) merged the
-Slice B change set from `codex/slice-b-decision-contract` into `main` as
-`5699933` on 2026-08-21. It delivered the preserved product-direction and
-continuity documentation plus the decision-contract implementation described
-above. The complete local verification baseline, PR CI, and post-merge `main`
-CI passed on Python 3.9, 3.11, and 3.13.
+Slice B decision contract into `main` as `5699933` on 2026-08-21. It delivered
+the normalized request, evaluator, three decision outcomes, stable reasons,
+constraints, policy provenance, and proposal-only evidence described above.
 
-## Documentation Clarity Pass
+Pull request
+[#20](https://github.com/socragpt/agent-governance-harness/pull/20) merged the
+human-first repository cleanup into `main` as `baf580d6` on 2026-08-21. It
+delivered:
 
-An STE-inspired clear-language pass updated 17 human-authored documentation
-files and landed directly on `main` as `b68a526` on 2026-08-21. The pass
-preserves normative keywords, requirement and reason codes, commands, links,
-identifiers, policy semantics, and implemented-versus-planned boundaries. It
-does not change source code, schemas, machine-readable fixtures, templates,
-research drafts, or runtime behavior.
+- a shorter public quickstart and explicit current capability boundary.
+- separate documentation paths for policy authors, SDK integrators,
+  contributors, and maintainers.
+- clear secondary status for compatibility, reference, template, research,
+  and documentation-recall material.
+- task-routed coding-agent guidance instead of a read-everything startup path.
 
-The editable install, byte compilation, strict XML validation, policy
-validation, decision evaluation, 13 documentation-recall examples, Markdown
-link checks, and all 57 tests pass locally. The checker findings that remain are
-advisory results for Markdown structure, protected normative language, or terms
-of art. The post-push
-[`main` CI run](https://github.com/socragpt/agent-governance-harness/actions/runs/32537306117)
+The change did not alter schemas, evaluator semantics, reason codes, CLI
+compatibility, or runtime behavior. Post-merge
+[`main` CI run 32540910938](https://github.com/socragpt/agent-governance-harness/actions/runs/32540910938)
 passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
 smoke tests.
 
-That CI run emitted non-blocking deprecation annotations because
-`actions/checkout@v4` and `actions/setup-python@v5` target Node.js 20 while the
-runner forces Node.js 24. Track this as workflow maintenance; it did not affect
-the verified result.
+## Active Milestone: Dogfood 0
+
+The next milestone is the planned
+[Repository Development Dogfooding Plan](DOGFOOD_PLAN.md). It will apply the
+current evaluator to development actions in this repository.
+
+Dogfood 0 is explicitly shadow and non-enforcing. User, Codex, operating-system,
+Git, and GitHub controls remain authoritative. The pilot will not treat
+evaluator output as permission to execute.
+
+The pilot will:
+
+1. model repository-development actors, capabilities, resources, controls, and
+   approval expectations in Policy Bundle v0.1;
+2. create deterministic allow, deny, approval, stale, malformed, and unmapped
+   scenarios;
+3. observe at least 25 real material development actions across at least six
+   capability categories;
+4. record minimized decisions, expected outcomes, disagreements, and workflow
+   friction; and
+5. use the evidence to rank the next three product gaps.
+
+The pilot tests adoption assumptions for `DX-005`, `DX-007`, and `DX-010`. It
+does not claim those target requirements are implemented.
 
 ## Decisions That Should Survive Handoffs
 
 1. **Govern the institution around the model.** The project models delegated
    authority, decision controls, and evidence—not only prompt behavior.
 2. **Fail closed.** Missing or invalid authority must not become permission.
-3. **Separate compilation, decision, and enforcement.** Compiled artifacts are
-   policy data. Decision results do not dispatch actions, and only a future
-   trusted enforcement point can ensure the exact call obeys them.
-4. **Prevent authority amplification.** An actor cannot delegate capabilities
-   or scope it does not hold.
-5. **Keep boundaries honest.** Documentation must clearly label implemented,
+3. **Separate compilation, decision, and enforcement.** Policy artifacts and
+   decision results do not dispatch actions.
+4. **Prevent authority amplification.** An actor cannot delegate authority it
+   does not hold.
+5. **Keep boundaries honest.** Documentation must distinguish implemented,
    experimental, compatibility, research, and planned material.
-6. **Favor portable contracts.** Schemas and deterministic artifacts should be
-   usable across agent frameworks and model providers.
+6. **Favor portable contracts.** Core schemas and semantics must remain
+   independent of model, framework, workflow, and tool vendors.
 7. **Preserve compatibility intentionally.** The XML baseline remains shipped
-   while the structured Policy Bundle becomes the primary path.
-8. **Make product intent enforceable.** Material work must conform to the
-   [Product Charter](PRODUCT_CHARTER.md), map to requirements in the
-   [Product Specification](PRODUCT_SPEC.md), and pass the charter's anti-drift
-   test before acceptance.
-9. **One engine, progressive adoption.** The target product exposes one
-   governance core through a wizard, CLI, embedded SDK, service, and adapters.
-   Organizations should be able to move from policy validation to shadow mode
-   and scoped enforcement without rewriting policy or adopting a new agent
-   framework.
-10. **Make identity trust an explicit evaluator input.** Decision Contract v0.1
-    requires a named assertion with a validity window and a caller-configured
-    trusted-boundary allowlist. The evaluator does not authenticate or
-    cryptographically verify that assertion.
-11. **Keep v0.1 selectors exact and conservative.** Capability, action,
-    resource, and typed-channel IDs must match exactly; unsupported channel
-    composition, overlapping exceptions, and incompatible cost currencies
-    fail closed.
-12. **Propose evidence without claiming retention.** Every decision returns a
-    content-addressed proposal marked `proposal_only`; no append-only or
-    tamper-evident store exists yet.
-
-## Recommended Next Milestone
-
-Implement the smallest coherent Slice C approval-and-enforcement reference.
-Slice B merged through PR #18 and no longer blocks this work.
-
-1. Specify Approval Grant v0.1 binding the principal, actor, goal, capability,
-   action, resource, canonical parameters, decision, policy digest, scope,
-   issue time, expiry, quorum, separation of duties, and reuse policy.
-2. Extend the shared evaluator or a separate verifier to reject missing,
-   expired, reused, insufficient, self-approved, or differently bound grants
-   without changing the three decision outcomes.
-3. Add explicitly non-enforcing shadow mode and an evidence sink interface that
-   preserves proposal-versus-retained-record distinctions.
-4. Build one narrow trusted pre-dispatch adapter only after approval binding is
-   tested; keep framework details outside the core evaluator.
-5. Demonstrate allow, deny, unresolved approval, approved dispatch, constraint
-   enforcement, and execution linkage end to end before adding more adapters or
-   an operational UI.
-
-Slice C should not be considered complete until denied, absent, invalid, stale,
-or unresolved decisions cannot dispatch through the reference integration.
+   while Policy Bundle v0.1 is the structured path forward.
+8. **Use one semantic core.** The CLI, SDK, future service, and adapters must
+   share conformance fixtures and reason codes.
+9. **Make identity trust explicit.** The current evaluator consumes a named,
+   caller-allowed trust boundary but does not verify it cryptographically.
+10. **Keep v0.1 selectors exact and conservative.** Unsupported composition,
+    ambiguity, and incompatible constraints fail closed.
+11. **Propose evidence without claiming retention.** Every result contains a
+    record marked `proposal_only`; no trusted evidence store exists.
+12. **Dogfood before selecting the next build.** Pilot evidence should decide
+    whether normalization, selectors, initialization, approvals, enforcement,
+    or evidence retention is the highest-priority gap.
+13. **Shadow is not enforcement.** A dogfood decision must not replace existing
+    authority, approval, or tool controls.
 
 ## Open Design Questions
 
-- How should resource selectors and constraint operators be versioned?
-- Which conflicts require `deny` versus `require_approval`?
-- How are approval grants bound to a request, policy version, scope, and expiry?
-- Which identity assertion format and verifier should first implement the v0.1
-  trust-boundary contract without putting vendor semantics in the core?
-- What integrity mechanism should protect evidence before an external store is
-  selected?
-- Which agent framework should be the first reference integration after the
-  framework-neutral decision contract is stable?
+- Can Policy Bundle v0.1 model repository path, command, branch, and remote
+  action scopes without unsafe overbreadth?
+- What trusted component should normalize concrete development actions to
+  exact v0.1 capability and resource IDs?
+- Which observation fields are sufficient to reproduce dogfood decisions
+  without retaining sensitive data?
+- How should out-of-band user authorization be referenced without pretending
+  that the current evaluator verified an Approval Grant?
+- Which pilot finding should take priority if normalization, approval, and
+  evidence gaps appear together?
+- After the pilot, how should resource selectors and constraint operators be
+  versioned?
+- Which identity assertion verifier and enforcement adapter should become the
+  first trusted references?
 
-Resolve these through explicit design notes and tests rather than embedding
-unstated assumptions in an integration.
+Resolve these questions through explicit fixtures, observations, design notes,
+and tests. Do not embed unstated assumptions in an adapter.
+
+## Next Recommended Action
+
+Implement only the Dogfood 0 artifacts described in `DOGFOOD_PLAN.md`:
+
+1. add the repository-development policy;
+2. add deterministic scenario requests and expected results;
+3. define a minimized observation record;
+4. document the manual shadow procedure; and
+5. validate the complete baseline before observing live actions.
+
+Do not implement approval verification, enforcement, or durable evidence in
+that milestone. Use the pilot findings to choose and plan the next product
+slice.
 
 ## Verification Baseline
 
-The current expected local check is:
+The complete local verification command set is:
 
 ```bash
 python -m pip install -e .
@@ -204,20 +197,22 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-The current suite contains 57 tests. On 2026-08-21 the full local checks passed,
-including Markdown links, all three decision outcomes, malformed-file denial,
-SDK/CLI parity, deterministic conformance fixtures, and an installed-wheel CLI
-and SDK smoke test outside the repository. The wheel was built without runtime
-dependencies. PR #18 and post-merge `main` CI passed on Python 3.9, 3.11, and
-3.13. The verified Slice B implementation merge commit is `5699933`.
+The suite contains 57 tests. Before PR #20 merged, the editable install, byte
+compilation, policy commands, 13 documentation-recall examples, Markdown link
+checks, and all 57 tests passed locally. Post-merge `main` CI passed the full
+Python 3.9, 3.11, and 3.13 matrix at `baf580d6`.
+
+On 2026-08-21, the complete local baseline also passed after the Dogfood 0 plan
+and status-document updates. This documentation milestone does not change
+runtime behavior, schemas, fixtures, reason codes, or CLI contracts.
 
 ## Handoff Checklist
 
-Before ending a material work session:
+Before ending material work:
 
-- record the current branch, PR, and CI outcome;
-- move completed work from the active change set into verified current state;
-- update decisions and open questions when design choices change;
-- reorder the recommended next milestone if priorities change;
-- record the commands and results used for verification; and
-- keep status claims dated and link to durable code, issues, or pull requests.
+- record the current branch, pull request, and CI outcome.
+- move completed work into verified current state.
+- update decisions and open questions.
+- reorder the next milestone when evidence changes priority.
+- record the commands and results used for verification.
+- keep status claims linked to durable code, tests, issues, or pull requests.
