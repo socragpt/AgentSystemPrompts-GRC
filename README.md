@@ -1,24 +1,22 @@
 # Agent Governance Harness
 
-**Policy-as-code for defining authority, delegation, approvals, and evidence
-requirements in multi-agent systems.**
+**Policy-as-code for authority, delegation, approvals, and evidence requirements
+in multi-agent systems.**
 
 [![CI](https://github.com/socragpt/agent-governance-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/socragpt/agent-governance-harness/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Agent Governance Harness lets an organization describe its actors, roles,
-capabilities, resources, policies, approvals, delegations, and exceptions as a
-versioned governance graph. The harness validates that graph with fail-closed
-behavior and compiles it into deterministic agent instructions and decision
-data. It then evaluates versioned, normalized action requests against the same
-policy semantics.
+Agent Governance Harness evaluates a normalized proposed action against a
+versioned governance policy. It returns exactly `allow`, `deny`, or
+`require_approval`, with reasons, effective constraints, policy provenance, and
+a proposal-only evidence record.
 
 > **Status:** early alpha. Policy Bundle v0.1, semantic validation,
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
-> evaluator are implemented in this alpha. Identity verification, approval
-> collection, tool enforcement, and durable evidence storage are not.
+> evaluator are implemented. Identity verification, approval-grant
+> verification, pre-dispatch enforcement, and durable evidence storage are not.
 
-## Try It in 60 Seconds
+## Run the Current Alpha
 
 The package requires Python 3.9 or newer and has no runtime dependencies.
 
@@ -28,161 +26,129 @@ source .venv/bin/activate
 python -m pip install -e .
 
 agent-governance policy validate examples/policies/multi_agent_operations.json
-agent-governance policy compile \
-  examples/policies/multi_agent_operations.json \
-  --output-dir dist/policy
-
 agent-governance policy evaluate \
   examples/policies/multi_agent_operations.json \
   examples/requests/browser_read_allowed.json \
   --trusted-identity-boundary identity.reference
 ```
 
-Successful compilation creates:
+The evaluation command returns Decision Result v0.1 JSON. It does not dispatch
+or block the proposed action.
 
-- `agent-policy.txt` — stable, agent-facing governance instructions;
-- `decision-data.json` — normalized policy data, resolution rules, and source
-  hashes used by the decision contract.
+To compile the policy into deterministic artifacts:
 
-Compilation produces policy data. It does not authorize or dispatch an action.
-The evaluator separately returns an advisory governance decision and proposed
-evidence. No current component enforces that decision before dispatch.
-
-## What It Governs
-
-```text
-actor -> role -> capability -> resource
-  |                    |
-  +---- delegation ----+
-
-policy -> control -> allow | deny | require_approval
-                         |
-                         +-> constraints, evidence, exceptions
+```bash
+agent-governance policy compile \
+  examples/policies/multi_agent_operations.json \
+  --output-dir dist/policy
 ```
 
-Policy Bundle v0.1 can express:
+Compilation creates:
 
-- human, agent, and service actors;
-- role-based baseline authority;
-- capability and resource boundaries;
-- human-to-agent and agent-to-agent delegation;
-- approval quorum and separation-of-duties requirements;
-- policy precedence, lifecycle, provenance, and fail-closed defaults;
-- constrained, time-bounded exceptions; and
-- evidence fields a future runtime must retain.
+- `agent-policy.txt`, which contains stable agent-facing governance
+  instructions; and
+- `decision-data.json`, which contains normalized policy data, resolution
+  rules, and source hashes.
 
-The validator rejects duplicate IDs, unresolved references, invalid
-lifecycles, delegation cycles, authority amplification, impossible approval
-quorums, and overbroad exceptions.
+These artifacts are policy data. They are not execution authorization.
 
-## Why a Harness
+## What Works Now
 
-Alignment in an agentic system is not only a property of the model. It is also
-a property of the institution around it: who may act, with which authority,
-through which channels, under which checks, and with what evidence.
+The current alpha can:
 
-The target operating flow is:
+- represent human, agent, and service actors, roles, capabilities, resources,
+  controls, approval requirements, delegations, exceptions, and evidence
+  requirements.
+- reject broken references, invalid lifecycles, delegation cycles, authority
+  amplification, impossible approval quorums, and overbroad exceptions.
+- compile equivalent policy input into equivalent artifacts.
+- evaluate Action Request v0.1 with fail-closed behavior.
+- resolve policy effects as `deny > require_approval > allow` at equal
+  precedence.
+- return cited controls, authority paths, effective constraints, stable reason
+  codes, and policy provenance.
+- expose the same evaluator through the Python SDK and CLI.
+
+The current alpha cannot:
+
+- authenticate or cryptographically verify identity assertions.
+- create, collect, verify, revoke, or consume approval grants.
+- prevent a tool, API, or agent framework from dispatching an action.
+- enforce returned constraints during execution.
+- retain append-only or tamper-evident evidence.
+
+## Choose a Documentation Path
+
+| Goal | Start here |
+| --- | --- |
+| Understand or author policy | [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) and the [example policy](examples/policies/multi_agent_operations.json) |
+| Integrate the evaluator | [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md) and the [conformance fixture](conformance/decision-contract-v0.1.json) |
+| Contribute code or documentation | [Contributing](CONTRIBUTING.md) |
+| Understand product direction | [Product Charter](docs/PRODUCT_CHARTER.md), [Product Specification](docs/PRODUCT_SPEC.md), and [Project Status](docs/PROJECT_STATUS.md) |
+| Browse all documentation | [Documentation Guide](docs/README.md) |
+
+## Governance Boundary
+
+The target product belongs between intent and effect:
 
 ```text
-authenticated principal
-        -> delegated task
-        -> agent proposes action
-        -> governance decision
-        -> deny | require approval | dispatch
-        -> execution result and evidence
-        -> monitoring and controlled improvement
+authenticated principal and authorized goal
+                    |
+                    v
+agent or service proposes a normalized action
+                    |
+                    v
+policy decision: deny | require_approval | allow
+                    |
+                    v
+trusted pre-dispatch enforcement point
+                    |
+                    v
+tool execution and policy-linked evidence
 ```
 
 This repository currently implements policy definition, compilation, and the
 side-effect-free decision portion of that flow. See the
-[Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md),
-[architecture](docs/ARCHITECTURE.md), and [roadmap](ROADMAP.md) for the
+[architecture](docs/ARCHITECTURE.md) and [roadmap](ROADMAP.md) for the target
 enforcement path.
 
-The [Product Charter](docs/PRODUCT_CHARTER.md) is the durable statement of
-purpose and anti-drift test. The [Product Specification](docs/PRODUCT_SPEC.md)
-translates it into target workflows, requirement IDs, and acceptance scenarios.
-The target delivery model is one shared governance engine exposed through a
-guided initializer, CLI, embedded SDK, service, and enforcement adapters. Only
-the policy CLI/compiler and shared Python SDK/CLI decision evaluator are
-implemented in the current alpha.
+## Repository Map
 
-## Safety Contract
+- `src/agent_governance/` contains the installable library and
+  `agent-governance` CLI.
+- `schemas/` contains the normative v0.1 JSON Schemas.
+- `conformance/` contains shared decision cases for current and future product
+  surfaces.
+- `examples/policies/` and `examples/requests/` contain executable examples.
+- `tests/` contains policy, decision, CLI, and repository-contract tests.
+- `docs/` contains product contracts, architecture, project status, reference
+  guidance, templates, and research drafts.
 
-The project is designed around these invariants:
+## Compatibility and Experimental Material
 
-1. Only authorized goals may be pursued.
-2. Higher-priority requirements override lower-priority instructions.
-3. Actors operate with least privilege and explicit resource limits.
-4. Material, irreversible, or out-of-scope actions require approval.
-5. The harness fails closed when authority is missing, stale, ambiguous, or
-   conflicting.
-6. Governed decisions identify the applicable policy and controls.
-7. Delegation cannot create authority the delegator does not possess.
-
-See the [safety model](docs/SAFETY_MODEL.md) for the instruction hierarchy,
-trust boundaries, and threat model.
-
-## Legacy XML Workflow
-
-The original XML governance prompt remains available as a compatibility
-example in [`examples/legacy/`](examples/legacy/). The installed package ships
-the same baseline, so these commands work without a repository checkout:
+The original XML prompt remains a compatibility example in
+[`examples/legacy/`](examples/legacy/). The installed package ships the same
+baseline, so these commands remain available:
 
 ```bash
 agent-governance validate --strict
 agent-governance render
 ```
 
-Policy Bundle v0.1 is the structured path forward. The XML prompt is not a
-runtime security boundary.
+The XML prompt is not a runtime security boundary. Policy Bundle v0.1 is the
+structured path forward.
 
-## Documentation-Recall Evaluation
+The separate documentation-recall utility under [`evals/`](evals/) measures
+exact match and token F1. It does not test agent behavior or establish
+governance compliance. Behavioral and adversarial evaluation remains planned.
 
-The separate evaluation utility measures documentation recall using exact match
-and token F1:
+## Scope and Safety
 
-```bash
-python evals/run_eval.py
-python evals/run_eval.py --responses responses.jsonl --threshold 0.70
-```
+The project is not an identity provider, action dispatcher, sandbox, agent
+framework, certification, legal opinion, or guarantee of regulatory
+compliance. The harness must fail closed if authority is missing, stale,
+malformed, ambiguous, or conflicting. Delegation must not create authority that
+the delegator does not possess.
 
-These checks do not establish governance compliance. Behavioral and
-adversarial scenarios are planned in the [roadmap](ROADMAP.md).
-
-## Repository Map
-
-- `src/agent_governance/` — installable library and `agent-governance` CLI.
-- `schemas/` — normative policy, request, decision, and evidence JSON Schemas.
-- `conformance/` — shared decision cases for SDK, CLI, and future service surfaces.
-- `examples/policies/` — valid multi-actor governance bundles.
-- `examples/requests/` — allow, deny, and approval-gated Action Request v0.1 examples.
-- `examples/legacy/` — the compatibility XML prompt baseline.
-- `docs/` — architecture, safety, standards, templates, and research.
-- `evals/` — deterministic evaluation datasets and runner.
-- `tests/` — unit and repository-contract tests.
-
-Start with the [Product Charter](docs/PRODUCT_CHARTER.md), the
-[Product Specification](docs/PRODUCT_SPEC.md), and the
-[documentation guide](docs/README.md). Then read the
-[Policy Bundle v0.1 specification](docs/POLICY_BUNDLE_V0.1.md), the
-[Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md), and the
-[business purpose](docs/BUSINESS_PURPOSE.md).
-
-## Boundaries
-
-This project is not:
-
-- a claim that prompting alone makes model behavior safe;
-- an identity provider, action dispatcher, enforcement point, or sandbox in its
-  current form;
-- a certification, legal opinion, or guarantee of regulatory compliance; or
-- a replacement for identity, security, workflow, or GRC systems.
-
-Future control mappings may reference established governance and security
-frameworks, but mappings indicate conceptual alignment rather than
-certification.
-
-See [Contributing](CONTRIBUTING.md) before proposing changes and
-[Security](SECURITY.md) for vulnerability reporting. The project is available
-under the [MIT License](LICENSE).
+See the [Safety Model](docs/SAFETY_MODEL.md), [Security Policy](SECURITY.md), and
+[MIT License](LICENSE).

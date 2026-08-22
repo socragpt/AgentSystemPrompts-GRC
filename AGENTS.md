@@ -1,112 +1,99 @@
 # Agent Working Agreement
 
-This file is the entry point for coding agents and fresh context windows working
-on Agent Governance Harness.
+This file routes coding agents to the context required for their task. Human
+contributors can start with [`README.md`](README.md) and
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Start Every Fresh Context
 
 1. Read [`docs/PRODUCT_CHARTER.md`](docs/PRODUCT_CHARTER.md) for the durable
    purpose, constitutional principles, boundaries, and anti-drift test.
-2. Read [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) for target workflows,
-   requirements, acceptance scenarios, and the definition of a complete
-   reference product.
-3. Read [`README.md`](README.md) for the implemented product promise and current
-   boundary.
-4. Read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the latest
-   project snapshot, active work, decisions, and next priorities.
-5. Read [`ROADMAP.md`](ROADMAP.md),
-   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), and
-   [`docs/SAFETY_MODEL.md`](docs/SAFETY_MODEL.md) before changing behavior.
-6. Inspect the current Git branch, working tree, recent commits, and open pull
-   requests. Do not assume the last conversation's branch or PR state is still
-   current.
-7. Treat implementation and tests as authoritative when they disagree with a
-   status document, then update the status document in the same change.
+2. Read [`README.md`](README.md) for the implemented product boundary and
+   [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the verified current
+   state and next priorities.
+3. Inspect the current Git branch, working tree, remote, recent commits, open
+   pull requests, and CI. Do not rely on prior chat or handoff state.
+4. Select the additional context for the task from the routing table below.
+5. Treat implementation and tests as authoritative when they disagree with a
+   current-state document. Update the affected document in the same change.
+
+## Task-Routed Context
+
+| Task | Read before editing |
+| --- | --- |
+| Policy shape, validation, or compilation | [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md), [`docs/SAFETY_MODEL.md`](docs/SAFETY_MODEL.md), [`docs/POLICY_BUNDLE_V0.1.md`](docs/POLICY_BUNDLE_V0.1.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), and [`ROADMAP.md`](ROADMAP.md) |
+| Action request, decision, reason code, or constraint | [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md), [`docs/SAFETY_MODEL.md`](docs/SAFETY_MODEL.md), [`docs/DECISION_CONTRACT_V0.1.md`](docs/DECISION_CONTRACT_V0.1.md), [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), and [`ROADMAP.md`](ROADMAP.md) |
+| Approval, enforcement, identity, evidence, or adapter behavior | Product Specification, Safety Model, both implemented contract documents, Architecture, and Roadmap |
+| CLI, packaging, or CI | [`CONTRIBUTING.md`](CONTRIBUTING.md), `pyproject.toml`, `.github/workflows/ci.yml`, and each affected public document |
+| Compatibility XML | `examples/legacy/SystemPrompt.xml`, `src/agent_governance/SystemPrompt.xml`, `src/agent_governance/prompt.py`, and the prompt and repository-contract tests |
+| Documentation-only change | The document-authority map in [`docs/README.md`](docs/README.md), the source documents for each claim, and the implemented behavior that the text describes |
+| Product direction or roadmap | Product Specification, Safety Model, Architecture, Roadmap, [`docs/BUSINESS_PURPOSE.md`](docs/BUSINESS_PURPOSE.md), and Project Status |
+
+Read an entire selected document before acting on it. Do not load unrelated
+reference, template, or research material unless the task requires it.
 
 ## Product Guardrails
 
 - The project is a framework-neutral, policy-as-code governance harness for
   authority, delegation, approvals, constraints, and evidence requirements in
   multi-agent systems.
-- [`docs/PRODUCT_CHARTER.md`](docs/PRODUCT_CHARTER.md) is the stable authority
-  for product purpose and boundaries. Architecture and implementation must
-  conform to it rather than redefine it implicitly.
-- The current compiler emits deterministic policy artifacts. It does **not**
+- The Product Charter is the stable authority for product purpose and
+  boundaries. Architecture and implementation must conform to it.
+- The current compiler emits deterministic policy artifacts. It does not
   authorize or dispatch runtime actions.
 - The target product exposes one shared governance engine through a guided
   initializer, CLI, embedded SDK, decision service, and enforcement adapters.
   These surfaces must not develop different policy semantics.
 - Missing, stale, ambiguous, or conflicting authority must fail closed.
-- Delegation must not create authority the delegator does not possess.
-- The XML prompt is a compatibility path; Policy Bundle v0.1 is the structured
+- Delegation must not create authority that the delegator does not possess.
+- The XML prompt is a compatibility path. Policy Bundle v0.1 is the structured
   path forward.
-- Preserve the `agent_governance` Python import and `agent-governance` CLI unless
-  a deliberate compatibility change is approved.
+- Preserve the `agent_governance` Python import and `agent-governance` CLI
+  unless a deliberate compatibility change is approved.
 - Do not claim certification, legal compliance, or safety guarantees.
 
 ## Change Discipline
 
 - Prefer one reviewable milestone per branch and pull request.
-- Map material product work to requirement IDs in
-  [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) and run the
-  [charter anti-drift test](docs/PRODUCT_CHARTER.md#anti-drift-test).
+- Map material product work to requirement IDs in the Product Specification
+  and run the Product Charter anti-drift test.
 - Keep schemas, examples, documentation, tests, and compiled behavior aligned.
 - Add precise failing tests before or with changes to governance semantics.
-- Distinguish implemented behavior from target architecture in all public text.
-- Do not weaken fail-closed behavior merely to accept malformed or incomplete
-  policies.
-- Update [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) after a material
-  merge, design decision, milestone change, or newly discovered blocker.
+- Distinguish implemented behavior from target architecture in public text.
+- Do not weaken fail-closed behavior to accept malformed or incomplete policy.
+- Update Project Status after a material merge, design decision, milestone
+  change, or newly discovered blocker.
+- Do not publish, merge, delete remote work, or modify remote state unless the
+  user explicitly authorizes it.
 
-## Context Management
+## Context and Handoff
 
-- Use one chat or task per coherent outcome. Start a fresh task when the goal
-  changes materially instead of carrying the entire project in one transcript.
-- Keep the same chat while solving the same problem so relevant reasoning and
-  decisions remain available.
-- Treat `AGENTS.md`, `docs/PROJECT_STATUS.md`, committed code, tests, and Git
-  history as durable context. Do not rely on chat memory for project truth.
-- At the start of a fresh context, verify the working directory, Git branch,
-  working tree, open pull requests, and CI before relying on a prior handoff.
-- In Codex CLI, use `/status` to inspect remaining context and `/compact` when a
-  long chat should continue with a concise summary of earlier turns.
-- Use `/new` or `/clear` for a genuinely new outcome, `/fork` for an alternative
-  approach, and `/resume` only when the original transcript remains relevant.
-- Keep noisy exploration, long logs, and independent investigations out of the
-  main thread when possible; return concise conclusions and file references.
-- Before ending material work, update `docs/PROJECT_STATUS.md` with the verified
-  state, decisions, validation results, blockers, and next recommended action.
-- When this file changes, begin a new Codex session from the repository root so
-  Codex rebuilds its instruction context from the updated guidance.
+- Use one task for one coherent outcome. Start a new task when the goal changes
+  materially.
+- Keep noisy exploration and independent investigations out of the main task
+  when possible. Return concise conclusions and file references.
+- Before ending material work, record verified state, decisions, validation
+  results, blockers, and the next recommended action in Project Status.
+- When this file changes, begin a new Codex task from the repository root so
+  the updated instructions load into context.
 
 ## Standard Verification
 
-From the repository root:
+Run the relevant subset during development. Run the complete baseline before a
+material handoff:
 
 ```bash
 python -m pip install -e .
 python -m compileall -q src examples evals tests
 agent-governance validate --strict
 agent-governance policy validate examples/policies/multi_agent_operations.json
+agent-governance policy evaluate \
+  examples/policies/multi_agent_operations.json \
+  examples/requests/browser_read_allowed.json \
+  --trusted-identity-boundary identity.reference
+python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
 For packaging changes, also build a wheel and smoke-test the installed CLI from
 outside the repository.
-
-## Fresh-Context Seed
-
-Copy this into a new conversation when explicit kickoff context is useful:
-
-> Continue development of the Agent Governance Harness repository. First read
-> `AGENTS.md`, `docs/PRODUCT_CHARTER.md`, `docs/PRODUCT_SPEC.md`, `README.md`,
-> `docs/PROJECT_STATUS.md`, `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
-> `docs/SAFETY_MODEL.md`. Then inspect the current
-> Git branch and working tree, recent commits, open pull requests, and CI; do
-> not rely on stale conversation state. Summarize the verified state before
-> editing. Continue the highest-priority unblocked item in the project status,
-> map material work to product-spec requirement IDs, apply the charter's
-> anti-drift test, preserve the documented fail-closed and compatibility
-> boundaries, run the relevant tests, and update `docs/PROJECT_STATUS.md`
-> before handoff. Do not
-> publish, merge, or delete remote work unless I explicitly ask.

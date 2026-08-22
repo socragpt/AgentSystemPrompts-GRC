@@ -1,90 +1,109 @@
 # Documentation Guide
 
-Use this page to distinguish implemented alpha behavior, target architecture,
-human-readable guidance, templates, and research drafts.
+Choose the shortest path that matches your work. You do not need to read every
+project document before you use or contribute to the current alpha.
 
-## Start Here
+## First-Time User
 
-- [Product Charter](PRODUCT_CHARTER.md) is the stable north star for purpose,
-  principles, boundaries, tradeoffs, and the anti-drift test.
-- [Product Specification](PRODUCT_SPEC.md) defines target users, workflows,
-  product surfaces, deployment modes, requirement IDs, acceptance scenarios,
-  and what a complete reference product means.
-- [Project Status](PROJECT_STATUS.md) is the living handoff record for current
-  capabilities, active work, decisions, and next priorities.
-- [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) defines the implemented
-  normalized request, decision, reason-code, constraint, and proposed-evidence
-  contracts and their enforcement boundary.
-- [Business Purpose](BUSINESS_PURPOSE.md) explains the problem, intended users,
-  value hypothesis, and proof milestones.
-- [Target Architecture](ARCHITECTURE.md) describes the planned institutional
-  governance harness, trust boundaries, governance graph, and decision flow.
-- [Safety Model](SAFETY_MODEL.md) defines the instruction hierarchy, safety
-  invariants, threat model, and intended decision outcomes.
-- [Roadmap](../ROADMAP.md) separates implemented policy validation and
-  compilation from planned enforcement, evidence, and behavioral evaluation.
+Start with the root [README](../README.md). It contains the implemented product
+boundary and a verified policy-evaluation quickstart.
 
-## Implemented Alpha
+Then inspect these executable examples:
+
+- [multi-agent policy](../examples/policies/multi_agent_operations.json).
+- [allowed browser request](../examples/requests/browser_read_allowed.json).
+- [approval-gated email request](../examples/requests/email_send_requires_approval.json).
+- [denied unmapped request](../examples/requests/unmapped_action_denied.json).
+
+The evaluator returns an advisory governance decision and proposal-only
+evidence. No current component prevents dispatch.
+
+## Policy Author
+
+Read these files:
+
+1. [Policy Bundle v0.1](POLICY_BUNDLE_V0.1.md) for the policy contract,
+   validation rules, and deterministic compilation behavior.
+2. The normative
+   [Policy Bundle JSON Schema](../schemas/policy-bundle-v0.1.schema.json).
+3. The [multi-agent policy](../examples/policies/multi_agent_operations.json)
+   for a complete example.
+
+Use the [Safety Model](SAFETY_MODEL.md) when policy work changes authority,
+delegation, approval, or failure behavior.
+
+## SDK or Integration Developer
+
+Read these files:
+
+1. [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) for request, decision,
+   reason-code, constraint, and proposed-evidence semantics.
+2. The [Action Request](../schemas/action-request-v0.1.schema.json),
+   [Decision Result](../schemas/decision-result-v0.1.schema.json), and
+   [Proposed Evidence Record](../schemas/proposed-evidence-record-v0.1.schema.json)
+   JSON Schemas.
+3. The shared
+   [decision conformance fixture](../conformance/decision-contract-v0.1.json).
+
+The Python SDK and CLI use one evaluator. Future services and adapters must use
+the same semantics and conformance cases.
+
+## Contributor
+
+Read [Contributing](../CONTRIBUTING.md) first. It identifies the context and
+verification required for each type of change.
+
+Read the deeper product documents before you change governance behavior,
+public contracts, capability claims, or product direction:
+
+- [Product Charter](PRODUCT_CHARTER.md) defines durable purpose, principles,
+  boundaries, and the anti-drift test.
+- [Product Specification](PRODUCT_SPEC.md) defines target workflows,
+  requirement IDs, and acceptance scenarios.
+- [Safety Model](SAFETY_MODEL.md) defines safety invariants and threat
+  assumptions.
+- [Target Architecture](ARCHITECTURE.md) describes the planned system design.
+- [Project Status](PROJECT_STATUS.md) records verified current behavior and the
+  next recommended milestone.
+- [Roadmap](../ROADMAP.md) sequences planned delivery.
+
+## Document Authority
+
+When documents appear to overlap, use this order:
+
+1. The Product Charter defines durable purpose and boundaries.
+2. The Safety Model defines safety invariants and threat assumptions.
+3. The Product Specification defines target requirements.
+4. Policy Bundle v0.1 and Decision Contract v0.1 define implemented public
+   contracts.
+5. Architecture and Roadmap describe the target design and delivery sequence.
+6. Project Status records the verified current state.
+
+Implementation and tests are authoritative when a current-state document
+disagrees with executable behavior.
+
+## Secondary and Compatibility Material
+
+These files are not required for the primary developer path:
 
 - [`examples/legacy/SystemPrompt.xml`](../examples/legacy/SystemPrompt.xml) is
-  the compatibility XML governance baseline.
-- [`src/agent_governance/`](../src/agent_governance/) contains the parser, validator,
-  policy compiler, prompt renderer, evaluation functions, and command-line
-  interface.
-- [Policy Bundle v0.1](POLICY_BUNDLE_V0.1.md) documents the experimental
-  governance graph, deterministic compilation contract, and enforcement
-  boundary.
-- [`schemas/policy-bundle-v0.1.schema.json`](../schemas/policy-bundle-v0.1.schema.json)
-  is the normative document-shape schema; the
-  [multi-agent example](../examples/policies/multi_agent_operations.json)
-  exercises delegation, channel use, approval, and a bounded exception.
-- [`evals/`](../evals/) contains the deterministic documentation-recall dataset
-  and runner.
-- [`examples/`](../examples/) contains executable usage examples.
+  the shipped XML compatibility baseline. It is not an enforcement boundary.
+- [Business Purpose](BUSINESS_PURPOSE.md) records the value and commercial
+  hypotheses behind the target product.
+- [Glossary](GLOSSARY.md) defines project and governance terms.
+- [`standards/`](standards/) contains human-readable organizational guidance.
+  The package does not enforce these documents.
+- [`templates/`](templates/) contains general planning, policy, and risk
+  templates. They are not Policy Bundle v0.1 starter policies.
+- [`research/`](research/) contains speculative or unvalidated drafts. Research
+  content is not a product contract.
+- [`evals/`](../evals/) contains a documentation-recall experiment. It does not
+  test governance enforcement or agent behavior.
 
-The alpha compiler produces policy data. It does not implement runtime
-authorization, approval workflows, pre-dispatch enforcement, or append-only
-evidence storage.
+The repository uses the [MIT License](../LICENSE). The research license note
+does not modify the repository license.
 
-The separate Decision Contract v0.1 evaluator returns advisory policy decisions
-and proposal-only evidence. It does not authenticate callers, dispatch actions,
-enforce constraints, or retain evidence.
+## Agent Instructions
 
-## Governance Guidance
-
-- [Glossary](GLOSSARY.md)
-- [GRC Framework](standards/grc-framework.md)
-- [Decision-Making Standard](standards/decision-making.md)
-- [Documentation Standard](standards/documentation.md)
-- [Operating Standard](standards/operating.md)
-- [Planning Standard](standards/planning.md)
-- [Monitoring and Improvement Standard](standards/monitoring-improvement.md)
-- [Action and Compliance Evidence Protocols](standards/action-compliance-evidence.md)
-
-These documents describe policy and target operating expectations. Their
-presence in the repository does not mean the current package enforces them.
-
-## Templates
-
-- [Data Protection Policy, Standard, and Procedure](templates/policies/data-protection-policy.md)
-- [Strategic Plan](templates/plans/strategic-plan.md)
-- [Risk Assessment](templates/assessments/risk-assessment.md)
-
-## Research Drafts
-
-- [Ethometric AI Responsibility Index](research/ethometric-ai-responsibility-index.md) is explicitly an
-  unvalidated measurement proposal.
-- [License Warranty Proposal](research/apache-3-license-proposal.md) is a speculative research
-  note. It is not the repository license and does not modify it.
-
-The repository is distributed under the [MIT License](../LICENSE).
-
-## Project Information
-
-- [Product Charter](PRODUCT_CHARTER.md)
-- [Product Specification](PRODUCT_SPEC.md)
-- [Project Status](PROJECT_STATUS.md)
-- [Agent Working Agreement](../AGENTS.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Security](../SECURITY.md)
-- [Roadmap](../ROADMAP.md)
+[AGENTS.md](../AGENTS.md) contains task-routing and continuity instructions for
+coding agents. Human contributors can use the documentation paths above.
