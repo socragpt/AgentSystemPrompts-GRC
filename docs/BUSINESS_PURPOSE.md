@@ -112,7 +112,7 @@ revenue, or product tiers.
 
 ## Proof milestones
 
-The business case should be earned through technical proof:
+Earn the business case through technical proof:
 
 1. **Define — policy specification and compiler (v0.1 implemented).** Versioned
    schemas and a deterministic compiler. Invalid policy fails at a precise
@@ -120,16 +120,21 @@ The business case should be earned through technical proof:
 2. **Decide — decision and evidence proposal (v0.1 implemented).** Normalized
    requests return `allow`, `deny`, or `require_approval` with stable reasons,
    controls, constraints, provenance, and proposal-only evidence.
-3. **Enforce — approval and pre-dispatch reference.** Exact-bound approval and
-   one trusted adapter demonstrate that denied or unresolved actions cannot
-   dispatch and that execution remains within returned constraints.
-4. **Prove — behavioral evaluation and integration.** Adversarial evaluations
+3. **Observe — repository-development dogfood pilot.** Apply the current
+   decision contract in explicitly non-enforcing shadow mode. Use real workflow
+   evidence to identify adoption friction and select the next product build.
+4. **Enforce — approval and pre-dispatch reference.** Exact-bound approval
+   demonstrates that denied or unresolved actions cannot dispatch. One trusted
+   adapter demonstrates that execution remains within returned constraints.
+5. **Prove — behavioral evaluation and integration.** Adversarial evaluations
    and an end-to-end agent integration demonstrate that continuous integration
    can detect meaningful governance regressions before release.
 
-The immediate next proof is the smallest approval-and-enforcement slice built
-on Decision Contract v0.1. It should verify an exact-bound approval and mediate
-one narrow tool call without moving framework-specific semantics into the core.
+The immediate next proof is the
+[Repository Development Dogfooding Plan](DOGFOOD_PLAN.md). The pilot will use
+Policy Bundle v0.1 and Decision Contract v0.1 without claiming enforcement.
+Its findings will determine whether normalization, selectors, initialization,
+approval grants, enforcement, or evidence retention should be built next.
 
 ## Boundaries
 

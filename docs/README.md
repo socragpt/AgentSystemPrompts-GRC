@@ -65,6 +65,8 @@ public contracts, capability claims, or product direction:
 - [Target Architecture](ARCHITECTURE.md) describes the planned system design.
 - [Project Status](PROJECT_STATUS.md) records verified current behavior and the
   next recommended milestone.
+- [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) defines the planned
+  non-enforcing shadow pilot and its next-build decision rules.
 - [Roadmap](../ROADMAP.md) sequences planned delivery.
 
 ## Document Authority
@@ -78,6 +80,8 @@ When documents appear to overlap, use this order:
    contracts.
 5. Architecture and Roadmap describe the target design and delivery sequence.
 6. Project Status records the verified current state.
+7. The Dogfooding Plan defines one current experiment. It does not change the
+   product contract.
 
 Implementation and tests are authoritative when a current-state document
 disagrees with executable behavior.
