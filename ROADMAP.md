@@ -44,8 +44,8 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract is implemented. A non-enforcing
-repository-development dogfood pilot is the active next milestone. Identity
+**Status:** the Slice B decision contract and Dogfood 0 Phase 1 are implemented.
+The non-enforcing repository-development shadow pilot is active. Identity
 verification, approval grants, enforcement, and durable evidence remain
 planned.
 

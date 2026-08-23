@@ -5,6 +5,7 @@
 - **Mode:** shadow; explicitly non-enforcing
 - **Scope:** development of Agent Governance Harness
 - **Plan date:** 2026-08-21
+- **Current report:** [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md)
 
 ## Purpose
 
@@ -164,7 +165,8 @@ report should aggregate findings and use sanitized examples.
 
 The pilot report must calculate:
 
-- **mapping coverage:** evaluated actions divided by material actions observed.
+- **mapping coverage:** material actions with a safe capability and resource
+  mapping divided by material actions observed.
 - **decision agreement:** decisions that match the maintainer's expected
   disposition.
 - **false allows:** harness `allow` results when the maintainer expected
