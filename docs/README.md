@@ -56,6 +56,9 @@ local recorder. Keep live records in the ignored pilot directory or outside
 the repository. Do not collect them until the maintainer explicitly opens the
 live shadow gate.
 
+Read the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for the current sanitized
+metrics, findings, evidence limits, and next operational milestone.
+
 ## Contributor
 
 Read [Contributing](../CONTRIBUTING.md) first. It identifies the context and
@@ -75,6 +78,8 @@ public contracts, capability claims, or product direction:
   next recommended milestone.
 - [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) defines the
   non-enforcing shadow pilot and its next-build decision rules.
+- [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) records sanitized pilot evidence
+  and provisional findings.
 - [Roadmap](../ROADMAP.md) sequences planned delivery.
 
 ## Document Authority

@@ -4,7 +4,7 @@
 - **Status date:** 2026-08-22
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `79b7b4a9d3add6805339bf021256f49375515e24`
+- **Verified `main`:** `39831956cfcbb88f2dc75fd05548aec5ca26d707`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -24,10 +24,11 @@ grants, block tool dispatch, enforce execution constraints, or persist durable
 evidence.
 
 The active milestone is a non-enforcing repository-development dogfood pilot.
-Phase 1 is implemented and locally verified on `codex/dogfood-phase-1`. It has
-not been merged. The maintainer explicitly authorized live shadow observation
-and publication of the Phase 1 candidate for review on 2026-08-22. The pilot is
-now running. Pull-request publication does not authorize merge.
+Phase 1 is implemented on `main`. The maintainer explicitly authorized live
+shadow observation on 2026-08-22, and the pilot is running. The current
+sanitized findings are in the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md).
+Post-merge status and handoff updates are in progress on the local
+`codex/dogfood-status-handoff` branch. They are not committed or published.
 
 ## Verified Current State
 
@@ -68,7 +69,7 @@ The alpha foundation does **not** implement:
 - behavioral or adversarial model evaluation.
 - certification or compliance guarantees.
 
-The local `codex/dogfood-phase-1` branch adds a Phase 1 candidate with:
+Dogfood 0 Phase 1 adds:
 
 - an exact-resource repository-development Policy Bundle v0.1;
 - 14 deterministic allow, deny, approval, stale, malformed, and unmapped
@@ -121,12 +122,21 @@ semantics. Post-merge
 [`main` CI run 32541704684](https://github.com/socragpt/agent-governance-harness/actions/runs/32541704684)
 passed on Python 3.9, 3.11, and 3.13.
 
+Pull request
+[#22](https://github.com/socragpt/agent-governance-harness/pull/22) merged
+Dogfood 0 Phase 1 into `main` as `39831956` on 2026-08-22 UTC. It added the
+repository-development policy, 14 deterministic scenarios, the minimized
+observation contract and recorder, the live-gated procedure, and 12 tests. It
+did not change the shared evaluator or add enforcement. Post-merge
+[`main` CI run 32599618658](https://github.com/socragpt/agent-governance-harness/actions/runs/32599618658)
+passed on Python 3.9, 3.11, and 3.13.
+
 ## Active Milestone: Dogfood 0
 
 The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) governs the
 active milestone. Phase 1 builds the policy, fixtures, expected results,
-observation contract, recorder, procedure, and tests. The local Phase 1
-candidate meets its acceptance criteria.
+observation contract, recorder, procedure, and tests. The Phase 1 artifacts met
+their acceptance criteria and are now merged into `main`.
 
 Dogfood 0 is explicitly shadow and non-enforcing. User, Codex, operating-system,
 Git, and GitHub controls remain authoritative. The pilot will not treat
@@ -157,6 +167,15 @@ workflow, reuses the shared policy and decision semantics, preserves
 fail-closed behavior, keeps trust assumptions explicit, remains
 framework-neutral, and produces reproducible artifacts. The documentation does
 not describe shadow decisions as enforcement or verified approval.
+
+The verified pilot snapshot through `observation.dogfood.012` contains 12
+observations and 8 material actions. All 8 material actions had a safe
+capability and resource mapping, so mapping coverage is 100%. Seven modeled
+capability categories and one unmapped action category have been observed. All
+12 retained decisions are reproducible and match the maintainer's expected
+policy disposition. The snapshot has zero false allows and zero false blocks.
+See the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics and evidence
+limits.
 
 ## Decisions That Should Survive Handoffs
 
@@ -222,13 +241,18 @@ not describe shadow decisions as enforcement or verified approval.
   remains unmeasured.
 - The pilot has no built-in aggregate report. Current metrics require a
   separate query over the local JSONL index.
-- A malformed live request failed closed because `write` is not a supported
-  side-effect value. The recorder rejects invalid requests, so it cannot retain
-  that denial through its normal path. This limits live evidence for malformed
-  and request-construction failures.
+- The operator reported a malformed live request. It failed closed because
+  `write` is not a supported side-effect value. The recorder rejects invalid
+  requests, so it cannot retain that denial through its normal path. No
+  retained pilot artifact independently reproduces this event. This limit
+  reduces the evidence available for malformed and request-construction
+  failures.
 - The recorder accepts an operator-supplied observation timestamp but does not
   validate it against the request or recording time. One sampled read exposed
   this risk when its supplied timestamp was later than the recorder invocation.
+- Local branch creation is not modeled by the pilot policy. The live request
+  failed closed with `authority.capability_not_found`, and the existing
+  workflow performed the reversible local action in shadow mode.
 - Which pilot finding should take priority if normalization, approval, and
   evidence gaps appear together?
 - After the pilot, how should resource selectors and constraint operators be
@@ -241,14 +265,15 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Continue the authorized live shadow pilot. Publish and review the Phase 1
-candidate through the normal pull-request workflow. Merge still requires
-separate authorization.
+Implement the bounded Dogfood 0 observation-hardening milestone defined in the
+[pilot report](DOGFOOD_REPORT.md). Improve attempt retention, timestamps,
+explicit reporting fields, aggregate verification, and the local-branch scope
+decision without adding enforcement or separate policy semantics.
 
-The live pilot must observe at least 25 material actions across at least six
-capability categories. Use those observations to rank the next three product
-gaps. Do not implement approval verification, enforcement, or durable evidence
-before the pilot evidence supports that choice.
+Then continue the live pilot to at least 25 material actions and use the full
+evidence to rank the next three product gaps. Do not implement approval
+verification, enforcement, or durable evidence before the pilot supports that
+choice.
 
 ## Verification Baseline
 
@@ -268,15 +293,11 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` contains 57 tests. Post-merge CI passed the full Python 3.9,
-3.11, and 3.13 matrix at `79b7b4a9`.
-
-On 2026-08-22, the complete local baseline passed on
-`codex/dogfood-phase-1`. The branch contains 69 tests: the existing 57 tests
-and 12 Phase 1 tests. The editable install, byte compilation, compatibility XML
-validation, example and dogfood policy validation, reference decision, 13
-documentation-recall examples, Markdown links, and all 69 tests passed. The
-verification created no live observations.
+Verified `main` contains 69 tests. Post-merge CI passed the full Python 3.9,
+3.11, and 3.13 matrix at `39831956`. Before merge, the editable install, byte
+compilation, compatibility XML validation, example and dogfood policy
+validation, reference decision, 13 documentation-recall examples, Markdown
+links, and all 69 tests passed locally.
 
 ## Handoff Checklist
 

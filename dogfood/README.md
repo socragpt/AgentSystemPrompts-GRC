@@ -175,3 +175,6 @@ categories, calculate the metrics in
 [`docs/DOGFOOD_PLAN.md`](../docs/DOGFOOD_PLAN.md). Rank the next three product
 gaps from the retained evidence. Do not select the next build from anecdote or
 from the harness disposition alone.
+
+The committed [Dogfood 0 Pilot Report](../docs/DOGFOOD_REPORT.md) contains the
+current sanitized checkpoint. Raw observations remain local and ignored.
