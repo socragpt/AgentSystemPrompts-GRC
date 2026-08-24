@@ -1,12 +1,13 @@
 """Record minimized Dogfood 0 shadow observations without enforcing actions."""
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
 import re
 import sys
-from typing import Any, Dict, Iterable, List, Optional, Sequence
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence
 
 from agent_governance import (
     ActionRequestError,
@@ -21,11 +22,13 @@ from agent_governance import (
 from agent_governance.policy import normalize_policy_bundle
 
 
-SCHEMA_PATH = Path(__file__).with_name("observation.schema.json")
+SCHEMA_PATHS = {
+    "0.1": Path(__file__).with_name("observation-v0.1.schema.json"),
+    "0.2": Path(__file__).with_name("observation.schema.json"),
+}
 DISPOSITIONS = ("allow", "deny", "require_approval")
 MAPPING_CONFIDENCE = ("exact", "bounded", "ambiguous", "unmapped")
 FRICTION_CODES = (
-    "none",
     "approval-unverified",
     "goal-assumption",
     "identity-assumption",
@@ -34,6 +37,9 @@ FRICTION_CODES = (
     "selector-too-broad",
     "unmapped-action",
 )
+DECISION_USEFULNESS = ("useful", "not_useful", "unknown")
+_IDENTIFIER_PATTERN = re.compile(r"^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$")
+_PARAMETERS_DIGEST_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 
 def _pretty_json(value: Any) -> str:
@@ -46,6 +52,22 @@ def _compact_json(value: Any) -> str:
 
 def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def minimized_identifier(value: Any) -> Optional[str]:
+    """Return a schema-safe identifier or ``None`` for invalid request data."""
+
+    if isinstance(value, str) and _IDENTIFIER_PATTERN.fullmatch(value):
+        return value
+    return None
+
+
+def minimized_parameters_digest(value: Any) -> Optional[str]:
+    """Return a schema-safe parameter digest or ``None`` for invalid input."""
+
+    if isinstance(value, str) and _PARAMETERS_DIGEST_PATTERN.fullmatch(value):
+        return value
+    return None
 
 
 def _json_type_matches(value: Any, expected: str) -> bool:
@@ -161,10 +183,15 @@ def _schema_errors(
     return errors
 
 
-def load_observation_schema(path: Path = SCHEMA_PATH) -> Dict[str, Any]:
-    """Load the local Dogfood 0 observation schema."""
+def load_observation_schema(
+    path: Optional[Path] = None, *, version: str = "0.2"
+) -> Dict[str, Any]:
+    """Load one supported local Dogfood 0 observation schema."""
 
-    value = json.loads(path.read_text(encoding="utf-8"))
+    schema_path = path or SCHEMA_PATHS.get(version)
+    if schema_path is None:
+        raise ValueError(f"Unsupported observation schema_version: {version!r}")
+    value = json.loads(schema_path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("Observation schema root must be an object")
     return value
@@ -175,7 +202,14 @@ def validate_observation(
 ) -> List[str]:
     """Validate one observation with the schema features used by Dogfood 0."""
 
-    active_schema = schema or load_observation_schema()
+    if schema is not None:
+        active_schema = schema
+    elif isinstance(observation, dict):
+        active_schema = load_observation_schema(
+            version=str(observation.get("schema_version", ""))
+        )
+    else:
+        active_schema = load_observation_schema()
     return sorted(_schema_errors(observation, active_schema, active_schema))
 
 
@@ -188,21 +222,34 @@ def _write_new(path: Path, content: str) -> None:
         handle.write(content)
 
 
+def _recording_time(clock: Optional[Callable[[], datetime]]) -> str:
+    value = clock() if clock is not None else datetime.now(timezone.utc)
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError("Recorder clock must return a timezone-aware datetime")
+    return value.astimezone(timezone.utc).replace(microsecond=0).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
+
+
 def record_observation(
     *,
     policy_path: Path,
     request_path: Path,
     output_dir: Path,
     observation_id: str,
-    observed_at: str,
+    activity_id: str,
+    action_reported_at: Optional[str],
     trusted_identity_boundaries: Iterable[str],
     maintainer_expected_disposition: str,
     approval_requested: bool,
     approval_received: bool,
     action_occurred: bool,
+    material: bool,
+    decision_usefulness: str,
     normalization_duration_ms: int,
     mapping_confidence: str,
-    friction_code: str,
+    friction_codes: Iterable[str],
+    clock: Optional[Callable[[], datetime]] = None,
 ) -> Path:
     """Create one local shadow record and append its minimized JSONL index row."""
 
@@ -212,7 +259,10 @@ def record_observation(
         raise ValueError("Unsupported maintainer expected disposition")
     if mapping_confidence not in MAPPING_CONFIDENCE:
         raise ValueError("Unsupported mapping confidence")
-    if friction_code not in FRICTION_CODES:
+    if decision_usefulness not in DECISION_USEFULNESS:
+        raise ValueError("Unsupported decision usefulness")
+    normalized_friction_codes = sorted(set(friction_codes))
+    if any(code not in FRICTION_CODES for code in normalized_friction_codes):
         raise ValueError("Unsupported friction code")
     if normalization_duration_ms < 0:
         raise ValueError("normalization_duration_ms must not be negative")
@@ -223,8 +273,11 @@ def record_observation(
         raise PolicyBundleError(policy_issues)
     request = load_action_request(str(request_path))
     request_issues = validate_action_request(request)
-    if request_issues:
-        raise ActionRequestError(request_issues)
+    if any(issue.code == "schema.unknown_field" for issue in request_issues):
+        raise ValueError(
+            "Invalid requests with unknown fields are not retained because the "
+            "fields are outside the minimized Action Request contract"
+        )
 
     result = evaluate_action(
         policy,
@@ -233,10 +286,17 @@ def record_observation(
     )
     result_dict = result.as_dict()
     evidence = result_dict["proposed_evidence_record"]
+    if request_issues and (
+        result_dict["disposition"] != "deny"
+        or result_dict["approval_requirements"]
+    ):
+        raise ValueError("Invalid Action Requests must fail closed without approval")
 
-    normalized_request = normalize_action_request(request)
+    retained_request = (
+        request if request_issues else normalize_action_request(request)
+    )
     normalized_policy = normalize_policy_bundle(policy)
-    request_text = _compact_json(normalized_request)
+    request_text = _compact_json(retained_request)
     policy_text = _pretty_json(normalized_policy)
     decision_text = result.to_json()
     evidence_text = _pretty_json(evidence)
@@ -245,8 +305,6 @@ def record_observation(
     decision_sha256 = _sha256_text(decision_text)
     evidence_sha256 = _sha256_text(evidence_text)
 
-    if request_sha256 != result_dict["request_sha256"]:
-        raise ValueError("Retained request digest does not match the decision")
     if policy_sha256 != result_dict["policy"]["source_sha256"]:
         raise ValueError("Retained policy digest does not match the decision")
 
@@ -258,23 +316,35 @@ def record_observation(
         item["approval_id"] for item in result_dict["approval_requirements"]
     ]
     observation = {
-        "schema_version": "0.1",
+        "schema_version": "0.2",
         "observation_id": observation_id,
-        "observed_at": observed_at,
+        "activity_id": activity_id,
+        "recorded_at": _recording_time(clock),
+        "action_reported_at": action_reported_at,
         "mode": "shadow",
         "enforced": False,
         "request": {
             "artifact_ref": _artifact_ref(observation_id, "request"),
-            "sha256": request_sha256,
-            "request_id": request["request_id"],
-            "parameters_digest": request["parameters_digest"],
+            "sha256": result_dict["request_sha256"],
+            "artifact_sha256": request_sha256,
+            "request_id": minimized_identifier(result_dict["request_id"]),
+            "parameters_digest": minimized_parameters_digest(
+                evidence["request"]["parameters_digest"]
+            ),
+            "valid": not request_issues,
         },
         "action": {
-            "authorized_goal_id": request["authorized_goal_id"],
-            "actor_id": request["actor_id"],
-            "capability_id": request["capability_id"],
-            "action": request["action"],
-            "resource_id": request["resource_id"],
+            "authorized_goal_id": minimized_identifier(
+                evidence["action"]["authorized_goal_id"]
+            ),
+            "actor_id": minimized_identifier(evidence["action"]["actor_id"]),
+            "capability_id": minimized_identifier(
+                evidence["action"]["capability_id"]
+            ),
+            "action": minimized_identifier(evidence["action"]["action"]),
+            "resource_id": minimized_identifier(
+                evidence["action"]["resource_id"]
+            ),
         },
         "policy": {
             "artifact_ref": _artifact_ref(observation_id, "policy"),
@@ -310,9 +380,11 @@ def record_observation(
             "received": approval_received,
         },
         "action_occurred": action_occurred,
+        "material": material,
+        "decision_usefulness": decision_usefulness,
         "normalization_duration_ms": normalization_duration_ms,
         "mapping_confidence": mapping_confidence,
-        "friction_code": friction_code,
+        "friction_codes": normalized_friction_codes,
     }
     observation_errors = validate_observation(observation)
     if observation_errors:
@@ -344,7 +416,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--request", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--observation-id", required=True)
-    parser.add_argument("--observed-at", required=True)
+    parser.add_argument("--activity-id", required=True)
+    parser.add_argument("--action-reported-at")
     parser.add_argument(
         "--trusted-identity-boundary",
         required=True,
@@ -357,11 +430,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--approval-requested", action="store_true")
     parser.add_argument("--approval-received", action="store_true")
     parser.add_argument("--action-occurred", required=True, choices=("yes", "no"))
+    materiality = parser.add_mutually_exclusive_group(required=True)
+    materiality.add_argument("--material", action="store_true")
+    materiality.add_argument("--non-material", action="store_true")
+    parser.add_argument(
+        "--decision-usefulness", required=True, choices=DECISION_USEFULNESS
+    )
     parser.add_argument("--normalization-duration-ms", required=True, type=int)
     parser.add_argument(
         "--mapping-confidence", required=True, choices=MAPPING_CONFIDENCE
     )
-    parser.add_argument("--friction-code", required=True, choices=FRICTION_CODES)
+    parser.add_argument(
+        "--friction-code", action="append", default=[], choices=FRICTION_CODES
+    )
     return parser
 
 
@@ -373,15 +454,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             request_path=args.request,
             output_dir=args.output_dir,
             observation_id=args.observation_id,
-            observed_at=args.observed_at,
+            activity_id=args.activity_id,
+            action_reported_at=args.action_reported_at,
             trusted_identity_boundaries=args.trusted_identity_boundaries,
             maintainer_expected_disposition=args.expected_disposition,
             approval_requested=args.approval_requested,
             approval_received=args.approval_received,
             action_occurred=args.action_occurred == "yes",
+            material=args.material,
+            decision_usefulness=args.decision_usefulness,
             normalization_duration_ms=args.normalization_duration_ms,
             mapping_confidence=args.mapping_confidence,
-            friction_code=args.friction_code,
+            friction_codes=args.friction_code,
         )
     except (ActionRequestError, PolicyBundleError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)

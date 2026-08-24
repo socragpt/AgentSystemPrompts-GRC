@@ -2,7 +2,7 @@
   "schema_version": "0.1",
   "bundle": {
     "id": "bundle.repository-development-dogfood",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "title": "Repository Development Dogfood Shadow Policy",
     "owner_actor_id": "human.maintainer",
     "effective_at": "2026-08-22T00:00:00Z",
@@ -10,7 +10,7 @@
     "default_effect": "deny",
     "provenance": {
       "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/dogfood/policy.json",
-      "revision": "dogfood-phase-1",
+      "revision": "dogfood-observation-hardening",
       "authored_by": [
         "human.maintainer"
       ],
@@ -63,6 +63,7 @@
         "capability.dependency-install",
         "capability.documentation-edit",
         "capability.force-push",
+        "capability.local-branch-create",
         "capability.local-commit",
         "capability.pull-request-create",
         "capability.remote-delete",
@@ -186,6 +187,12 @@
       "description": "Rewrite remote branch history with a force-push."
     },
     {
+      "id": "capability.local-branch-create",
+      "action": "git.branch.create",
+      "resource_id": "service.local-git",
+      "description": "Create one reversible local branch reference for the authorized development task."
+    },
+    {
       "id": "capability.local-commit",
       "action": "git.commit",
       "resource_id": "service.local-git",
@@ -255,7 +262,7 @@
   "policies": [
     {
       "id": "policy.repository-development-shadow",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "Repository Development Shadow Controls",
       "precedence": 500,
       "owner_actor_id": "human.maintainer",
@@ -263,7 +270,7 @@
       "review_at": "2026-11-22T00:00:00Z",
       "provenance": {
         "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/dogfood/policy.json",
-        "revision": "dogfood-phase-1",
+        "revision": "dogfood-observation-hardening",
         "authored_by": [
           "human.maintainer"
         ],
@@ -398,6 +405,34 @@
             "policy_version",
             "disposition",
             "approval"
+          ]
+        },
+        {
+          "id": "control.local-branch-create",
+          "description": "Allow the developer to create one reversible local branch reference.",
+          "subjects": {
+            "actor_ids": [
+              "agent.developer"
+            ]
+          },
+          "capability_ids": [
+            "capability.local-branch-create"
+          ],
+          "effect": "allow",
+          "constraints": {
+            "max_action_count": 1,
+            "max_delegation_depth": 0,
+            "require_reversible": true
+          },
+          "evidence_fields": [
+            "request",
+            "actor",
+            "capability",
+            "resource",
+            "parameters_digest",
+            "matched_controls",
+            "policy_version",
+            "disposition"
           ]
         },
         {
@@ -585,6 +620,7 @@
         "capability.dependency-install",
         "capability.documentation-edit",
         "capability.force-push",
+        "capability.local-branch-create",
         "capability.local-commit",
         "capability.pull-request-create",
         "capability.remote-delete",

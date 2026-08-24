@@ -24,22 +24,28 @@ Git under `dogfood/observations/`.
 
 - `policy.json` models the repository-development actors, resources,
   capabilities, delegations, controls, and approval requirements.
-- `requests/` contains the 14 deterministic baseline Action Request fixtures.
+- `requests/` contains the 15 deterministic baseline Action Request fixtures.
 - `expected.json` declares the expected disposition, reason codes, cited
   controls, and approval requirements for each fixture.
-- `observation.schema.json` defines a closed, minimized observation record.
-- `record_observation.py` creates canonical local artifacts and a JSONL index.
-  It does not run Git or commit its output.
+- `observation.schema.json` defines the active closed v0.2 observation record.
+- `observation-v0.1.schema.json` preserves read compatibility for legacy local
+  records.
+- `record_observation.py` creates v0.2 artifacts and a JSONL index.
+- `report_observations.py` verifies the index, paths, digests, schemas, and
+  reproduced decisions before it calculates metrics.
+
+These scripts do not run Git or commit their output.
 
 ## Policy Choices
 
-The Phase 1 policy makes these explicit choices:
+The current pilot policy makes these explicit choices:
 
 | Proposed action | Shadow disposition |
 | --- | --- |
 | Read repository content | `allow` |
 | Run local validation or tests | `allow` |
 | Edit task-scoped documentation, source, or tests | `allow` |
+| Create one reversible local branch reference | `allow` |
 | Install or change a dependency | `require_approval` |
 | Create a local commit | `require_approval` |
 | Push a branch or create a pull request | `require_approval` |
@@ -50,8 +56,8 @@ The Phase 1 policy makes these explicit choices:
 | Use an unmapped capability or resource | `deny` through the bundle default |
 
 The reviewer receives repository-read and local-validation delegations only.
-The reviewer does not receive edit, dependency, commit, publication, merge, or
-destructive-remote capabilities.
+The reviewer does not receive branch-creation, edit, dependency, commit,
+publication, merge, or destructive-remote capabilities.
 
 ## Current Trust and Modeling Limits
 
@@ -83,8 +89,8 @@ python -m unittest tests.test_dogfood -v
 ```
 
 The dogfood test evaluates every case through the SDK and CLI. It also checks
-determinism, stale-policy behavior, fail-closed cases, the observation schema,
-artifact digests, and decision reproduction.
+determinism, stale-policy behavior, fail-closed cases, both observation schema
+versions, artifact digests, aggregate reporting, and decision reproduction.
 
 ## Live Shadow Procedure
 
@@ -98,15 +104,18 @@ For each material action:
 3. Map the action to one exact capability and resource in `policy.json`.
 4. Canonicalize the security-relevant parameters and compute
    `parameters_digest`.
-5. Create a valid Action Request v0.1.
+5. Create an Action Request v0.1 JSON object. The request can be invalid when
+   the purpose is to retain a fail-closed construction attempt. Do not include
+   unknown fields.
 6. Evaluate the request with `identity.dogfood-local` as the procedural trust
    boundary.
 7. Show the disposition, reason codes, effective constraints, and the
    non-enforcing warning to the maintainer.
 8. Use the existing workflow to decide whether the action proceeds.
 9. Record the maintainer's expected disposition and any out-of-band approval.
-10. Record whether the action occurred, the mapping confidence, normalization
-    time, and one non-sensitive friction code.
+10. Record whether the action occurred, its materiality, decision usefulness,
+    mapping confidence, normalization time, and all applicable controlled
+    friction codes.
 
 An action is material when it writes repository content, changes dependencies,
 creates a commit, affects remote state, deletes data, accesses sensitive data,
@@ -126,18 +135,31 @@ python dogfood/record_observation.py \
   --request path/to/canonical-request.json \
   --output-dir "$pilot_output" \
   --observation-id observation.dogfood.001 \
-  --observed-at 2026-08-22T20:00:00Z \
+  --activity-id activity.dogfood.repository-read \
+  --action-reported-at 2026-08-22T20:00:00Z \
   --trusted-identity-boundary identity.dogfood-local \
   --expected-disposition allow \
   --action-occurred yes \
+  --non-material \
+  --decision-usefulness useful \
   --normalization-duration-ms 45000 \
-  --mapping-confidence exact \
-  --friction-code none
+  --mapping-confidence exact
 ```
 
 Add `--approval-requested` and `--approval-received` only when those events
 occurred through the existing workflow. These flags record observations. They
 do not verify an approval or authorize execution.
+
+Repeat `--friction-code` when more than one controlled finding applies. Omit
+it when no friction occurred. The recorder generates `recorded_at` from its
+UTC clock. `--action-reported-at` is optional operator-reported context and is
+not trusted recording time.
+
+The recorder calls the shared evaluator for both valid and invalid Action
+Request objects. Invalid requests must return `deny` with no approval
+requirements. The recorder rejects unknown request fields to avoid retaining
+data outside the minimized contract. It does not retain unreadable files,
+invalid JSON syntax, or non-object JSON roots.
 
 The recorder creates this structure:
 
@@ -153,9 +175,24 @@ The recorder creates this structure:
       proposed-evidence.json
 ```
 
-The request and policy artifact digests match the digests in the Decision
-Result. The decision and proposed-evidence digests bind the observation to the
-retained files.
+The v0.2 request record keeps the evaluator's input digest in `sha256` and the
+retained file digest in `artifact_sha256`. These values are equal for valid
+canonical requests and can differ for unsupported JSON values in an invalid
+request. The reporter verifies both bindings. The policy, decision, and
+proposed-evidence digests also bind the observation to the retained files.
+
+Verify and summarize a local observation set with:
+
+```bash
+python dogfood/report_observations.py \
+  --output-dir "$pilot_output" \
+  --trusted-identity-boundary identity.dogfood-local
+```
+
+The reporter exits nonzero when schemas, index rows, path containment,
+artifact digests, request-validity flags, or reproduced decisions do not
+match. Its JSON metrics include explicit numerators and denominators. It reads
+legacy v0.1 records but labels their materiality as inferred.
 
 ## Data-Minimization Rule
 

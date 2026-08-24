@@ -51,10 +51,11 @@ the same semantics and conformance cases.
 ## Dogfood Operator
 
 Read the [Dogfood 0 procedure](../dogfood/README.md) before you evaluate a live
-repository-development action. Phase 1 provides deterministic fixtures and a
-local recorder. Keep live records in the ignored pilot directory or outside
-the repository. Do not collect them until the maintainer explicitly opens the
-live shadow gate.
+repository-development action. The pilot provides deterministic fixtures, a
+local v0.2 recorder, and a verifier/reporter that retains v0.1 read
+compatibility. Keep live records in the ignored pilot directory or outside the
+repository. Do not collect them until the maintainer explicitly opens the live
+shadow gate.
 
 Read the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for the current sanitized
 metrics, findings, evidence limits, and next operational milestone.

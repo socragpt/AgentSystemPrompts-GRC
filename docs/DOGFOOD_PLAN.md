@@ -111,13 +111,15 @@ Before live observation, deterministic fixtures must cover at least:
 12. denied unmapped action.
 13. denied stale identity or policy context.
 14. denied malformed request.
+15. allowed reversible local branch creation for the developer.
 
 Each scenario must declare its expected disposition and stable reason codes.
 The SDK and CLI must return equivalent results.
 
-Phase 1 implements these 14 cases in `dogfood/requests/` and declares their
-expected results in `dogfood/expected.json`. Live observations remain outside
-Phase 1.
+Phase 1 implemented the first 14 cases. The observation-hardening milestone
+adds the explicit local-branch case. All 15 cases are in `dogfood/requests/`,
+with expected results in `dogfood/expected.json`. Live observations remain
+outside the tracked fixture set.
 
 ## Shadow Procedure
 
@@ -143,8 +145,10 @@ is stable.
 The pilot should retain a minimized JSONL observation for each evaluated
 action. The format should contain:
 
-- observation ID and UTC time.
-- a reference to the retained canonical Action Request v0.1 and its digest.
+- observation ID, logical activity ID, recorder-generated UTC time, and
+  optional operator-reported action time.
+- a reference to the retained Action Request v0.1 JSON object, its artifact and
+  evaluator-input digests, and its contract-validity classification.
 - authorized goal, actor, capability, action, and resource IDs.
 - policy bundle version, retained snapshot reference, and digest.
 - Decision Result and Proposed Evidence Record references and digests.
@@ -154,8 +158,9 @@ action. The format should contain:
 - agreement or disagreement classification.
 - whether out-of-band approval was requested and received.
 - whether the action ran under the existing workflow.
+- explicit materiality and controlled decision usefulness.
 - normalization time and mapping-confidence category.
-- a short, non-sensitive friction code.
+- zero or more unique, controlled, non-sensitive friction codes.
 
 Do not retain raw secrets, credentials, personal data, complete prompts,
 unredacted action parameters, or model chain of thought. A committed pilot
@@ -219,18 +224,21 @@ Use these rules after the pilot:
 The final selection must still map to Product Specification requirements and
 pass the Product Charter anti-drift test.
 
-## Phase 1 Pilot Artifacts
+## Pilot Artifacts
 
-Phase 1 adds:
+The pilot includes:
 
 - `dogfood/README.md` for the shadow procedure.
 - `dogfood/policy.json` for repository-development governance.
 - `dogfood/requests/` for deterministic baseline scenarios.
 - `dogfood/expected.json` for expected outcomes and reason codes.
 - `dogfood/observation.schema.json` for minimized pilot observations.
+- `dogfood/observation-v0.1.schema.json` for legacy observation validation.
 - `dogfood/record_observation.py`, which retains canonical requests,
   decisions, proposed evidence, and policy snapshots without committing its
   output.
+- `dogfood/report_observations.py`, which verifies retained artifacts and
+  calculates metrics with explicit denominators.
 
 These artifacts are non-enforcing. They do not authenticate identity, verify
 approvals, dispatch actions, or provide durable evidence storage. The

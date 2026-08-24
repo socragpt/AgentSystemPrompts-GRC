@@ -1,16 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/socragpt/agent-governance-harness/dogfood/observation.schema.json",
-  "title": "Agent Governance Harness Dogfood Observation v0.2",
+  "$id": "https://github.com/socragpt/agent-governance-harness/dogfood/observation-v0.1.schema.json",
+  "title": "Agent Governance Harness Dogfood Observation v0.1",
   "description": "A minimized, reproducible record for the non-enforcing repository-development shadow pilot.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
     "observation_id",
-    "activity_id",
-    "recorded_at",
-    "action_reported_at",
+    "observed_at",
     "mode",
     "enforced",
     "request",
@@ -22,31 +20,19 @@
     "agreement",
     "out_of_band_approval",
     "action_occurred",
-    "material",
-    "decision_usefulness",
     "normalization_duration_ms",
     "mapping_confidence",
-    "friction_codes"
+    "friction_code"
   ],
   "properties": {
     "schema_version": {
-      "const": "0.2"
+      "const": "0.1"
     },
     "observation_id": {
       "$ref": "#/$defs/observation_id"
     },
-    "activity_id": {
-      "$ref": "#/$defs/activity_id"
-    },
-    "recorded_at": {
+    "observed_at": {
       "$ref": "#/$defs/timestamp"
-    },
-    "action_reported_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
     },
     "mode": {
       "const": "shadow"
@@ -61,8 +47,7 @@
         "artifact_ref",
         "sha256",
         "request_id",
-        "parameters_digest",
-        "valid"
+        "parameters_digest"
       ],
       "properties": {
         "artifact_ref": {
@@ -71,17 +56,11 @@
         "sha256": {
           "$ref": "#/$defs/sha256"
         },
-        "artifact_sha256": {
-          "$ref": "#/$defs/sha256"
-        },
         "request_id": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         },
         "parameters_digest": {
-          "$ref": "#/$defs/nullable_prefixed_sha256"
-        },
-        "valid": {
-          "type": "boolean"
+          "$ref": "#/$defs/prefixed_sha256"
         }
       }
     },
@@ -97,19 +76,19 @@
       ],
       "properties": {
         "authorized_goal_id": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         },
         "actor_id": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         },
         "capability_id": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         },
         "action": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         },
         "resource_id": {
-          "$ref": "#/$defs/nullable_identifier"
+          "$ref": "#/$defs/identifier"
         }
       }
     },
@@ -272,16 +251,6 @@
     "action_occurred": {
       "type": "boolean"
     },
-    "material": {
-      "type": "boolean"
-    },
-    "decision_usefulness": {
-      "enum": [
-        "useful",
-        "not_useful",
-        "unknown"
-      ]
-    },
     "normalization_duration_ms": {
       "type": "integer",
       "minimum": 0
@@ -294,12 +263,17 @@
         "unmapped"
       ]
     },
-    "friction_codes": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/friction_code"
-      }
+    "friction_code": {
+      "enum": [
+        "none",
+        "approval-unverified",
+        "goal-assumption",
+        "identity-assumption",
+        "normalization-ambiguous",
+        "request-construction",
+        "selector-too-broad",
+        "unmapped-action"
+      ]
     }
   },
   "$defs": {
@@ -314,21 +288,6 @@
       "minLength": 3,
       "maxLength": 128,
       "pattern": "^observation\\.[a-z0-9]+(?:[._-][a-z0-9]+)*$"
-    },
-    "activity_id": {
-      "type": "string",
-      "minLength": 3,
-      "maxLength": 128,
-      "pattern": "^activity\\.[a-z0-9]+(?:[._-][a-z0-9]+)*$"
-    },
-    "nullable_identifier": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "minLength": 3,
-      "maxLength": 128,
-      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
     },
     "timestamp": {
       "type": "string",
@@ -346,13 +305,6 @@
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{64}$"
     },
-    "nullable_prefixed_sha256": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "pattern": "^sha256:[0-9a-f]{64}$"
-    },
     "disposition": {
       "enum": [
         "allow",
@@ -363,17 +315,6 @@
     "reason_code": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
-    },
-    "friction_code": {
-      "enum": [
-        "approval-unverified",
-        "goal-assumption",
-        "identity-assumption",
-        "normalization-ambiguous",
-        "request-construction",
-        "selector-too-broad",
-        "unmapped-action"
-      ]
     },
     "request_ref": {
       "type": "string",

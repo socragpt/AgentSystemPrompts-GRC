@@ -1,10 +1,10 @@
 # Project Status
 
 - **Project:** Agent Governance Harness
-- **Status date:** 2026-08-22
+- **Status date:** 2026-08-23
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `39831956cfcbb88f2dc75fd05548aec5ca26d707`
+- **Verified `main`:** `4291a89d0d6ea7fbbbaf48607e3c5246dbc8aecf`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -27,8 +27,9 @@ The active milestone is a non-enforcing repository-development dogfood pilot.
 Phase 1 is implemented on `main`. The maintainer explicitly authorized live
 shadow observation on 2026-08-22, and the pilot is running. The current
 sanitized findings are in the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md).
-Post-merge status and handoff updates are in progress on the local
-`codex/dogfood-status-handoff` branch. They are not committed or published.
+The first status checkpoint is merged. The bounded observation-hardening
+change is implemented and locally verified on
+`codex/dogfood-observation-hardening`.
 
 ## Verified Current State
 
@@ -69,20 +70,28 @@ The alpha foundation does **not** implement:
 - behavioral or adversarial model evaluation.
 - certification or compliance guarantees.
 
-Dogfood 0 Phase 1 adds:
+Dogfood 0 now includes:
 
 - an exact-resource repository-development Policy Bundle v0.1;
-- 14 deterministic allow, deny, approval, stale, malformed, and unmapped
-  Action Request fixtures;
+- 15 deterministic allow, deny, approval, stale, malformed, unmapped, and
+  local-branch Action Request fixtures;
 - expected dispositions, reason codes, cited controls, and approval
   requirements for each fixture;
-- a closed observation schema that retains artifact references and digests;
-- a dependency-free local recorder for canonical request, policy, decision,
-  and proposal-only evidence artifacts;
+- a closed v0.2 observation schema and retained v0.1 read compatibility;
+- a dependency-free local recorder for valid and invalid request objects,
+  policy snapshots, decisions, and proposal-only evidence artifacts;
+- recorder-generated UTC time, optional operator-reported action time, logical
+  activity IDs, explicit materiality, controlled decision usefulness, and
+  multiple controlled friction codes;
+- a dependency-free reporter that validates schemas, index equality, path
+  containment, digests, request-validity flags, and shared-evaluator
+  reproduction before it calculates metrics;
+- a narrow developer-only policy mapping for one reversible local branch
+  creation;
 - a manual shadow procedure with an explicit live-observation gate; and
-- 12 dogfood tests for policy validity, decisions, SDK/CLI parity,
-  determinism, fail-closed behavior, observation validation, recording, and
-  reproduction.
+- 17 dogfood tests for policy validity, decisions, SDK/CLI parity,
+  determinism, fail-closed behavior, observation compatibility, recording,
+  reporting, corruption detection, and reproduction.
 
 These files do not change evaluator semantics. They do not authenticate,
 approve, dispatch, enforce, or create trusted evidence.
@@ -131,6 +140,13 @@ did not change the shared evaluator or add enforcement. Post-merge
 [`main` CI run 32599618658](https://github.com/socragpt/agent-governance-harness/actions/runs/32599618658)
 passed on Python 3.9, 3.11, and 3.13.
 
+Pull request
+[#23](https://github.com/socragpt/agent-governance-harness/pull/23) merged the
+first sanitized Dogfood 0 status checkpoint into `main` as `4291a89` on
+2026-08-23 UTC. It recorded verified findings through
+`observation.dogfood.012` without changing evaluator or policy semantics. The
+pull-request CI run passed on Python 3.9, 3.11, and 3.13.
+
 ## Active Milestone: Dogfood 0
 
 The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) governs the
@@ -168,14 +184,14 @@ fail-closed behavior, keeps trust assumptions explicit, remains
 framework-neutral, and produces reproducible artifacts. The documentation does
 not describe shadow decisions as enforcement or verified approval.
 
-The verified pilot snapshot through `observation.dogfood.012` contains 12
-observations and 8 material actions. All 8 material actions had a safe
-capability and resource mapping, so mapping coverage is 100%. Seven modeled
-capability categories and one unmapped action category have been observed. All
-12 retained decisions are reproducible and match the maintainer's expected
-policy disposition. The snapshot has zero false allows and zero false blocks.
-See the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics and evidence
-limits.
+The verified local pilot snapshot through `observation.dogfood.022` contains
+22 observations and 17 material actions. All 17 material actions had a safe
+capability and resource mapping, so mapping coverage is 100%. Ten capability
+categories and one historically unmapped action category have been observed.
+All 22 retained decisions reproduce and match the maintainer's expected policy
+disposition. The snapshot has zero false allows and zero false blocks. Three
+new v0.2 records explicitly classify their decisions as useful. See the
+[Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics and evidence limits.
 
 ## Decisions That Should Survive Handoffs
 
@@ -215,6 +231,13 @@ limits.
 17. **Retain minimized artifacts.** Observations link canonical request,
     policy, decision, and proposal-only evidence files by reference and digest.
     They do not retain raw parameters, prompts, secrets, or chain of thought.
+18. **Version local observation evidence.** New records use the closed v0.2
+    contract. The reporter reads v0.1 records without rewriting them and labels
+    legacy inferred materiality.
+19. **Model local branch creation narrowly.** The developer can create one
+    reversible local branch reference. The reviewer does not receive this
+    delegation, and retained v0.1.0 policy snapshots preserve historical
+    unmapped denials.
 
 ## Open Design Questions and Findings
 
@@ -235,24 +258,16 @@ limits.
   does not declare a comparable capability-side-effect contract.
 - The named identity boundary and authorized goal remain procedural inputs.
   The current evaluator does not verify either claim.
-- The first live review found that the observation record does not explicitly
-  identify material actions or record whether a decision was useful. Current
-  progress counts infer materiality from the capability, and usefulness
-  remains unmeasured.
-- The pilot has no built-in aggregate report. Current metrics require a
-  separate query over the local JSONL index.
-- The operator reported a malformed live request. It failed closed because
-  `write` is not a supported side-effect value. The recorder rejects invalid
-  requests, so it cannot retain that denial through its normal path. No
-  retained pilot artifact independently reproduces this event. This limit
-  reduces the evidence available for malformed and request-construction
-  failures.
-- The recorder accepts an operator-supplied observation timestamp but does not
-  validate it against the request or recording time. One sampled read exposed
-  this risk when its supplied timestamp was later than the recorder invocation.
-- Local branch creation is not modeled by the pilot policy. The live request
-  failed closed with `authority.capability_not_found`, and the existing
-  workflow performed the reversible local action in shadow mode.
+- Observation v0.2 makes materiality and decision usefulness explicit. The
+  reporter still infers materiality for the 19 retained v0.1 records and labels
+  that denominator.
+- The operator-reported malformed live attempt occurred before v0.2 and still
+  has no retained artifact. New syntactically valid JSON objects that fail
+  Action Request validation can be retained. Invalid JSON, non-object roots,
+  and unknown request fields remain outside the recorder scope.
+- One legacy v0.1 timestamp anomaly remains unverifiable because v0.1 has no
+  recorder-generated timestamp. New records separate generated `recorded_at`
+  from optional operator-reported action time.
 - Which pilot finding should take priority if normalization, approval, and
   evidence gaps appear together?
 - After the pilot, how should resource selectors and constraint operators be
@@ -265,15 +280,11 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Implement the bounded Dogfood 0 observation-hardening milestone defined in the
-[pilot report](DOGFOOD_REPORT.md). Improve attempt retention, timestamps,
-explicit reporting fields, aggregate verification, and the local-branch scope
-decision without adding enforcement or separate policy semantics.
-
-Then continue the live pilot to at least 25 material actions and use the full
-evidence to rank the next three product gaps. Do not implement approval
-verification, enforcement, or durable evidence before the pilot supports that
-choice.
+Review and publish the locally verified observation-hardening change. Then
+continue the live pilot from 17 to at least 25 material actions, run the
+supported reporter, and use the full evidence to rank the next three product
+gaps. Do not implement approval verification, enforcement, or durable evidence
+before the pilot supports that choice.
 
 ## Verification Baseline
 
@@ -293,11 +304,19 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` contains 69 tests. Post-merge CI passed the full Python 3.9,
-3.11, and 3.13 matrix at `39831956`. Before merge, the editable install, byte
+Verified `main` contains 69 tests. Pull-request CI passed the full Python 3.9,
+3.11, and 3.13 matrix for `4291a89`. Before merge, the editable install, byte
 compilation, compatibility XML validation, example and dogfood policy
 validation, reference decision, 13 documentation-recall examples, Markdown
 links, and all 69 tests passed locally.
+
+The observation-hardening branch passes byte compilation, compatibility XML
+validation, example and dogfood policy validation, the reference decision, all
+13 documentation-recall examples, the local observation reporter through
+`observation.dogfood.022`, Markdown link checks, and all 74 tests. A fresh
+build-isolated editable reinstall could not reach the package index from the
+sandbox. The existing editable environment remained sufficient for the full
+functional baseline.
 
 ## Handoff Checklist
 

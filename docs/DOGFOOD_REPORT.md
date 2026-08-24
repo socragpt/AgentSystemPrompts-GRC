@@ -1,9 +1,9 @@
 # Dogfood 0 Pilot Report
 
 - **Status:** live shadow observation running
-- **Snapshot date:** 2026-08-22
-- **Snapshot boundary:** through `observation.dogfood.012`
-- **Verified `main`:** `39831956cfcbb88f2dc75fd05548aec5ca26d707`
+- **Snapshot date:** 2026-08-23
+- **Snapshot boundary:** through `observation.dogfood.022`
+- **Verified `main`:** `4291a89d0d6ea7fbbbaf48607e3c5246dbc8aecf`
 - **Mode:** shadow; explicitly non-enforcing
 
 > **WARNING:** This report describes advisory decisions. It does not prove
@@ -24,62 +24,67 @@ or model chain of thought.
 
 | Metric | Result |
 | --- | ---: |
-| Deterministic baseline scenarios | 14 of 14 passed |
-| Recorded observations | 12 |
-| Material actions | 8 of 25 |
-| Mapping coverage | 8 of 8 material actions, or 100% |
-| Modeled capability categories observed | 7 |
+| Deterministic baseline scenarios | 15 of 15 passed |
+| Recorded observations | 22 |
+| Material actions | 17 of 25 |
+| Mapping coverage | 17 of 17 material actions, or 100% |
+| Capability categories observed | 10 |
 | Unmapped action categories observed | 1 |
-| Decision agreement | 12 of 12, or 100% |
+| Decision agreement | 22 of 22, or 100% |
 | False allows | 0 |
 | False blocks | 0 |
-| Approval load | 3 of 12, or 25% |
-| Unmapped rate | 1 of 12, or 8.3% |
-| Median normalization time | 20 seconds |
-| Reproducible retained decisions | 12 of 12, or 100% |
-| Timestamp-order anomalies | 1 |
+| Approval load | 8 of 22, or 36.4% |
+| Unmapped rate | 2 of 22, or 9.1% |
+| Median normalization time | 27.5 seconds |
+| Reproducible retained decisions | 22 of 22, or 100% |
+| v0.2 decision usefulness | 3 useful of 3 reported |
+| v0.2 timestamp-order anomalies | 0 of 3 reported action times |
 
-The recorded dispositions are eight `allow`, three `require_approval`, and one
-`deny`. The three approval-gated actions were a local commit, a branch push,
-and pull-request creation. The harness did not verify their approvals. The
-maintainer authorized those actions through the existing workflow, and the
-pilot recorded that out-of-band event.
+The recorded dispositions are 12 `allow`, eight `require_approval`, and two
+`deny`. The harness did not verify approvals. The maintainer authorized the
+approval-gated actions through the existing workflow, and the pilot recorded
+those out-of-band events.
 
-The unmapped local branch creation was not a material action under the current
-pilot definition. It changed a reversible local Git reference, not repository
-content or remote state. It therefore does not reduce mapping coverage for the
-eight material actions in this snapshot.
+The two retained local branch-creation decisions used Policy Bundle snapshot
+v0.1.0 and failed closed as unmapped. The current v0.2.0 pilot policy now
+models one reversible, single-action local branch creation for the developer.
+The retained historical decisions still reproduce against their v0.1.0 policy
+snapshots. Local branch creation is not material under the current pilot
+definition, so these decisions do not reduce material-action mapping coverage.
 
 ## Evidence Limits
 
-- The recorder rejects invalid Action Requests. The operator reported one
-  malformed live request with a `request.schema.enum` denial. The recorder
-  could not retain the denial through its normal path. No retained pilot
-  artifact independently reproduces this event.
-- The observation contract does not explicitly mark a material action or say
-  whether the decision was useful. The current material count is inferred from
-  the governed capability. Decision usefulness remains unmeasured.
-- The recorder accepts an operator-supplied observation timestamp. One record
-  is out of sequence because the supplied time was later than the recorder
-  invocation.
-- Each observation accepts only one friction code, although one action can
-  expose more than one problem.
-- The current report required a separate local verification query. The pilot
-  has no supported aggregate-report command.
+- Observation v0.2 retains fail-closed decisions for syntactically valid JSON
+  objects that fail Action Request validation. It rejects invalid JSON,
+  non-object roots, and unknown request fields. The previously reported
+  malformed live attempt still has no retained artifact because it occurred
+  before v0.2.
+- Observation v0.2 records materiality and controlled decision usefulness.
+  The reporter must infer materiality for the 19 retained v0.1 records and
+  labels that denominator separately.
+- The recorder now generates `recorded_at` internally and stores optional
+  operator-reported action time separately. One legacy v0.1 record has the
+  previously reported timestamp anomaly; v0.1 has no recorder-generated time
+  that can verify it.
+- Observation v0.2 accepts multiple unique controlled friction codes. Legacy
+  v0.1 records retain one code.
+- The supported reporter validates schemas, index equality, path containment,
+  artifact digests, request-validity flags, and shared-evaluator reproduction
+  before it calculates metrics with explicit denominators.
 
 These limits do not change the recorded policy disposition. They limit the
 quality and completeness of pilot operations evidence.
 
 ## Findings Through This Snapshot
 
-### 1. Observation and reporting need hardening
+### 1. Observation and reporting hardening is implemented
 
-Every retained decision is reproducible, but the recorder cannot retain every
-decision attempt. It also depends on manual timestamps and inferred reporting
-fields. This is the clearest blocker to completing Dogfood 0 with reliable
-metrics.
+The bounded v0.2 recorder and reporter resolve the identified local experiment
+gaps. They preserve v0.1 read compatibility and do not add trusted evidence
+storage. The pilot must now use v0.2 for new actions and continue to test the
+fields under real work.
 
-This finding maps to `EVD-001`, `EVD-004`, `DX-005`, and `DX-006`. It does not
+This work maps to `EVD-001`, `EVD-004`, `DX-005`, and `DX-006`. It does not
 claim that durable evidence requirements are implemented.
 
 ### 2. Request construction is operationally fragile
@@ -102,41 +107,27 @@ Grant.
 This is evidence relevant to `APR-002` through `APR-005`. The sample remains
 too small to select approval work ahead of the other pilot findings.
 
-### 4. The pilot policy does not cover the full repository workflow
+### 4. Local branch creation now has a narrow pilot mapping
 
-Local branch creation is not a modeled capability. Its valid Action Request
-failed closed with `authority.capability_not_found`. The existing workflow
-still allowed the reversible local action because Dogfood 0 is non-enforcing.
-
-The next pilot update must either model local branch creation explicitly or
-classify it as outside the observed workflow. It must not broaden authority
-implicitly.
+The current policy explicitly allows the developer to create one reversible
+local branch reference on `service.local-git`. The reviewer has no delegation
+for this capability. Historical unmapped decisions remain unchanged because
+each observation retains its evaluated policy snapshot.
 
 ## Next Operational Milestone
 
-Complete a bounded **Dogfood 0 observation-hardening** change before resuming
-high-volume observation:
+Continue real repository work until the pilot reaches 25 material actions.
+The current snapshot has 17. Use observation v0.2 for new attempts and run the
+supported reporter before each sanitized checkpoint. Then apply the decision
+rules in [`DOGFOOD_PLAN.md`](DOGFOOD_PLAN.md) and rank the next three product
+gaps.
 
-1. retain fail-closed decisions for invalid Action Requests without treating
-   invalid input as executable authority;
-2. generate recording time inside the recorder and distinguish it from the
-   operator-reported action time;
-3. record materiality and decision usefulness explicitly;
-4. preserve more than one controlled friction finding when necessary;
-5. add a supported aggregate report that verifies artifact digests and
-   decision reproduction; and
-6. decide explicitly whether local branch creation belongs in the pilot policy.
-
-This milestone improves the experiment. It does not add approval verification,
-enforcement, a decision service, or durable evidence storage.
-
-After this change, continue real repository work until the pilot reaches 25
-material actions. Then apply the decision rules in
-[`DOGFOOD_PLAN.md`](DOGFOOD_PLAN.md) and rank the next three product gaps.
+Do not add approval verification, enforcement, a decision service, or durable
+evidence storage before the completed pilot supports that choice.
 
 ## Anti-Drift Review
 
-The proposed observation-hardening milestone serves the named repository
+The implemented observation-hardening milestone serves the named repository
 workflow and the evidence requirements above. It reuses the shared evaluator,
 keeps unsupported input fail-closed, and does not create separate policy
 semantics in a report or UI. It preserves the distinction between shadow
@@ -149,3 +140,8 @@ Pull request
 Dogfood 0 Phase 1 into `main` as `39831956` on 2026-08-22 UTC. Post-merge
 [`main` CI run 32599618658](https://github.com/socragpt/agent-governance-harness/actions/runs/32599618658)
 passed on Python 3.9, 3.11, and 3.13.
+
+Pull request
+[#23](https://github.com/socragpt/agent-governance-harness/pull/23) merged the
+first sanitized pilot checkpoint into `main` as `4291a89` on 2026-08-23 UTC.
+Its pull-request CI passed on Python 3.9, 3.11, and 3.13.

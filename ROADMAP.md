@@ -44,10 +44,10 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract and Dogfood 0 Phase 1 are implemented.
-The non-enforcing repository-development shadow pilot is active. Identity
-verification, approval grants, enforcement, and durable evidence remain
-planned.
+**Status:** the Slice B decision contract, Dogfood 0 Phase 1, and the bounded
+observation-hardening milestone are implemented. The non-enforcing
+repository-development shadow pilot is active. Identity verification,
+approval grants, enforcement, and durable evidence remain planned.
 
 Implemented:
 
@@ -55,6 +55,9 @@ Implemented:
 - Expose identical decision semantics through the Python SDK and CLI.
 - Return stable reasons, effective constraints, policy provenance, and a
   proposal-only evidence record.
+- Retain valid and schema-invalid Action Request objects in local v0.2 shadow
+  observations, verify them against the shared evaluator, and report explicit
+  pilot metrics.
 
 Remaining:
 
