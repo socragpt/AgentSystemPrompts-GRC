@@ -14,6 +14,18 @@ by a principal.
 An authorization by an eligible principal or service for an exact action,
 scope, and set of constraints.
 
+## Approval Grant
+
+A versioned record binding individual approver decisions to one exact request,
+unresolved policy decision, effective scope, and expiry. Approval Grant v0.1 is
+single-use and requires explicit caller-supplied revocation and reuse state.
+
+## Approval Verification Result
+
+A separate `satisfied` or `not_satisfied` result stating whether an exact grant
+meets an unresolved `require_approval` decision under supplied verification
+state. It does not change the decision to `allow` or authorize dispatch.
+
 ## Assumption
 
 A belief or statement accepted as true without proof and used as a premise for

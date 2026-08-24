@@ -282,10 +282,10 @@ thought is not a required governance artifact.
 | ID | Requirement | Delivery |
 | --- | --- | --- |
 | APR-001 | Approval rules must define eligible roles, quorum, separation of duties, expiry, scope, and required request bindings. | Alpha policy foundation |
-| APR-002 | A grant must bind to the subject, capability, resource, canonical parameter digest, policy decision, and expiry required by its rule. | Target |
-| APR-003 | Missing, expired, revoked, reused, insufficient, self-approved, or differently bound grants must fail closed. | Target |
-| APR-004 | Approval must authorize only the exact requested exception; it must not create standing ambient authority unless policy explicitly defines it. | Target |
-| APR-005 | Approval decisions and rationale metadata must be retained as governed evidence with data minimization. | Target |
+| APR-002 | A grant must bind to the subject, capability, resource, canonical parameter digest, policy decision, and expiry required by its rule. | Approval Grant v0.1 |
+| APR-003 | Missing, expired, revoked, reused, insufficient, self-approved, or differently bound grants must fail closed. | Approval Grant v0.1 with explicit caller-supplied state; authoritative state sourcing remains target |
+| APR-004 | Approval must authorize only the exact requested exception; it must not create standing ambient authority unless policy explicitly defines it. | Approval Grant v0.1 exact-action, single-use verification; dispatch remains target |
+| APR-005 | Approval decisions and rationale metadata must be retained as governed evidence with data minimization. | Minimized proposal in Approval Grant v0.1; governed retention remains target |
 
 ### Enforcement
 
@@ -404,9 +404,10 @@ implemented in the current alpha.
 
 ### Slice C — Approval and enforcement reference
 
-Interactive initialization, shadow mode, exact-bound approval grants, one
-trusted pre-dispatch adapter, denial and approval blocking, execution linkage,
-and failure-mode tests.
+Exact-bound approval-grant verification is implemented. Interactive
+initialization, trusted request normalization, MCP shadow mode, one trusted
+pre-dispatch adapter, denial and approval blocking, execution linkage, and
+failure-mode tests remain in this slice.
 
 ### Slice D — Evidence and controlled operations
 

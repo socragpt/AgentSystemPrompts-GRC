@@ -1,0 +1,89 @@
+{
+  "schema_version": "0.1",
+  "policy_path": "examples/policies/multi_agent_operations.json",
+  "request_path": "examples/requests/email_send_requires_approval.json",
+  "trusted_identity_boundaries": [
+    "identity.reference"
+  ],
+  "cases": [
+    {
+      "id": "valid",
+      "grant_path": "examples/approvals/valid.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "outcome": "satisfied",
+        "reason_codes": [
+          "approval.satisfied"
+        ]
+      }
+    },
+    {
+      "id": "stale",
+      "grant_path": "examples/approvals/stale.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.expired"
+        ]
+      }
+    },
+    {
+      "id": "mismatched",
+      "grant_path": "examples/approvals/mismatched.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.parameters_mismatch"
+        ]
+      }
+    },
+    {
+      "id": "insufficient-quorum",
+      "grant_path": "examples/approvals/insufficient-quorum.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.insufficient_quorum"
+        ]
+      }
+    },
+    {
+      "id": "self-approved",
+      "grant_path": "examples/approvals/self-approved.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.insufficient_quorum",
+          "approval.approver_ineligible",
+          "approval.self_approved"
+        ]
+      }
+    },
+    {
+      "id": "revoked",
+      "grant_path": "examples/approvals/revoked.json",
+      "state_path": "examples/approval_states/revoked.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.revoked"
+        ]
+      }
+    },
+    {
+      "id": "reused",
+      "grant_path": "examples/approvals/reused.json",
+      "state_path": "examples/approval_states/reused.json",
+      "expected": {
+        "outcome": "not_satisfied",
+        "reason_codes": [
+          "approval.reused"
+        ]
+      }
+    }
+  ]
+}

@@ -6,9 +6,11 @@ This document describes the architecture the harness is building toward. The
 current early alpha parses, validates, and renders an XML governance baseline.
 It also validates and deterministically compiles Policy Bundle v0.1. One shared
 Python SDK/CLI decision core evaluates Action Request v0.1. The alpha also
-provides deterministic documentation-recall evaluation utilities. It does not
-yet authenticate identity, collect approvals, gate tool dispatch, expose a
-decision service, or persist evidence.
+provides a shared SDK/CLI Approval Grant v0.1 verifier with explicit
+caller-supplied trust, time, revocation, and reuse state, plus deterministic
+documentation-recall evaluation utilities. It does not authenticate identity,
+collect approvals, source or atomically update grant state, gate tool dispatch,
+expose a decision service, or persist evidence.
 
 ## Governance as a System Property
 
@@ -102,9 +104,9 @@ agent framework -> adapter -> normalized action request -> decision engine
 
 The policy loader, schema and semantic validator, canonicalizer, authority and
 delegation resolver, control resolver, constraint combiner, decision evaluator,
-reason codes, and evidence builder form one core library. The CLI, SDK, sidecar,
-service, wizard, and adapters call this library or conform to its versioned
-protocol and shared fixtures.
+approval verifier, reason codes, and evidence builders form one core library.
+The CLI, SDK, sidecar, service, wizard, and adapters call this library or
+conform to its versioned protocol and shared fixtures.
 
 No presentation or deployment surface may implement an independent policy
 interpretation.
@@ -119,9 +121,10 @@ immutable versions, and provenance—not opaque wizard state.
 ### Runtime governance plane
 
 The runtime plane normalizes a proposed action, evaluates authority and policy,
-verifies any required approval, gates dispatch, and emits linked evidence. It
-must remain deterministic before execution and explicit about which execution
-properties can be enforced by a particular adapter.
+verifies any required approval, gates dispatch, and emits linked evidence. The
+current core implements the decision and approval-verification steps without
+dispatch. Runtime behavior must remain deterministic before execution and
+explicit about which execution properties a particular adapter can enforce.
 
 ### Adapters
 
@@ -135,6 +138,16 @@ An enforcement adapter has three responsibilities:
 
 Adapters do not grant authority, resolve policy differently, or silently
 convert unsupported fields into permissive defaults.
+
+The first reference wedge will target Model Context Protocol (MCP) call
+normalization and explicitly non-enforcing shadow evaluation. MCP is an
+integration surface, not a source of core policy semantics: server names, tool
+names, arguments, annotations, and session identity remain adapter input until
+they are mapped to the provider-neutral Action Request contract through an
+explicit policy profile. Unmapped or lossy calls fail closed. Tool annotations
+are untrusted metadata unless a trusted adapter establishes otherwise. A later
+enforcement adapter may mediate MCP dispatch only after request mappings and
+constraint expressiveness are demonstrated in shadow mode.
 
 ## Deployment Architecture
 
@@ -168,10 +181,12 @@ The target operating flow is:
 4. Evaluate authority, capability, resource, channel, and control constraints.
 5. Return `allow`, `deny`, or `require_approval` with applicable control
    references.
-6. Prevent dispatch unless the decision and any required approval authorize
+6. Verify any approval against the exact unresolved decision and current
+   caller-supplied state.
+7. Prevent dispatch unless the decision and any required approval authorize
    the exact action.
-7. Record the decision, approval, execution result, and policy provenance.
-8. Use monitored outcomes and reviewed evidence to improve policy through a
+8. Record the decision, approval, execution result, and policy provenance.
+9. Use monitored outcomes and reviewed evidence to improve policy through a
    controlled revision process.
 
 An absent, invalid, stale, or ambiguous decision must not be interpreted as
@@ -197,8 +212,9 @@ approval, effective date, validation result, and rollback path.
 | Validation | XML structure plus v0.1 shape, reference, lifecycle, and delegation checks | Cross-bundle and runtime-context validation |
 | Compilation | Plain-text XML rendering plus deterministic v0.1 policy artifacts | Stable artifacts consumed by enforcement integrations |
 | Decisions | Side-effect-free Action Request v0.1 evaluator through Python SDK and CLI | The same evaluator exposed through a trusted decision service and adapters |
+| Approvals | Exact-bound, side-effect-free grant verifier using explicit caller-supplied state | Trusted collection, authoritative revocation and atomic consumption integrated with enforcement |
 | Enforcement | Not implemented | Pre-dispatch tool and action gating |
-| Evidence | Proposal-only structured record for every evaluator outcome | Append-only, redacted decision and execution evidence |
+| Evidence | Proposal-only structured records for decision and approval-verification outcomes | Append-only, redacted decision, approval, and execution evidence |
 | Evaluation | Documentation recall | Behavioral and adversarial governance scenarios |
 
 ## Non-Goals

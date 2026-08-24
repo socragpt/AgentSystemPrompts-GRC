@@ -1,5 +1,19 @@
 """Agent Governance Harness public API."""
 
+from .approval import (
+    APPROVAL_GRANT_SCHEMA_VERSION,
+    APPROVAL_VERIFICATION_EVIDENCE_SCHEMA_VERSION,
+    APPROVAL_VERIFICATION_RESULT_SCHEMA_VERSION,
+    APPROVAL_VERIFICATION_STATE_SCHEMA_VERSION,
+    ApprovalGrantError,
+    ApprovalVerificationResult,
+    load_approval_grant,
+    load_approval_verification_state,
+    validate_approval_grant,
+    validate_approval_verification_state,
+    verify_approval_grant,
+    verify_approval_grant_files,
+)
 from .decision import (
     ACTION_REQUEST_SCHEMA_VERSION,
     DECISION_RESULT_SCHEMA_VERSION,
@@ -26,7 +40,13 @@ from .prompt import Section, generate_prompt, parse_system_prompt, validate_sect
 
 __all__ = [
     "ACTION_REQUEST_SCHEMA_VERSION",
+    "APPROVAL_GRANT_SCHEMA_VERSION",
+    "APPROVAL_VERIFICATION_EVIDENCE_SCHEMA_VERSION",
+    "APPROVAL_VERIFICATION_RESULT_SCHEMA_VERSION",
+    "APPROVAL_VERIFICATION_STATE_SCHEMA_VERSION",
     "ActionRequestError",
+    "ApprovalGrantError",
+    "ApprovalVerificationResult",
     "CompiledPolicy",
     "DECISION_RESULT_SCHEMA_VERSION",
     "DecisionResult",
@@ -41,11 +61,17 @@ __all__ = [
     "evaluate_action_files",
     "generate_prompt",
     "load_action_request",
+    "load_approval_grant",
+    "load_approval_verification_state",
     "load_policy_bundle",
     "normalize_action_request",
     "parse_system_prompt",
     "validate_policy_bundle",
     "validate_action_request",
+    "validate_approval_grant",
+    "validate_approval_verification_state",
     "validate_sections",
+    "verify_approval_grant",
+    "verify_approval_grant_files",
 ]
 __version__ = "0.1.0"

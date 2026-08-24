@@ -7,9 +7,10 @@ propose or perform actions. These capabilities include tools, APIs,
 filesystems, browsers, and communication systems. Governance applies before an
 action is dispatched and continues through evidence collection and monitoring.
 
-This alpha provides a deterministic, side-effect-free decision contract but
-does not authenticate identity, collect approvals, dispatch actions, enforce
-returned constraints, or persist evidence.
+This alpha provides deterministic, side-effect-free decision and exact-bound
+approval-verification contracts. It does not authenticate identity, collect
+approvals, source authoritative revocation or reuse state, atomically consume
+grants, dispatch actions, enforce returned constraints, or persist evidence.
 
 ## Instruction Hierarchy
 
@@ -60,3 +61,8 @@ The Decision Contract v0.1 evaluator exposes three explicit outcomes:
 An absent, invalid, or ambiguous decision must never be interpreted as `allow`.
 The current evaluator proposes decision evidence but is not itself a trusted
 pre-dispatch enforcement point.
+
+Approval Grant v0.1 separately returns `satisfied` or `not_satisfied` for an
+exact `require_approval` decision under explicit caller-supplied state. A
+`satisfied` result does not convert the decision to `allow`, consume the grant,
+or prove that a trusted component mediated dispatch.

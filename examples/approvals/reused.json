@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.1",
+  "grant_id": "grant.email-send-reused",
+  "approval_requirement_ids": [
+    "approval.external-email"
+  ],
+  "binding": {
+    "request_id": "request.email-send-001",
+    "request_sha256": "d487a07036a15f2bebaffcb225e95b79ac8d6e0367f8449af82ef35c1bfb377f",
+    "decision_id": "decision.e6de5ec05f90cab4f8188fd836205a81c7375ae16309c20303602852cf85cc75",
+    "decision_disposition": "require_approval",
+    "subject_actor_id": "agent.communicator",
+    "capability_id": "capability.email-send",
+    "resource_id": "tool.email",
+    "parameters_digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "policy": {
+      "bundle_id": "bundle.multi-agent-operations",
+      "bundle_version": "0.1.0",
+      "schema_version": "0.1",
+      "source_sha256": "89e3afb072dbddc8e34fe433e5e2b8d208a0210244797e3e579f9a8aaf0b6b77"
+    },
+    "scope": {
+      "max_cost": {
+        "amount_minor": 0,
+        "currency": "USD"
+      },
+      "max_duration_seconds": 300,
+      "max_action_count": 1,
+      "max_delegation_depth": 0,
+      "allowed_data_classifications": [
+        "internal"
+      ],
+      "require_reversible": false
+    }
+  },
+  "issued_at": "2026-08-21T20:05:00Z",
+  "expires_at": "2026-08-21T20:50:00Z",
+  "reuse_policy": "single_use",
+  "approvals": [
+    {
+      "approval_id": "approval.external-email",
+      "approver_actor_id": "human.risk-approver",
+      "approved_at": "2026-08-21T20:04:00Z",
+      "identity": {
+        "trust_boundary_id": "identity.reference",
+        "assertion_id": "assertion.risk-approval-reused",
+        "authenticated_at": "2026-08-21T20:03:00Z",
+        "expires_at": "2026-08-21T20:30:00Z"
+      },
+      "rationale": {
+        "code": "risk.reviewed",
+        "reference": null
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
 - **Status date:** 2026-08-24
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `11257449ebe609c944e1a70ff705959fe0051db5`
+- **Verified `main`:** `d74173d7b8663273b2f0f802f4a2b02717a1fa40`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -19,18 +19,20 @@ action requests through one side-effect-free Python SDK and CLI core.
 
 The evaluator returns exactly `allow`, `deny`, or `require_approval`, with
 stable reasons, effective constraints, authority paths, policy provenance, and
-proposal-only evidence. It does not authenticate identity, verify approval
-grants, block tool dispatch, enforce execution constraints, or persist durable
-evidence.
+proposal-only evidence. Approval Grant v0.1 separately returns `satisfied` or
+`not_satisfied` for an exact unresolved decision under explicit caller-supplied
+trust, freshness, revocation, and reuse state. Neither result dispatches or
+authorizes execution.
 
 Dogfood 0 is complete through 25 material actions. The final sanitized findings
 and next-build ranking are in the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
-Approval Grant v0.1 contract and verifier as the next implementation milestone.
-Pull request
-[#25](https://github.com/socragpt/agent-governance-harness/pull/25)
-published the completion checkpoint. There are no open pull requests. The next
-work is the Approval Grant v0.1 milestone.
+Approval Grant v0.1 contract and verifier, now implemented locally on
+`codex/approval-grant-v0.1`. Pull request
+[#26](https://github.com/socragpt/agent-governance-harness/pull/26) published
+the post-dogfood status checkpoint and verified `main`. The next implementation
+milestone is an MCP request-normalization profile and explicitly non-enforcing
+shadow reference that preserves the framework-neutral core.
 
 ## Verified Current State
 
@@ -52,6 +54,16 @@ The alpha foundation implements:
 - portable allow, deny, and approval-gated conformance fixtures.
 - a proposal-only evidence record for validation failures and every decision
   outcome.
+- normative Approval Grant, Approval Verification State, and Approval
+  Verification Result v0.1 JSON Schemas.
+- exact request, decision, subject, capability, resource, canonical parameter,
+  policy, scope, rule, and expiry binding for approval grants.
+- deterministic, side-effect-free verification of approver eligibility,
+  quorum, separation of duties, freshness, caller-reported revocation, and
+  caller-reported reuse state.
+- equivalent approval verification through the Python SDK and CLI, with
+  portable valid and fail-closed conformance examples.
+- minimized proposal-only evidence for every approval-verification outcome.
 - deterministic JSONL documentation-recall evaluation utilities.
 - repository-contract, decision, policy, prompt, and evaluation tests.
 - a human-first documentation path for users, policy authors, integrators,
@@ -61,8 +73,9 @@ The alpha foundation does **not** implement:
 
 - authenticated identity-to-principal binding.
 - cryptographic verification of identity assertions.
-- approval grant creation, collection, verification, expiry, revocation,
-  reuse, or quorum workflows.
+- approval grant creation or collection workflows.
+- authoritative revocation and reuse-state sourcing or atomic grant
+  consumption.
 - pre-dispatch tool or API enforcement.
 - a language-neutral decision service or sidecar.
 - append-only, integrity-protected decision evidence.
@@ -173,6 +186,16 @@ and post-merge
 passed on Python 3.9, 3.11, and 3.13. Each job built a wheel and smoke-tested
 the installed package.
 
+Pull request
+[#26](https://github.com/socragpt/agent-governance-harness/pull/26) merged the
+post-dogfood status handoff into `main` as `d74173d7` on 2026-08-24 UTC. It
+published the verified completion state and next-milestone handoff without
+changing schemas or runtime behavior. Its pull-request checks passed.
+Post-merge
+[`main` CI run 32776110635](https://github.com/socragpt/agent-governance-harness/actions/runs/32776110635)
+passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
+smoke tests.
+
 ## Completed Milestone: Dogfood 0
 
 The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) records the
@@ -220,6 +243,32 @@ v0.2 records classify their decisions as useful. See the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics, evidence limits, the
 ranked gaps, and the selected next milestone.
 
+## Completed Local Milestone: Approval Grant v0.1
+
+The `codex/approval-grant-v0.1` branch implements the first ranked post-pilot
+gap under `APR-002` through `APR-005`. It adds strict versioned contracts for
+Approval Grant, Approval Verification State, Approval Verification Result, and
+embedded proposal-only verification evidence. One deterministic verifier is
+exposed through the `agent_governance` SDK and `agent-governance approval
+verify` CLI.
+
+The verifier reevaluates the exact policy and request, requires the supplied
+Decision Result to match and remain `require_approval`, checks every request,
+decision, subject, capability, resource, parameter, policy, scope, rule, and
+expiry binding, and derives approver eligibility from policy roles. Quorum,
+separation of duties, approver identity freshness, caller-reported revocation,
+and caller-reported reuse all fail closed. Portable examples cover valid,
+stale, mismatched, insufficient-quorum, self-approved, revoked, and reused
+grants.
+
+The core is side-effect-free. It neither creates nor collects approvals, reads
+the clock or network, sources authoritative identity or grant state, consumes
+a single-use grant, changes Decision Result v0.1, dispatches an action, nor
+retains trusted evidence. Its Product Charter anti-drift review passes: it
+serves the named governance problem, reuses the shared core, preserves exact
+fail-closed contracts, keeps trust inputs explicit, remains framework-neutral,
+and does not claim enforcement or compliance.
+
 ## Decisions That Should Survive Handoffs
 
 1. **Govern the institution around the model.** The project models delegated
@@ -265,9 +314,13 @@ ranked gaps, and the selected next milestone.
     reversible local branch reference. The reviewer does not receive this
     delegation, and retained v0.1.0 policy snapshots preserve historical
     unmapped denials.
-20. **Verify approval before attempting enforcement.** The next milestone is a
-    provider-neutral Approval Grant v0.1 contract and deterministic verifier,
-    not an approval workflow UI or tool-dispatch adapter.
+20. **Verify approval before attempting enforcement.** Approval Grant v0.1 is
+    a provider-neutral, deterministic verifier, not an approval workflow UI or
+    tool-dispatch adapter.
+21. **Use MCP as the first wedge, not the semantic center.** The next reference
+    integration normalizes MCP call proposals in non-enforcing shadow mode.
+    Core request, decision, approval, and evidence contracts remain framework-
+    neutral, and MCP metadata is not authority by default.
 
 ## Open Design Questions and Findings
 
@@ -279,9 +332,9 @@ ranked gaps, and the selected next milestone.
 - The Phase 1 observation contract can reproduce a decision from minimized,
   digest-linked artifacts. Live use must test whether its controlled fields
   are operationally sufficient.
-- The observation contract records whether an out-of-band approval was
-  requested and received. It does not claim that the harness verified an
-  Approval Grant.
+- Historical dogfood observations record whether an out-of-band approval was
+  requested and received. They were not backfilled with or reclassified as
+  verified Approval Grants after Approval Grant v0.1 was implemented.
 - Policy Bundle v0.1 does not bind a resource class to concrete path, command,
   branch, or remote parameters. The pilot normalizer must preserve that limit.
 - Action Request v0.1 retains expected side effects, but Policy Bundle v0.1
@@ -298,27 +351,31 @@ ranked gaps, and the selected next milestone.
 - One legacy v0.1 timestamp anomaly remains unverifiable because v0.1 has no
   recorder-generated timestamp. New records separate generated `recorded_at`
   from optional operator-reported action time.
-- Should Approval Grant verification consume revocation and reuse state as
-  explicit caller input in v0.1, or define a minimal state-provider interface?
-- Which verifier result contract should distinguish a satisfied approval from
-  a fail-closed invalid grant without changing the three-way Decision Result?
+- Approval Grant v0.1 resolves changing verification inputs as explicit caller
+  state and returns a separate `satisfied` or `not_satisfied` contract without
+  changing the three-way Decision Result. A trusted state-provider interface
+  and atomic consumption remain integration work.
 - After the pilot, how should resource selectors and constraint operators be
   versioned?
-- Which identity assertion verifier and enforcement adapter should become the
-  first trusted references?
+- Which MCP fields can be normalized without loss into Action Request v0.1,
+  and which mappings require a future selector or request-contract version?
+- Which identity assertion verifier should become the first trusted reference
+  after the MCP shadow profile exposes its concrete trust-boundary needs?
 
 Resolve these questions through explicit fixtures, observations, design notes,
 and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Implement Approval Grant v0.1 as a versioned contract and deterministic,
-side-effect-free verifier under `APR-002` through `APR-005`. Bind the exact
-subject, capability, resource, parameter digest, decision, policy, scope, and
-expiry. Fail closed for invalid approvers, insufficient quorum, separation-of-
-duties violations, stale grants, revocation, reuse, or mismatched bindings.
-Keep approval collection, dispatch, enforcement, and durable evidence outside
-this milestone.
+Implement a versioned MCP request-normalization profile and explicitly
+non-enforcing shadow reference. Map concrete server, tool, argument, identity,
+and goal inputs into the existing framework-neutral Action Request contract;
+reuse the shared evaluator and Approval Grant verifier; reject incomplete,
+unknown, ambiguous, or lossy mappings; and retain only proposal-only shadow
+artifacts. Use observed mapping gaps to scope the smallest selector changes
+before attempting a trusted pre-dispatch adapter. Do not proxy or dispatch MCP
+calls, authenticate sessions, collect approvals, consume grants, or claim
+enforcement in this milestone.
 
 ## Verification Baseline
 
@@ -333,16 +390,25 @@ agent-governance policy evaluate \
   examples/policies/multi_agent_operations.json \
   examples/requests/browser_read_allowed.json \
   --trusted-identity-boundary identity.reference
+agent-governance approval verify --help
 agent-governance policy validate dogfood/policy.json
 python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` at `11257449` contains 74 tests. Pull-request and post-merge CI
+Verified `main` at `d74173d7` contains 74 tests. Pull-request and post-merge CI
 passed the full Python 3.9, 3.11, and 3.13 matrix. Each job performed a clean
 installation, byte compilation, compatibility XML validation, example policy
 validation, and reference evaluation. All 13 documentation-recall examples and
 74 tests passed. Each job also built and smoke-tested the wheel.
+
+The local `codex/approval-grant-v0.1` branch passes editable installation,
+byte compilation, compatibility and example policy validation, reference
+evaluation, dogfood policy validation, all 13 documentation-recall examples,
+Markdown link checks, diff checks, and all 85 tests. The installed CLI returns
+`0` for the valid approval example and `5` for the stale example. A clean wheel
+build and installed-wheel smoke test from outside the repository also pass,
+including an exact valid approval verification.
 
 The supported reporter also verified the maintainer's ignored local records
 through `observation.dogfood.039`: 39 observations, 32 material actions, 100%

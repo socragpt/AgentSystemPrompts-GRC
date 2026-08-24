@@ -13,6 +13,7 @@ Then inspect these executable examples:
 - [multi-agent policy](../examples/policies/multi_agent_operations.json).
 - [allowed browser request](../examples/requests/browser_read_allowed.json).
 - [approval-gated email request](../examples/requests/email_send_requires_approval.json).
+- [valid exact-bound approval grant](../examples/approvals/valid.json).
 - [denied unmapped request](../examples/requests/unmapped_action_denied.json).
 
 The evaluator returns an advisory governance decision and proposal-only
@@ -38,15 +39,21 @@ Read these files:
 
 1. [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) for request, decision,
    reason-code, constraint, and proposed-evidence semantics.
-2. The [Action Request](../schemas/action-request-v0.1.schema.json),
+2. [Approval Grant v0.1](APPROVAL_GRANT_V0.1.md) for exact binding,
+   caller-supplied verification state, approver, and fail-closed semantics.
+3. The [Action Request](../schemas/action-request-v0.1.schema.json),
    [Decision Result](../schemas/decision-result-v0.1.schema.json), and
    [Proposed Evidence Record](../schemas/proposed-evidence-record-v0.1.schema.json)
    JSON Schemas.
-3. The shared
-   [decision conformance fixture](../conformance/decision-contract-v0.1.json).
+4. The normative [Approval Grant](../schemas/approval-grant-v0.1.schema.json),
+   [Approval Verification State](../schemas/approval-verification-state-v0.1.schema.json),
+   and [Approval Verification Result](../schemas/approval-verification-result-v0.1.schema.json)
+   JSON Schemas.
+5. The shared [decision](../conformance/decision-contract-v0.1.json) and
+   [approval](../conformance/approval-grant-v0.1.json) conformance fixtures.
 
-The Python SDK and CLI use one evaluator. Future services and adapters must use
-the same semantics and conformance cases.
+The Python SDK and CLI use one decision evaluator and one approval verifier.
+Future services and adapters must use the same semantics and conformance cases.
 
 ## Dogfood Operator
 
@@ -90,8 +97,8 @@ When documents appear to overlap, use this order:
 1. The Product Charter defines durable purpose and boundaries.
 2. The Safety Model defines safety invariants and threat assumptions.
 3. The Product Specification defines target requirements.
-4. Policy Bundle v0.1 and Decision Contract v0.1 define implemented public
-   contracts.
+4. Policy Bundle v0.1, Decision Contract v0.1, and Approval Grant v0.1 define
+   implemented public contracts.
 5. Architecture and Roadmap describe the target design and delivery sequence.
 6. Project Status records the verified current state.
 7. The Dogfooding Plan defines one completed experiment. It does not change
