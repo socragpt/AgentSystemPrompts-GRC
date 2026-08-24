@@ -75,6 +75,24 @@ definition, so these decisions do not reduce material-action mapping coverage.
 These limits do not change the recorded policy disposition. They limit the
 quality and completeness of pilot operations evidence.
 
+## Next-Build Ranking Method
+
+The completion decision ranks product gaps with four tests:
+
+1. apply the decision rules in `DOGFOOD_PLAN.md` to verified reporter metrics;
+2. prefer repeated observed friction over isolated or hypothetical gaps;
+3. order prerequisite contracts before integrations that depend on them; and
+4. reject any candidate that fails the Product Charter anti-drift test or
+   requires the alpha to claim enforcement it does not provide.
+
+The ranking treats approval verification, request construction and
+normalization, selector precision, pre-dispatch enforcement, and evidence
+retention as distinct gaps. A selected milestone may combine a request builder
+with the selector support it needs, but it must not silently absorb approval,
+enforcement, or evidence-store semantics. Reproducible observations lower the
+priority of evidence retention; they do not satisfy the target requirements
+for append-only or tamper-evident storage.
+
 ## Findings Through This Snapshot
 
 ### 1. Observation and reporting hardening is implemented
