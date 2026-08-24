@@ -17,8 +17,13 @@ live shadow observation after all Phase 1 acceptance checks pass.
 
 The repository contained no live observations at the end of Phase 1. The
 maintainer opened the live gate on 2026-08-22 after the complete baseline
-passed. The pilot is now running in shadow mode. Live records remain ignored by
-Git under `dogfood/observations/`.
+passed. The pilot completed through `observation.dogfood.031` with 25 material
+actions. Live records remain ignored by Git under `dogfood/observations/` and
+the committed report contains only sanitized aggregate findings.
+
+This procedure remains available for reproduction and separately scoped
+follow-up observation. The completed pilot does not create continuing
+authority for development actions, remote publication, or enforcement.
 
 ## Pilot Artifacts
 

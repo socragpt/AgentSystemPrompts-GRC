@@ -1,9 +1,9 @@
 # Dogfood 0 Pilot Report
 
-- **Status:** live shadow observation running
-- **Snapshot date:** 2026-08-23
-- **Snapshot boundary:** through `observation.dogfood.022`
-- **Verified `main`:** `4291a89d0d6ea7fbbbaf48607e3c5246dbc8aecf`
+- **Status:** complete; next-build decision recorded
+- **Snapshot date:** 2026-08-24
+- **Snapshot boundary:** through `observation.dogfood.031`
+- **Verified `main`:** `ca34507ac953375f2d08f1a15dc64294366e9e8a`
 - **Mode:** shadow; explicitly non-enforcing
 
 > **WARNING:** This report describes advisory decisions. It does not prove
@@ -25,25 +25,26 @@ or model chain of thought.
 | Metric | Result |
 | --- | ---: |
 | Deterministic baseline scenarios | 15 of 15 passed |
-| Recorded observations | 22 |
-| Material actions | 17 of 25 |
-| Mapping coverage | 17 of 17 material actions, or 100% |
+| Recorded observations | 31 |
+| Material actions | 25 of 25 |
+| Mapping coverage | 25 of 25 material actions, or 100% |
 | Capability categories observed | 10 |
 | Unmapped action categories observed | 1 |
-| Decision agreement | 22 of 22, or 100% |
+| Decision agreement | 31 of 31, or 100% |
 | False allows | 0 |
 | False blocks | 0 |
-| Approval load | 8 of 22, or 36.4% |
-| Unmapped rate | 2 of 22, or 9.1% |
-| Median normalization time | 27.5 seconds |
-| Reproducible retained decisions | 22 of 22, or 100% |
-| v0.2 decision usefulness | 3 useful of 3 reported |
-| v0.2 timestamp-order anomalies | 0 of 3 reported action times |
+| Approval load | 14 of 31, or 45.2% |
+| Unmapped rate | 2 of 31, or 6.5% |
+| Median normalization time | 30 seconds |
+| Reproducible retained decisions | 31 of 31, or 100% |
+| v0.2 decision usefulness | 12 useful of 12 reported |
+| v0.2 timestamp-order anomalies | 0 of 12 reported action times |
 
-The recorded dispositions are 12 `allow`, eight `require_approval`, and two
-`deny`. The harness did not verify approvals. The maintainer authorized the
-approval-gated actions through the existing workflow, and the pilot recorded
-those out-of-band events.
+The recorded dispositions are 15 `allow`, 14 `require_approval`, and two
+`deny`. The harness did not verify approvals. The maintainer authorized all 14
+approval-gated decisions through the existing workflow, and 13 of those
+actions occurred. The pilot recorded authorization only as an out-of-band
+event.
 
 The two retained local branch-creation decisions used Policy Bundle snapshot
 v0.1.0 and failed closed as unmapped. The current v0.2.0 pilot policy now
@@ -51,6 +52,9 @@ models one reversible, single-action local branch creation for the developer.
 The retained historical decisions still reproduce against their v0.1.0 policy
 snapshots. Local branch creation is not material under the current pilot
 definition, so these decisions do not reduce material-action mapping coverage.
+The first live request evaluated against v0.2.0 returned `allow` for the
+developer's reversible, single-action branch creation and matched the
+maintainer's expectation.
 
 ## Evidence Limits
 
@@ -95,61 +99,95 @@ for append-only or tamper-evident storage.
 
 ## Findings Through This Snapshot
 
-### 1. Observation and reporting hardening is implemented
+### 1. Approval is the largest unresolved control-path gap
 
-The bounded v0.2 recorder and reporter resolve the identified local experiment
-gaps. They preserve v0.1 read compatibility and do not add trusted evidence
-storage. The pilot must now use v0.2 for new actions and continue to test the
-fields under real work.
+Fourteen of 31 observations, or 45.2%, returned `require_approval`. Every one
+depended on existing out-of-band authorization because the harness cannot
+create or verify a grant. `approval-unverified` is the most frequent controlled
+friction code, with 14 occurrences.
 
-This work maps to `EVD-001`, `EVD-004`, `DX-005`, and `DX-006`. It does not
-claim that durable evidence requirements are implemented.
+This evidence selects an Approval Grant v0.1 contract and verifier as the next
+milestone under `APR-002` through `APR-005`. Approval verification is a
+prerequisite for a trusted adapter: an adapter cannot safely dispatch the
+current approval-gated workload while approval remains only a boolean in an
+observation.
 
-### 2. Request construction is operationally fragile
+### 2. Request construction and normalization remain costly
 
-The pilot requires manual capability and resource selection, side-effect
-vocabulary, digests, identity-boundary claims, goal claims, and timestamps.
-The operator reported that one unsupported side-effect value caused a
-fail-closed denial. Manual construction also produced the timestamp anomaly.
+`request-construction` occurred 13 times, the median normalization time was 30
+seconds, `goal-assumption` occurred nine times, and `identity-assumption`
+occurred eight times. The pilot required manual capability and resource
+selection, side-effect vocabulary, digests, identity-boundary claims, goal
+claims, and timestamps.
 
-This evidence supports further evaluation of a request builder or normalizer.
-It does not yet select the next product slice.
+The second-ranked gap is a request builder and trusted normalizer with richer
+selector support under `DX-001`, `DEC-008`, and `PTH-001`. Policy Bundle v0.1
+cannot select concrete paths, commands, branches, or remotes; four observations
+explicitly recorded `selector-too-broad`. The builder must expose that limit
+instead of guessing authority.
 
-### 3. Approval remains procedural
+### 3. Enforcement should follow approval and normalization
 
-Three real approval-gated development actions returned `require_approval`.
-The maintainer authorized each through the existing workflow, but the harness
-only recorded booleans. It did not create or verify an exact-bound Approval
-Grant.
+All 31 decisions matched the maintainer's expected disposition, with no false
+allows or false blocks. Existing workflow controls, not the harness, decided
+whether actions occurred. This combination favors one trusted pre-dispatch
+reference adapter under `DX-004` and `ENF-001` through `ENF-005`, but only after
+the approval and normalization prerequisites above exist.
 
-This is evidence relevant to `APR-002` through `APR-005`. The sample remains
-too small to select approval work ahead of the other pilot findings.
+### 4. Local evidence quality is sufficient for milestone selection
 
-### 4. Local branch creation now has a narrow pilot mapping
+All 31 observations reproduced from minimized request and policy artifacts,
+and the reporter found complete evidence for every record. This lowers the
+relative priority of an evidence-sink contract. It does not satisfy `EVD-002`
+or `EVD-003`: the local files are still ignored, mutable, and not a trusted
+append-only store.
 
-The current policy explicitly allows the developer to create one reversible
-local branch reference on `service.local-git`. The reviewer has no delegation
-for this capability. Historical unmapped decisions remain unchanged because
-each observation retains its evaluated policy snapshot.
+### 5. The narrow local-branch mapping works but exposes selector limits
+
+The current policy allowed the developer's first live reversible local-branch
+request and continued to deny the retained v0.1.0 unmapped requests against
+their historical policy snapshots. The reviewer still has no branch-creation
+delegation. The live mapping was useful, but its generic local-Git resource
+also contributed one `selector-too-broad` finding.
+
+## Final Gap Ranking
+
+1. **Approval Grant v0.1 contract and verifier.** Highest frequency, direct
+   safety impact, and a prerequisite for approval-gated enforcement.
+2. **Request builder and trusted normalizer with richer selectors.** Repeated
+   construction friction and the largest source of manual trust assumptions.
+3. **Trusted pre-dispatch reference adapter.** Strong decision agreement makes
+   integration useful, but it depends on the first two gaps.
+
+The language-neutral decision service and durable evidence sink remain target
+work. The pilot did not produce evidence that they should displace these three
+gaps.
 
 ## Next Operational Milestone
 
-Continue real repository work until the pilot reaches 25 material actions.
-The current snapshot has 17. Use observation v0.2 for new attempts and run the
-supported reporter before each sanitized checkpoint. Then apply the decision
-rules in [`DOGFOOD_PLAN.md`](DOGFOOD_PLAN.md) and rank the next three product
-gaps.
+Implement Approval Grant v0.1 as a versioned, provider-neutral contract plus a
+deterministic, side-effect-free verifier. It must bind the exact subject,
+capability, resource, parameter digest, decision, policy, scope, and expiry;
+validate approver eligibility, quorum, separation of duties, and explicit
+revocation or reuse state; and fail closed for every missing, stale,
+mismatched, insufficient, self-approved, revoked, or reused grant.
 
-Do not add approval verification, enforcement, a decision service, or durable
-evidence storage before the completed pilot supports that choice.
+Expose equivalent verification through the Python SDK and CLI with shared
+conformance fixtures and proposal-only evidence. Do not collect approvals,
+dispatch actions, enforce constraints, or claim durable evidence in this
+milestone.
 
 ## Anti-Drift Review
 
-The implemented observation-hardening milestone serves the named repository
-workflow and the evidence requirements above. It reuses the shared evaluator,
-keeps unsupported input fail-closed, and does not create separate policy
-semantics in a report or UI. It preserves the distinction between shadow
-decisions and enforcement.
+The selected milestone serves the observed approval-gated repository workflow
+and strengthens the path from an explicit `require_approval` decision to an
+exact, testable authorization artifact. Invalid or ambiguous grants fail
+closed, delegation does not expand, and approval authority remains explicit.
+The contract and verifier remain provider-neutral, use the shared decision and
+policy identifiers, and can be tested deterministically. Documentation will
+continue to distinguish verification from collection, dispatch, enforcement,
+and trusted retention. The milestone therefore passes the Product Charter
+anti-drift test without creating a competing policy interpretation.
 
 ## Delivery History
 
@@ -163,3 +201,12 @@ Pull request
 [#23](https://github.com/socragpt/agent-governance-harness/pull/23) merged the
 first sanitized pilot checkpoint into `main` as `4291a89` on 2026-08-23 UTC.
 Its pull-request CI passed on Python 3.9, 3.11, and 3.13.
+
+Pull request
+[#24](https://github.com/socragpt/agent-governance-harness/pull/24) merged the
+observation-hardening milestone into `main` as `ca34507` on 2026-08-24 UTC.
+Pull-request
+[CI run 32752158332](https://github.com/socragpt/agent-governance-harness/actions/runs/32752158332)
+and post-merge
+[`main` CI run 32752296025](https://github.com/socragpt/agent-governance-harness/actions/runs/32752296025)
+passed on Python 3.9, 3.11, and 3.13.

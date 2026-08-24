@@ -120,21 +120,24 @@ Earn the business case through technical proof:
 2. **Decide — decision and evidence proposal (v0.1 implemented).** Normalized
    requests return `allow`, `deny`, or `require_approval` with stable reasons,
    controls, constraints, provenance, and proposal-only evidence.
-3. **Observe — repository-development dogfood pilot.** Apply the current
-   decision contract in explicitly non-enforcing shadow mode. Use real workflow
-   evidence to identify adoption friction and select the next product build.
-4. **Enforce — approval and pre-dispatch reference.** Exact-bound approval
-   demonstrates that denied or unresolved actions cannot dispatch. One trusted
-   adapter demonstrates that execution remains within returned constraints.
+3. **Observe — repository-development dogfood pilot (complete).** The pilot
+   applied the current decision contract in explicitly non-enforcing shadow
+   mode to 25 material actions. Its evidence selected the next product build.
+4. **Enforce — approval and pre-dispatch reference.** The selected first step
+   is an exact-bound Approval Grant v0.1 contract and verifier. A later trusted
+   adapter must demonstrate that denied or unresolved actions cannot dispatch
+   and that execution remains within returned constraints.
 5. **Prove — behavioral evaluation and integration.** Adversarial evaluations
    and an end-to-end agent integration demonstrate that continuous integration
    can detect meaningful governance regressions before release.
 
-The immediate next proof is the
-[Repository Development Dogfooding Plan](DOGFOOD_PLAN.md). The pilot will use
-Policy Bundle v0.1 and Decision Contract v0.1 without claiming enforcement.
-Its findings will determine whether normalization, selectors, initialization,
-approval grants, enforcement, or evidence retention should be built next.
+The immediate next proof is Approval Grant v0.1. The completed
+[Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) recorded 31
+reproducible observations, including 25 material actions. Approval remained
+unresolved in 14 observations, or 45.2%, so the next milestone will define and
+verify exact-bound grants before a pre-dispatch adapter is attempted. This work
+will not claim approval collection, dispatch, enforcement, or trusted evidence
+retention.
 
 ## Boundaries
 

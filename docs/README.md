@@ -50,15 +50,15 @@ the same semantics and conformance cases.
 
 ## Dogfood Operator
 
-Read the [Dogfood 0 procedure](../dogfood/README.md) before you evaluate a live
-repository-development action. The pilot provides deterministic fixtures, a
-local v0.2 recorder, and a verifier/reporter that retains v0.1 read
-compatibility. Keep live records in the ignored pilot directory or outside the
-repository. Do not collect them until the maintainer explicitly opens the live
-shadow gate.
+Read the [Dogfood 0 procedure](../dogfood/README.md) to reproduce the completed
+repository-development pilot or run separately scoped follow-up observations.
+The pilot provides deterministic fixtures, a local v0.2 recorder, and a
+verifier/reporter that retains v0.1 read compatibility. Keep live records in
+the ignored pilot directory or outside the repository. The historical live
+gate did not authorize development actions or enforcement.
 
-Read the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for the current sanitized
-metrics, findings, evidence limits, and next operational milestone.
+Read the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for the final sanitized
+metrics, findings, evidence limits, ranked gaps, and selected next milestone.
 
 ## Contributor
 
@@ -80,7 +80,7 @@ public contracts, capability claims, or product direction:
 - [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) defines the
   non-enforcing shadow pilot and its next-build decision rules.
 - [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) records sanitized pilot evidence
-  and provisional findings.
+  and the final next-build decision.
 - [Roadmap](../ROADMAP.md) sequences planned delivery.
 
 ## Document Authority
@@ -94,8 +94,8 @@ When documents appear to overlap, use this order:
    contracts.
 5. Architecture and Roadmap describe the target design and delivery sequence.
 6. Project Status records the verified current state.
-7. The Dogfooding Plan defines one current experiment. It does not change the
-   product contract.
+7. The Dogfooding Plan defines one completed experiment. It does not change
+   the product contract.
 
 Implementation and tests are authoritative when a current-state document
 disagrees with executable behavior.

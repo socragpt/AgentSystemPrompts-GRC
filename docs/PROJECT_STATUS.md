@@ -23,12 +23,11 @@ proposal-only evidence. It does not authenticate identity, verify approval
 grants, block tool dispatch, enforce execution constraints, or persist durable
 evidence.
 
-The active milestone is a non-enforcing repository-development dogfood pilot.
-Phase 1 is implemented on `main`. The maintainer explicitly authorized live
-shadow observation on 2026-08-22, and the pilot is running. The current
-sanitized findings are in the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md).
-The first status checkpoint and bounded observation-hardening change are
-merged. The Dogfood 0 completion checkpoint is active on
+Dogfood 0 is complete through 25 material actions. The final sanitized findings
+and next-build ranking are in the
+[Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
+Approval Grant v0.1 contract and verifier as the next implementation milestone.
+The completion checkpoint is locally prepared on
 `codex/dogfood-completion-checkpoint`.
 
 ## Verified Current State
@@ -159,35 +158,35 @@ and post-merge
 passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
 smoke tests.
 
-## Active Milestone: Dogfood 0
+## Completed Milestone: Dogfood 0
 
-The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) governs the
-active milestone. Phase 1 builds the policy, fixtures, expected results,
+The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) records the
+completed milestone. Phase 1 built the policy, fixtures, expected results,
 observation contract, recorder, procedure, and tests. The Phase 1 artifacts met
-their acceptance criteria and are now merged into `main`.
+their acceptance criteria and are merged into `main`.
 
 Dogfood 0 is explicitly shadow and non-enforcing. User, Codex, operating-system,
-Git, and GitHub controls remain authoritative. The pilot will not treat
+Git, and GitHub controls remain authoritative. The pilot did not treat
 evaluator output as permission to execute.
 
-The complete pilot will:
+The completed pilot:
 
-1. model repository-development actors, capabilities, resources, controls, and
+1. modeled repository-development actors, capabilities, resources, controls, and
    approval expectations in Policy Bundle v0.1;
-2. create deterministic allow, deny, approval, stale, malformed, and unmapped
+2. created deterministic allow, deny, approval, stale, malformed, and unmapped
    scenarios;
-3. observe at least 25 real material development actions across at least six
+3. observed 25 real material development actions across ten
    capability categories;
-4. record minimized decisions, expected outcomes, disagreements, and workflow
+4. recorded minimized decisions, expected outcomes, disagreements, and workflow
    friction; and
-5. use the evidence to rank the next three product gaps.
+5. used the evidence to rank the next three product gaps.
 
-The pilot tests adoption assumptions for `DX-005`, `DX-007`, and `DX-010`. It
+The pilot tested adoption assumptions for `DX-005`, `DX-007`, and `DX-010`. It
 does not claim those target requirements are implemented.
 
 No live development observations were collected during Phase 1. The maintainer
 opened the live gate after reviewing the verified Phase 1 result. The first
-observed material action records that authorization in this status document.
+observed material action recorded that authorization in this status document.
 Harness results remain advisory and do not authorize execution.
 
 The Phase 1 anti-drift review passed. The work serves the named repository
@@ -196,14 +195,15 @@ fail-closed behavior, keeps trust assumptions explicit, remains
 framework-neutral, and produces reproducible artifacts. The documentation does
 not describe shadow decisions as enforcement or verified approval.
 
-The verified local pilot snapshot through `observation.dogfood.022` contains
-22 observations and 17 material actions. All 17 material actions had a safe
+The verified completion snapshot through `observation.dogfood.031` contains 31
+observations and 25 material actions. All 25 material actions had a safe
 capability and resource mapping, so mapping coverage is 100%. Ten capability
-categories and one historically unmapped action category have been observed.
-All 22 retained decisions reproduce and match the maintainer's expected policy
-disposition. The snapshot has zero false allows and zero false blocks. Three
-new v0.2 records explicitly classify their decisions as useful. See the
-[Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics and evidence limits.
+categories and one historically unmapped action category were observed. All
+31 retained decisions reproduce and match the maintainer's expected policy
+disposition. The snapshot has zero false allows and zero false blocks. All 12
+v0.2 records classify their decisions as useful. See the
+[Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics, evidence limits, the
+ranked gaps, and the selected next milestone.
 
 ## Decisions That Should Survive Handoffs
 
@@ -228,9 +228,9 @@ new v0.2 records explicitly classify their decisions as useful. See the
     ambiguity, and incompatible constraints fail closed.
 11. **Propose evidence without claiming retention.** Every result contains a
     record marked `proposal_only`; no trusted evidence store exists.
-12. **Dogfood before selecting the next build.** Pilot evidence should decide
-    whether normalization, selectors, initialization, approvals, enforcement,
-    or evidence retention is the highest-priority gap.
+12. **Let dogfood evidence select the next build.** The completed pilot ranks
+    Approval Grant v0.1 first, request construction and selectors second, and a
+    trusted pre-dispatch adapter third.
 13. **Shadow is not enforcement.** A dogfood decision must not replace existing
     authority, approval, or tool controls.
 14. **Use conservative pilot dispositions.** Pull-request merges require
@@ -250,6 +250,9 @@ new v0.2 records explicitly classify their decisions as useful. See the
     reversible local branch reference. The reviewer does not receive this
     delegation, and retained v0.1.0 policy snapshots preserve historical
     unmapped denials.
+20. **Verify approval before attempting enforcement.** The next milestone is a
+    provider-neutral Approval Grant v0.1 contract and deterministic verifier,
+    not an approval workflow UI or tool-dispatch adapter.
 
 ## Open Design Questions and Findings
 
@@ -280,8 +283,10 @@ new v0.2 records explicitly classify their decisions as useful. See the
 - One legacy v0.1 timestamp anomaly remains unverifiable because v0.1 has no
   recorder-generated timestamp. New records separate generated `recorded_at`
   from optional operator-reported action time.
-- Which pilot finding should take priority if normalization, approval, and
-  evidence gaps appear together?
+- Should Approval Grant verification consume revocation and reuse state as
+  explicit caller input in v0.1, or define a minimal state-provider interface?
+- Which verifier result contract should distinguish a satisfied approval from
+  a fail-closed invalid grant without changing the three-way Decision Result?
 - After the pilot, how should resource selectors and constraint operators be
   versioned?
 - Which identity assertion verifier and enforcement adapter should become the
@@ -292,10 +297,13 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Complete the live pilot at no fewer than 25 material actions, run the supported
-reporter, publish a sanitized completion checkpoint, and rank the next three
-product gaps using the documented decision rules. Do not begin a Slice C
-implementation before that evidence-based ranking is complete.
+Review and publish the locally verified Dogfood 0 completion checkpoint. Then
+implement Approval Grant v0.1 as a versioned contract and deterministic,
+side-effect-free verifier under `APR-002` through `APR-005`. Bind the exact
+subject, capability, resource, parameter digest, decision, policy, scope, and
+expiry; fail closed for invalid approvers, quorum, separation of duties,
+freshness, revocation, reuse, or binding. Keep approval collection, dispatch,
+enforcement, and durable evidence outside this milestone.
 
 ## Verification Baseline
 
@@ -322,6 +330,14 @@ validation, the reference decision, 13 documentation-recall examples, all 74
 tests, wheel builds, and installed-wheel smoke tests. Local verification also
 passed dogfood policy validation, the supported observation reporter through
 `observation.dogfood.022`, Markdown link checks, and `git diff --check`.
+
+The completion-checkpoint branch passes a fresh editable install, byte
+compilation, compatibility XML validation, example and dogfood policy
+validation, the reference decision, all 13 documentation-recall examples, all
+74 tests, Markdown link checks, and `git diff --check`. The supported reporter
+also verified all local records through `observation.dogfood.033`; the
+published completion snapshot remains intentionally frozen at
+`observation.dogfood.031`, where the pilot first reached 25 material actions.
 
 ## Handoff Checklist
 
