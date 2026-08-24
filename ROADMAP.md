@@ -44,10 +44,10 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract, Dogfood 0 Phase 1, and the bounded
-observation-hardening milestone are implemented. The non-enforcing
-repository-development shadow pilot is active. Identity verification,
-approval grants, enforcement, and durable evidence remain planned.
+**Status:** the Slice B decision contract and Dogfood 0 are complete. The pilot
+selected an exact-bound Approval Grant v0.1 contract and verifier as the next
+milestone. Identity verification, pre-dispatch enforcement, and durable
+evidence remain planned.
 
 Implemented:
 
@@ -61,6 +61,8 @@ Implemented:
 
 Remaining:
 
+- Define Approval Grant v0.1 and verify exact request, decision, policy,
+  approver, quorum, separation-of-duties, expiry, and reuse bindings.
 - Expose the shared evaluator through a language-neutral sidecar or service.
 - Add a guided initializer, generated scenarios, and explicitly non-enforcing
   shadow mode for progressive adoption.
@@ -69,30 +71,55 @@ Remaining:
 
 ### Dogfood 0 — repository-development shadow pilot
 
-Before selecting the next Slice C implementation, apply the current evaluator
-to real development actions in this repository. The pilot must remain
-explicitly non-enforcing and must preserve existing user, Codex, Git, and
+**Status:** complete through `observation.dogfood.031` with 25 material actions.
+
+Before selecting the next Slice C implementation, the project applied the
+current evaluator to real development actions in this repository. The pilot
+remained explicitly non-enforcing and preserved existing user, Codex, Git, and
 GitHub controls.
 
-The pilot will:
+The pilot:
 
-- model repository-development authority in Policy Bundle v0.1.
-- cover deterministic allow, deny, approval, stale, malformed, and unmapped
+- modeled repository-development authority in Policy Bundle v0.1.
+- covered deterministic allow, deny, approval, stale, malformed, and unmapped
   scenarios.
-- observe at least 25 real material actions across at least six capability
-  categories.
-- measure mapping coverage, decision agreement, false allows, false blocks,
+- observed 25 real material actions across ten capability categories.
+- measured mapping coverage, decision agreement, false allows, false blocks,
   approval load, normalization effort, and evidence completeness.
-- use recorded findings to rank normalization, selectors, initialization,
+- used recorded findings to rank normalization, selectors, initialization,
   approval grants, enforcement, and evidence retention.
 
 See the [Repository Development Dogfooding Plan](docs/DOGFOOD_PLAN.md).
 
-**Dogfood exit criteria:** Every baseline scenario passes. Every observed
-decision is reproducible from minimized artifacts. Maintainers can rank the next
-three product gaps from evidence.
+**Dogfood exit criteria:** met. Every baseline scenario passes, all 31 observed
+decisions reproduce from minimized artifacts, and the completed evidence ranks
+the next three product gaps.
 
-**Exit criteria:** denied actions cannot dispatch and every outcome cites the controls that produced it.
+### Next milestone — Approval Grant v0.1
+
+Implement the versioned Approval Grant contract and a deterministic,
+side-effect-free verifier before building a pre-dispatch adapter. The milestone
+maps to `APR-002` through `APR-005` and must:
+
+- bind a grant to the exact subject, capability, resource, parameter digest,
+  decision, policy, scope, and expiry required by its approval rule;
+- verify approver eligibility, quorum, separation of duties, freshness, and
+  explicit revocation or reuse state;
+- fail closed for missing, stale, mismatched, insufficient, self-approved,
+  revoked, or reused grants; and
+- expose equivalent SDK and CLI verification results with portable conformance
+  fixtures and proposal-only evidence.
+
+This milestone does not collect approvals, dispatch actions, enforce returned
+constraints, or provide durable evidence storage.
+
+**Exit criteria:** deterministic conformance cases prove that an exact valid
+grant verifies as satisfying a `require_approval` decision and every
+mismatched or invalid grant fails closed without changing Decision Result
+semantics or dispatching an action.
+
+**Section exit criteria:** denied actions cannot dispatch and every outcome
+cites the controls that produced it.
 
 ## 4. Behavioral Evaluation
 

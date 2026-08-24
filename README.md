@@ -13,9 +13,9 @@ a proposal-only evidence record.
 
 > **Status:** early alpha. Policy Bundle v0.1, semantic validation,
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
-> evaluator are implemented. Dogfood 0 Phase 1 and local observation
-> hardening are implemented, and the non-enforcing repository-development
-> shadow pilot is active. Identity
+> evaluator are implemented. Dogfood 0 and local observation hardening are
+> complete. The pilot selected an exact-bound Approval Grant v0.1 contract and
+> verifier as the next milestone. Identity
 > verification, approval-grant verification, pre-dispatch enforcement, and
 > durable evidence storage are not.
 
@@ -89,7 +89,7 @@ The current alpha cannot:
 | --- | --- |
 | Understand or author policy | [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) and the [example policy](examples/policies/multi_agent_operations.json) |
 | Integrate the evaluator | [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md) and the [conformance fixture](conformance/decision-contract-v0.1.json) |
-| Review active dogfood evidence | [Dogfood 0 Pilot Report](docs/DOGFOOD_REPORT.md) |
+| Review completed dogfood evidence | [Dogfood 0 Pilot Report](docs/DOGFOOD_REPORT.md) |
 | Contribute code or documentation | [Contributing](CONTRIBUTING.md) |
 | Understand product direction | [Product Charter](docs/PRODUCT_CHARTER.md), [Product Specification](docs/PRODUCT_SPEC.md), and [Project Status](docs/PROJECT_STATUS.md) |
 | Browse all documentation | [Documentation Guide](docs/README.md) |

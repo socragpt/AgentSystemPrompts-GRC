@@ -1,7 +1,7 @@
 # Repository Development Dogfooding Plan
 
 - **Pilot:** Dogfood 0
-- **Status:** Phase 1 complete; live shadow observation authorized and running
+- **Status:** complete; next-build decision recorded
 - **Mode:** shadow; explicitly non-enforcing
 - **Scope:** development of Agent Governance Harness
 - **Plan date:** 2026-08-21
@@ -9,14 +9,13 @@
 
 ## Purpose
 
-Dogfood 0 will apply the current Policy Bundle v0.1 and Decision Contract v0.1
-to real development actions in this repository. The pilot will identify which
-product gap creates the most operational friction before the project commits to
+Dogfood 0 applied the current Policy Bundle v0.1 and Decision Contract v0.1 to
+real development actions in this repository. The pilot identified which
+product gaps created the most operational friction before the project selected
 the next implementation milestone.
 
-The harness will not choose the roadmap. Maintainers will use recorded
-decisions, disagreements, unmapped actions, and workflow friction to choose the
-next build.
+The harness did not choose the roadmap. The maintainer used recorded decisions,
+unmapped actions, and workflow friction to choose the next build.
 
 ## Product Boundary
 
@@ -207,6 +206,25 @@ Dogfood 0 is complete when:
 - each disagreement has a policy, normalization, contract, or integration
   classification.
 - maintainers can rank the next three product gaps from recorded evidence.
+
+## Completion Result
+
+All exit criteria are met through `observation.dogfood.031`. The supported
+reporter verified 31 minimized observations, including 25 material actions
+across ten capability categories. Mapping coverage, decision agreement, and
+evidence completeness are 100%. The snapshot contains no false allows or false
+blocks.
+
+The final ranking is:
+
+1. Approval Grant v0.1 contract and verifier;
+2. a request builder and trusted normalizer with richer selector support; and
+3. one trusted pre-dispatch reference adapter.
+
+The [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) records the metrics, rationale,
+anti-drift review, and selected next milestone. Future live observation must
+remain explicitly scoped and non-enforcing; it is not required to close this
+pilot.
 
 ## Next-Build Decision Rules
 
