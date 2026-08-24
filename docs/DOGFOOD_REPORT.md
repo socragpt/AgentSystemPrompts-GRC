@@ -3,7 +3,7 @@
 - **Status:** complete; next-build decision recorded
 - **Snapshot date:** 2026-08-24
 - **Snapshot boundary:** through `observation.dogfood.031`
-- **Verified `main`:** `ca34507ac953375f2d08f1a15dc64294366e9e8a`
+- **Verified `main`:** `11257449ebe609c944e1a70ff705959fe0051db5`
 - **Mode:** shadow; explicitly non-enforcing
 
 > **WARNING:** This report describes advisory decisions. It does not prove
@@ -210,3 +210,12 @@ Pull-request
 and post-merge
 [`main` CI run 32752296025](https://github.com/socragpt/agent-governance-harness/actions/runs/32752296025)
 passed on Python 3.9, 3.11, and 3.13.
+
+Pull request
+[#25](https://github.com/socragpt/agent-governance-harness/pull/25) merged this
+completion checkpoint into `main` as `11257449` on 2026-08-24 UTC. Pull-request
+[CI run 32771755851](https://github.com/socragpt/agent-governance-harness/actions/runs/32771755851)
+and post-merge
+[`main` CI run 32771899229](https://github.com/socragpt/agent-governance-harness/actions/runs/32771899229)
+passed on Python 3.9, 3.11, and 3.13. Each job built a wheel and smoke-tested
+the installed package.

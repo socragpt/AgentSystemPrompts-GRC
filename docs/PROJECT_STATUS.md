@@ -4,7 +4,7 @@
 - **Status date:** 2026-08-24
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `ca34507ac953375f2d08f1a15dc64294366e9e8a`
+- **Verified `main`:** `11257449ebe609c944e1a70ff705959fe0051db5`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -27,8 +27,10 @@ Dogfood 0 is complete through 25 material actions. The final sanitized findings
 and next-build ranking are in the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
 Approval Grant v0.1 contract and verifier as the next implementation milestone.
-The completion checkpoint is locally prepared on
-`codex/dogfood-completion-checkpoint`.
+Pull request
+[#25](https://github.com/socragpt/agent-governance-harness/pull/25)
+published the completion checkpoint. There are no open pull requests. The next
+work is the Approval Grant v0.1 milestone.
 
 ## Verified Current State
 
@@ -157,6 +159,19 @@ and post-merge
 [`main` CI run 32752296025](https://github.com/socragpt/agent-governance-harness/actions/runs/32752296025)
 passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
 smoke tests.
+
+Pull request
+[#25](https://github.com/socragpt/agent-governance-harness/pull/25) merged the
+Dogfood 0 completion checkpoint into `main` as `11257449` on 2026-08-24 UTC.
+It published the frozen evidence snapshot, ranked the next three product gaps,
+and selected Approval Grant v0.1 as the next milestone. It did not change
+schemas, evaluator behavior, policy semantics, or enforcement behavior.
+Pull-request
+[CI run 32771755851](https://github.com/socragpt/agent-governance-harness/actions/runs/32771755851)
+and post-merge
+[`main` CI run 32771899229](https://github.com/socragpt/agent-governance-harness/actions/runs/32771899229)
+passed on Python 3.9, 3.11, and 3.13. Each job built a wheel and smoke-tested
+the installed package.
 
 ## Completed Milestone: Dogfood 0
 
@@ -297,13 +312,13 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Review and publish the locally verified Dogfood 0 completion checkpoint. Then
-implement Approval Grant v0.1 as a versioned contract and deterministic,
+Implement Approval Grant v0.1 as a versioned contract and deterministic,
 side-effect-free verifier under `APR-002` through `APR-005`. Bind the exact
 subject, capability, resource, parameter digest, decision, policy, scope, and
-expiry; fail closed for invalid approvers, quorum, separation of duties,
-freshness, revocation, reuse, or binding. Keep approval collection, dispatch,
-enforcement, and durable evidence outside this milestone.
+expiry. Fail closed for invalid approvers, insufficient quorum, separation-of-
+duties violations, stale grants, revocation, reuse, or mismatched bindings.
+Keep approval collection, dispatch, enforcement, and durable evidence outside
+this milestone.
 
 ## Verification Baseline
 
@@ -323,21 +338,19 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` contains 74 tests. Pull-request and post-merge CI passed the
-full Python 3.9, 3.11, and 3.13 matrix for `ca34507`, including clean editable
+Verified `main` at `11257449` contains 74 tests. Pull-request and post-merge CI
+passed the full Python 3.9, 3.11, and 3.13 matrix. Each job performed a clean
 installation, byte compilation, compatibility XML validation, example policy
-validation, the reference decision, 13 documentation-recall examples, all 74
-tests, wheel builds, and installed-wheel smoke tests. Local verification also
-passed dogfood policy validation, the supported observation reporter through
-`observation.dogfood.022`, Markdown link checks, and `git diff --check`.
+validation, and reference evaluation. All 13 documentation-recall examples and
+74 tests passed. Each job also built and smoke-tested the wheel.
 
-The completion-checkpoint branch passes a fresh editable install, byte
-compilation, compatibility XML validation, example and dogfood policy
-validation, the reference decision, all 13 documentation-recall examples, all
-74 tests, Markdown link checks, and `git diff --check`. The supported reporter
-also verified all local records through `observation.dogfood.033`; the
-published completion snapshot remains intentionally frozen at
-`observation.dogfood.031`, where the pilot first reached 25 material actions.
+The supported reporter also verified the maintainer's ignored local records
+through `observation.dogfood.039`: 39 observations, 32 material actions, 100%
+material-action mapping coverage, 100% decision agreement, 100% evidence
+completeness, zero false allows, and zero false blocks. These local follow-up
+records do not change the published completion snapshot. The report remains
+frozen at `observation.dogfood.031`, where the pilot first reached 25 material
+actions.
 
 ## Handoff Checklist
 
