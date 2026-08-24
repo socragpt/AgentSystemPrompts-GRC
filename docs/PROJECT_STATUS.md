@@ -1,10 +1,10 @@
 # Project Status
 
 - **Project:** Agent Governance Harness
-- **Status date:** 2026-08-23
+- **Status date:** 2026-08-24
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `4291a89d0d6ea7fbbbaf48607e3c5246dbc8aecf`
+- **Verified `main`:** `ca34507ac953375f2d08f1a15dc64294366e9e8a`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -27,9 +27,9 @@ The active milestone is a non-enforcing repository-development dogfood pilot.
 Phase 1 is implemented on `main`. The maintainer explicitly authorized live
 shadow observation on 2026-08-22, and the pilot is running. The current
 sanitized findings are in the [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md).
-The first status checkpoint is merged. The bounded observation-hardening
-change is implemented and locally verified on
-`codex/dogfood-observation-hardening`.
+The first status checkpoint and bounded observation-hardening change are
+merged. The Dogfood 0 completion checkpoint is active on
+`codex/dogfood-completion-checkpoint`.
 
 ## Verified Current State
 
@@ -146,6 +146,18 @@ first sanitized Dogfood 0 status checkpoint into `main` as `4291a89` on
 2026-08-23 UTC. It recorded verified findings through
 `observation.dogfood.012` without changing evaluator or policy semantics. The
 pull-request CI run passed on Python 3.9, 3.11, and 3.13.
+
+Pull request
+[#24](https://github.com/socragpt/agent-governance-harness/pull/24) merged the
+Dogfood 0 observation-hardening milestone into `main` as `ca34507` on
+2026-08-24 UTC. It added the v0.2 observation contract, retained v0.1 read
+compatibility, the supported reporter, invalid-request retention, the narrow
+local-branch mapping, and 17 dogfood tests. Pull-request
+[CI run 32752158332](https://github.com/socragpt/agent-governance-harness/actions/runs/32752158332)
+and post-merge
+[`main` CI run 32752296025](https://github.com/socragpt/agent-governance-harness/actions/runs/32752296025)
+passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
+smoke tests.
 
 ## Active Milestone: Dogfood 0
 
@@ -280,11 +292,10 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Review and publish the locally verified observation-hardening change. Then
-continue the live pilot from 17 to at least 25 material actions, run the
-supported reporter, and use the full evidence to rank the next three product
-gaps. Do not implement approval verification, enforcement, or durable evidence
-before the pilot supports that choice.
+Complete the live pilot at no fewer than 25 material actions, run the supported
+reporter, publish a sanitized completion checkpoint, and rank the next three
+product gaps using the documented decision rules. Do not begin a Slice C
+implementation before that evidence-based ranking is complete.
 
 ## Verification Baseline
 
@@ -304,19 +315,13 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` contains 69 tests. Pull-request CI passed the full Python 3.9,
-3.11, and 3.13 matrix for `4291a89`. Before merge, the editable install, byte
-compilation, compatibility XML validation, example and dogfood policy
-validation, reference decision, 13 documentation-recall examples, Markdown
-links, and all 69 tests passed locally.
-
-The observation-hardening branch passes byte compilation, compatibility XML
-validation, example and dogfood policy validation, the reference decision, all
-13 documentation-recall examples, the local observation reporter through
-`observation.dogfood.022`, Markdown link checks, and all 74 tests. A fresh
-build-isolated editable reinstall could not reach the package index from the
-sandbox. The existing editable environment remained sufficient for the full
-functional baseline.
+Verified `main` contains 74 tests. Pull-request and post-merge CI passed the
+full Python 3.9, 3.11, and 3.13 matrix for `ca34507`, including clean editable
+installation, byte compilation, compatibility XML validation, example policy
+validation, the reference decision, 13 documentation-recall examples, all 74
+tests, wheel builds, and installed-wheel smoke tests. Local verification also
+passed dogfood policy validation, the supported observation reporter through
+`observation.dogfood.022`, Markdown link checks, and `git diff --check`.
 
 ## Handoff Checklist
 
