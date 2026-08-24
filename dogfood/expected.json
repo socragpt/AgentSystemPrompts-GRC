@@ -214,6 +214,21 @@
         "cited_control_ids": [],
         "approval_requirement_ids": []
       }
+    },
+    {
+      "id": "dogfood.allow.local-branch-create",
+      "request_path": "dogfood/requests/15_local_branch_create_allowed.json",
+      "valid_request": true,
+      "expected": {
+        "disposition": "allow",
+        "reason_codes": [
+          "control.allow"
+        ],
+        "cited_control_ids": [
+          "control.local-branch-create"
+        ],
+        "approval_requirement_ids": []
+      }
     }
   ]
 }
