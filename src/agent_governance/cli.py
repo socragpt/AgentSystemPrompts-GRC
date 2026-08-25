@@ -1,4 +1,4 @@
-"""Command-line interface for prompt, policy-bundle, and decision workflows."""
+"""Command-line interface for prompt, policy, decision, and approval workflows."""
 
 import argparse
 from importlib import resources
@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 from typing import List, Optional
 
+from .approval import verify_approval_grant_files
 from .decision import evaluate_action_files
 from .policy import (
     PolicyBundleError,
@@ -41,7 +42,7 @@ def _resolve_path(value: Optional[str]) -> Path:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="agent-governance",
-        description="Validate, compile, or evaluate agent governance policy",
+        description="Validate and apply agent governance contracts",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -55,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("xml_path", nargs="?", help="policy path")
 
     policy = subparsers.add_parser(
-        "policy", help="validate or compile a Policy Bundle v0.1 document"
+        "policy", help="validate, compile, or evaluate a Policy Bundle v0.1 document"
     )
     policy_commands = policy.add_subparsers(dest="policy_command", required=True)
     policy_validate = policy_commands.add_parser(
@@ -87,7 +88,39 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="BOUNDARY_ID",
         help="identity boundary accepted for this evaluation; repeatable",
     )
+
+    approval = subparsers.add_parser(
+        "approval", help="verify an exact-bound Approval Grant v0.1 document"
+    )
+    approval_commands = approval.add_subparsers(
+        dest="approval_command", required=True
+    )
+    approval_verify = approval_commands.add_parser(
+        "verify", help="verify a grant without collecting approval or dispatching"
+    )
+    approval_verify.add_argument("policy_path", help="Policy Bundle v0.1 path")
+    approval_verify.add_argument("request_path", help="Action Request v0.1 path")
+    approval_verify.add_argument("decision_path", help="Decision Result v0.1 path")
+    approval_verify.add_argument("grant_path", help="Approval Grant v0.1 path")
+    approval_verify.add_argument(
+        "--state",
+        required=True,
+        dest="state_path",
+        help="caller-supplied Approval Verification State v0.1 path",
+    )
     return parser
+
+
+def _approval_main(args: argparse.Namespace) -> int:
+    result = verify_approval_grant_files(
+        args.policy_path,
+        args.request_path,
+        args.decision_path,
+        args.grant_path,
+        args.state_path,
+    )
+    print(result.to_json(), end="")
+    return 0 if result.outcome == "satisfied" else 5
 
 
 def _policy_main(args: argparse.Namespace) -> int:
@@ -172,6 +205,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "policy":
         return _policy_main(args)
+    if args.command == "approval":
+        return _approval_main(args)
     return _prompt_main(args)
 
 

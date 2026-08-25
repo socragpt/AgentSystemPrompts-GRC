@@ -14,6 +14,7 @@ change. Additional context depends on the type of contribution.
 | Isolated documentation, test, or packaging fix | README and the affected files |
 | Policy shape, validation, or compilation | [Product Charter](docs/PRODUCT_CHARTER.md), [Product Specification](docs/PRODUCT_SPEC.md), [Safety Model](docs/SAFETY_MODEL.md), and [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) |
 | Action request, decision, reason code, or constraint | Product Charter, Product Specification, Safety Model, and [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md) |
+| Approval grant, verification state, or approval verifier | Product Charter, Product Specification, Safety Model, Decision Contract v0.1, and [Approval Grant v0.1](docs/APPROVAL_GRANT_V0.1.md) |
 | Architecture, roadmap, or product claim | Product Charter, Product Specification, [Project Status](docs/PROJECT_STATUS.md), and the affected design document |
 | Compatibility XML behavior | Policy-change guidance below and the prompt tests |
 
@@ -59,6 +60,7 @@ agent-governance policy evaluate \
   examples/policies/multi_agent_operations.json \
   examples/requests/browser_read_allowed.json \
   --trusted-identity-boundary identity.reference
+agent-governance approval verify --help
 python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```

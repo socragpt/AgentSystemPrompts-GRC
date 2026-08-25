@@ -44,10 +44,9 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract and Dogfood 0 are complete. The pilot
-selected an exact-bound Approval Grant v0.1 contract and verifier as the next
-milestone. Identity verification, pre-dispatch enforcement, and durable
-evidence remain planned.
+**Status:** the Slice B decision contract, Dogfood 0, and Approval Grant v0.1
+are complete. Identity verification, trusted request normalization,
+pre-dispatch enforcement, and durable evidence remain planned.
 
 Implemented:
 
@@ -55,14 +54,19 @@ Implemented:
 - Expose identical decision semantics through the Python SDK and CLI.
 - Return stable reasons, effective constraints, policy provenance, and a
   proposal-only evidence record.
+- Verify exact-bound approval grants with deterministic, caller-supplied
+  identity-boundary, freshness, revocation, and reuse state.
+- Return a separate `satisfied` or `not_satisfied` verification result without
+  changing Decision Result v0.1 semantics or consuming the grant.
 - Retain valid and schema-invalid Action Request objects in local v0.2 shadow
   observations, verify them against the shared evaluator, and report explicit
   pilot metrics.
 
 Remaining:
 
-- Define Approval Grant v0.1 and verify exact request, decision, policy,
-  approver, quorum, separation-of-duties, expiry, and reuse bindings.
+- Build trusted request-normalization profiles and exercise the first MCP
+  reference profile in explicitly non-enforcing shadow mode.
+- Extend policy selectors only from observed normalization requirements.
 - Expose the shared evaluator through a language-neutral sidecar or service.
 - Add a guided initializer, generated scenarios, and explicitly non-enforcing
   shadow mode for progressive adoption.
@@ -95,11 +99,11 @@ See the [Repository Development Dogfooding Plan](docs/DOGFOOD_PLAN.md).
 decisions reproduce from minimized artifacts, and the completed evidence ranks
 the next three product gaps.
 
-### Next milestone — Approval Grant v0.1
+### Completed milestone — Approval Grant v0.1
 
-Implement the versioned Approval Grant contract and a deterministic,
-side-effect-free verifier before building a pre-dispatch adapter. The milestone
-maps to `APR-002` through `APR-005` and must:
+The versioned Approval Grant contract and deterministic, side-effect-free
+verifier are implemented before any pre-dispatch adapter. The milestone maps
+to `APR-002` through `APR-005` and:
 
 - bind a grant to the exact subject, capability, resource, parameter digest,
   decision, policy, scope, and expiry required by its approval rule;
@@ -113,10 +117,39 @@ maps to `APR-002` through `APR-005` and must:
 This milestone does not collect approvals, dispatch actions, enforce returned
 constraints, or provide durable evidence storage.
 
-**Exit criteria:** deterministic conformance cases prove that an exact valid
+**Exit criteria:** met. Deterministic conformance cases prove that an exact valid
 grant verifies as satisfying a `require_approval` decision and every
 mismatched or invalid grant fails closed without changing Decision Result
 semantics or dispatching an action.
+
+### Next milestone — MCP request normalization and shadow reference
+
+Build the first versioned integration profile at the MCP boundary while
+keeping all authority, policy, decision, approval, and evidence semantics in
+the framework-neutral core. This milestone must:
+
+- translate an MCP tool-call proposal and explicitly supplied identity and
+  goal context into Action Request v0.1 without discarding security-relevant
+  arguments;
+- define exact, reviewable mappings from MCP server and tool identifiers to
+  policy capability and resource IDs;
+- use the shared canonical parameter digest and reject missing, ambiguous,
+  unknown, or lossy mappings;
+- treat tool annotations and remote content as untrusted data unless an
+  explicit trusted adapter boundary supplies the relevant assertion;
+- run the shared evaluator and Approval Grant verifier where applicable, with
+  portable fixtures proving that MCP does not redefine core semantics; and
+- record only proposal-only shadow results, clearly labeled as non-enforcing.
+
+This milestone does not proxy or dispatch MCP calls, authenticate sessions,
+collect approvals, atomically consume grants, or claim enforcement. Mapping
+findings should determine the smallest selector changes needed before a
+trusted pre-dispatch adapter is attempted.
+
+**Exit criteria:** representative MCP call proposals deterministically produce
+the expected normalized request, decision, and optional approval-verification
+result; incomplete or unsupported calls fail closed; and no path dispatches a
+tool or treats MCP metadata as authority.
 
 **Section exit criteria:** denied actions cannot dispatch and every outcome
 cites the controls that produced it.

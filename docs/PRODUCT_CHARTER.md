@@ -345,8 +345,10 @@ Use this map to prevent documents from competing silently:
    implementation.
 3. [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md) translates the charter into target
    product requirements and acceptance criteria.
-4. [`POLICY_BUNDLE_V0.1.md`](POLICY_BUNDLE_V0.1.md) defines the current policy
-   interchange contract.
+4. [`POLICY_BUNDLE_V0.1.md`](POLICY_BUNDLE_V0.1.md),
+   [`DECISION_CONTRACT_V0.1.md`](DECISION_CONTRACT_V0.1.md), and
+   [`APPROVAL_GRANT_V0.1.md`](APPROVAL_GRANT_V0.1.md) define the implemented
+   public interchange contracts.
 5. [`ARCHITECTURE.md`](ARCHITECTURE.md) describes how the target system may
    satisfy the charter and product specification.
 6. [`ROADMAP.md`](../ROADMAP.md) sequences delivery.

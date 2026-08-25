@@ -10,8 +10,11 @@ retain evidence explaining what happened and why.
 The project is currently an early alpha. It provides a governance baseline,
 an experimental multi-actor policy schema, a deterministic validator and
 compiler, policy and assessment templates, a command-line interface, and an
-evaluation harness. Runtime enforcement, approval workflows, and append-only
-decision evidence are planned capabilities, not current production features.
+evaluation harness. It also provides deterministic exact-bound approval-grant
+verification under explicit caller-supplied state. Runtime enforcement,
+approval collection workflows, authoritative grant-state management, and
+append-only decision evidence are planned capabilities, not current production
+features.
 
 ## The business problem
 
@@ -123,21 +126,27 @@ Earn the business case through technical proof:
 3. **Observe — repository-development dogfood pilot (complete).** The pilot
    applied the current decision contract in explicitly non-enforcing shadow
    mode to 25 material actions. Its evidence selected the next product build.
-4. **Enforce — approval and pre-dispatch reference.** The selected first step
-   is an exact-bound Approval Grant v0.1 contract and verifier. A later trusted
-   adapter must demonstrate that denied or unresolved actions cannot dispatch
-   and that execution remains within returned constraints.
-5. **Prove — behavioral evaluation and integration.** Adversarial evaluations
+4. **Verify — exact-bound approval (v0.1 implemented).** Approval Grant v0.1
+   verifies exact decision, request, policy, scope, approver, freshness,
+   revocation, and reuse bindings without collecting approvals or dispatching.
+5. **Integrate — request normalization and pre-dispatch reference.** The first
+   integration wedge is an MCP request-normalization profile in explicitly
+   non-enforcing shadow mode. A later trusted adapter must demonstrate that
+   denied or unresolved actions cannot dispatch and that execution remains
+   within returned constraints.
+6. **Prove — behavioral evaluation and integration.** Adversarial evaluations
    and an end-to-end agent integration demonstrate that continuous integration
    can detect meaningful governance regressions before release.
 
-The immediate next proof is Approval Grant v0.1. The completed
+The immediate next proof is provider-neutral request normalization through an
+MCP reference profile in non-enforcing shadow mode. The completed
 [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) recorded 31
-reproducible observations, including 25 material actions. Approval remained
-unresolved in 14 observations, or 45.2%, so the next milestone will define and
-verify exact-bound grants before a pre-dispatch adapter is attempted. This work
-will not claim approval collection, dispatch, enforcement, or trusted evidence
-retention.
+reproducible observations, including 25 material actions, and selected approval
+verification before adapter work. That approval milestone is now implemented.
+The MCP wedge will test mapping completeness and friction without letting MCP
+metadata redefine core policy semantics. It will not claim session
+authentication, approval collection, dispatch, enforcement, atomic grant
+consumption, or trusted evidence retention.
 
 ## Boundaries
 

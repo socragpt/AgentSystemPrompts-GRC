@@ -11,8 +11,11 @@ This version is **not an enforcement engine**. Validating or compiling a bundle
 does not authorize an action, prevent tool dispatch, verify an identity,
 execute an approval, or persist audit evidence. The separate
 [Decision Contract v0.1](DECISION_CONTRACT_V0.1.md) can evaluate a normalized
-request and propose evidence. Consumers must still treat compiled output and
-unenforced decisions as data rather than a security boundary.
+request and propose evidence. The separate
+[Approval Grant v0.1](APPROVAL_GRANT_V0.1.md) verifier can determine whether an
+exact grant satisfies a `require_approval` result under explicit caller state.
+Consumers must still treat compiled output, decisions, and approval
+verification as data rather than proof that dispatch was mediated.
 
 The normative JSON Schema is
 [`schemas/policy-bundle-v0.1.schema.json`](../schemas/policy-bundle-v0.1.schema.json).
@@ -119,8 +122,11 @@ what must be covered by an eventual approval record:
 - `parameters_digest` binds approval to canonicalized action parameters.
 
 The compiler and decision evaluator preserve these requirements but do not
-collect or verify an approval grant. A later approval and enforcement milestone
-must reject a missing, expired, reused, or differently bound grant before
+collect or verify an approval grant. Approval Grant v0.1 supplies a separate,
+side-effect-free verifier that rejects missing, expired, caller-reported
+revoked or reused, insufficient, self-approved, untrusted, or differently
+bound grants. A later trusted enforcement point must source authoritative
+state, consume a grant atomically, and repeat the binding checks before
 dispatch.
 
 ## Deterministic compilation contract

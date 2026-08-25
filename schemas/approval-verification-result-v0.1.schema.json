@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/approval-verification-result-v0.1.schema.json",
+  "title": "Agent Governance Approval Verification Result v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "verification_id",
+    "outcome",
+    "valid_until",
+    "reasons",
+    "grant",
+    "request",
+    "decision",
+    "policy",
+    "approval_requirement_ids",
+    "approver_actor_ids",
+    "verified_at",
+    "proposed_evidence_record"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "verification_id": {
+      "$ref": "#/$defs/verification_id"
+    },
+    "outcome": {
+      "$ref": "#/$defs/outcome"
+    },
+    "valid_until": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/reason"
+      }
+    },
+    "grant": {
+      "$ref": "#/$defs/grant_summary"
+    },
+    "request": {
+      "$ref": "#/$defs/request_summary"
+    },
+    "decision": {
+      "$ref": "#/$defs/decision_summary"
+    },
+    "policy": {
+      "$ref": "#/$defs/policy_provenance"
+    },
+    "approval_requirement_ids": {
+      "$ref": "#/$defs/string_array"
+    },
+    "approver_actor_ids": {
+      "$ref": "#/$defs/string_array"
+    },
+    "verified_at": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "proposed_evidence_record": {
+      "$ref": "#/$defs/proposed_evidence"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "parameters_digest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "nullable_timestamp": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_string": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "string_array": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "verification_id": {
+      "type": "string",
+      "pattern": "^approval-verification\\.[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "satisfied",
+        "not_satisfied"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/reason_code"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "grant_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant_id",
+        "grant_sha256"
+      ],
+      "properties": {
+        "grant_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "grant_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "request_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "request_sha256"
+      ],
+      "properties": {
+        "request_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "request_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "decision_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "disposition"
+      ],
+      "properties": {
+        "decision_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "disposition": {
+          "oneOf": [
+            {
+              "enum": [
+                "allow",
+                "deny",
+                "require_approval"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "policy_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_id",
+        "bundle_version",
+        "schema_version",
+        "source_sha256"
+      ],
+      "properties": {
+        "bundle_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "bundle_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "schema_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidence_request_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "request_sha256",
+        "parameters_digest"
+      ],
+      "properties": {
+        "request_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "request_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "parameters_digest": {
+          "$ref": "#/$defs/parameters_digest"
+        }
+      }
+    },
+    "evidence_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "reason_codes",
+        "approval_requirement_ids",
+        "approver_actor_ids",
+        "rationale_codes",
+        "verified_at",
+        "valid_until"
+      ],
+      "properties": {
+        "outcome": {
+          "$ref": "#/$defs/outcome"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reason_code"
+          }
+        },
+        "approval_requirement_ids": {
+          "$ref": "#/$defs/string_array"
+        },
+        "approver_actor_ids": {
+          "$ref": "#/$defs/string_array"
+        },
+        "rationale_codes": {
+          "$ref": "#/$defs/string_array"
+        },
+        "verified_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "valid_until": {
+          "$ref": "#/$defs/nullable_timestamp"
+        }
+      }
+    },
+    "proposed_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "evidence_id",
+        "record_type",
+        "proposal_only",
+        "verification_id",
+        "grant",
+        "request",
+        "decision",
+        "policy",
+        "verification"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "0.1"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^evidence\\.[0-9a-f]{64}$"
+        },
+        "record_type": {
+          "const": "proposed_approval_verification"
+        },
+        "proposal_only": {
+          "const": true
+        },
+        "verification_id": {
+          "$ref": "#/$defs/verification_id"
+        },
+        "grant": {
+          "$ref": "#/$defs/grant_summary"
+        },
+        "request": {
+          "$ref": "#/$defs/evidence_request_summary"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision_summary"
+        },
+        "policy": {
+          "$ref": "#/$defs/policy_provenance"
+        },
+        "verification": {
+          "$ref": "#/$defs/evidence_verification"
+        }
+      }
+    }
+  }
+}

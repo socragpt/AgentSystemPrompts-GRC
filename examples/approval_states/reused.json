@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1",
+  "verified_at": "2026-08-21T20:10:00Z",
+  "trusted_request_identity_boundaries": [
+    "identity.reference"
+  ],
+  "trusted_approver_identity_boundaries": [
+    "identity.reference"
+  ],
+  "revoked_grant_ids": [],
+  "consumed_grant_ids": [
+    "grant.email-send-reused"
+  ]
+}

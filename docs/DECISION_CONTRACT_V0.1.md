@@ -12,8 +12,10 @@ record.
 The evaluator does **not** authenticate identities, collect or verify approval
 grants, dispatch actions, enforce returned constraints, or persist evidence. An
 application must not treat the result as proof that execution was mediated. A
-future trusted enforcement point must validate the exact request and decision
-before dispatch.
+separate [Approval Grant v0.1](APPROVAL_GRANT_V0.1.md) verifier checks an exact
+grant without changing this contract's three-way disposition. A future trusted
+enforcement point must validate the exact request, decision, and any required
+approval before dispatch.
 
 The normative JSON Schemas are:
 
@@ -225,6 +227,8 @@ commands retain their existing exit-code behavior.
 | `EVD-001` | Every evaluator result proposes structured evidence. Durable or tamper-evident storage is not implemented. |
 | `DX-003`, `DX-006` | CLI and Python SDK share the evaluator; input errors include stable codes and JSON Pointer locations. A decision service is not implemented. |
 
-Approval grants, policy registries, action dispatch, trusted enforcement,
-execution-result linkage, evidence retention, shadow mode, and framework or tool
-adapters remain outside Decision Contract v0.1.
+Approval Grant v0.1 is a separate contract layered on unresolved
+`require_approval` results. Approval collection, policy registries, action
+dispatch, trusted enforcement, execution-result linkage, evidence retention,
+shadow mode, and framework or tool adapters remain outside Decision Contract
+v0.1.

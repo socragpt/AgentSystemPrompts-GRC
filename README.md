@@ -13,11 +13,11 @@ a proposal-only evidence record.
 
 > **Status:** early alpha. Policy Bundle v0.1, semantic validation,
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
-> evaluator are implemented. Dogfood 0 and local observation hardening are
-> complete. The pilot selected an exact-bound Approval Grant v0.1 contract and
-> verifier as the next milestone. Identity
-> verification, approval-grant verification, pre-dispatch enforcement, and
-> durable evidence storage are not.
+> evaluator are implemented. Approval Grant v0.1 adds exact-bound,
+> side-effect-free verification with explicit caller-supplied trust,
+> revocation, reuse, and time state. Dogfood 0 and local observation hardening
+> are complete. Identity verification, approval collection, pre-dispatch
+> enforcement, and durable evidence storage are not implemented.
 
 ## Run the Current Alpha
 
@@ -71,6 +71,11 @@ The current alpha can:
 - return cited controls, authority paths, effective constraints, stable reason
   codes, and policy provenance.
 - expose the same evaluator through the Python SDK and CLI.
+- verify an exact-bound Approval Grant v0.1 through the SDK and CLI without
+  changing the original `require_approval` decision or mutating reuse state.
+- fail closed for malformed, stale, revoked, reused, insufficient,
+  self-approved, untrusted, or differently bound grants using explicit
+  caller-supplied verification state.
 - validate deterministic repository-development shadow scenarios, create
   minimized local pilot records, and verify aggregate pilot metrics without
   enforcing actions.
@@ -78,7 +83,9 @@ The current alpha can:
 The current alpha cannot:
 
 - authenticate or cryptographically verify identity assertions.
-- create, collect, verify, revoke, or consume approval grants.
+- create or collect approval grants.
+- obtain authoritative revocation or reuse state, or atomically consume a
+  single-use grant.
 - prevent a tool, API, or agent framework from dispatching an action.
 - enforce returned constraints during execution.
 - retain append-only or tamper-evident evidence.
@@ -89,6 +96,7 @@ The current alpha cannot:
 | --- | --- |
 | Understand or author policy | [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) and the [example policy](examples/policies/multi_agent_operations.json) |
 | Integrate the evaluator | [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md) and the [conformance fixture](conformance/decision-contract-v0.1.json) |
+| Verify approval requirements | [Approval Grant v0.1](docs/APPROVAL_GRANT_V0.1.md) and the [approval conformance fixture](conformance/approval-grant-v0.1.json) |
 | Review completed dogfood evidence | [Dogfood 0 Pilot Report](docs/DOGFOOD_REPORT.md) |
 | Contribute code or documentation | [Contributing](CONTRIBUTING.md) |
 | Understand product direction | [Product Charter](docs/PRODUCT_CHARTER.md), [Product Specification](docs/PRODUCT_SPEC.md), and [Project Status](docs/PROJECT_STATUS.md) |
@@ -114,8 +122,9 @@ trusted pre-dispatch enforcement point
 tool execution and policy-linked evidence
 ```
 
-This repository currently implements policy definition, compilation, and the
-side-effect-free decision portion of that flow. See the
+This repository currently implements policy definition, compilation, the
+side-effect-free decision, and exact-bound approval verification portions of
+that flow. See the
 [architecture](docs/ARCHITECTURE.md) and [roadmap](ROADMAP.md) for the target
 enforcement path.
 
@@ -124,11 +133,13 @@ enforcement path.
 - `src/agent_governance/` contains the installable library and
   `agent-governance` CLI.
 - `schemas/` contains the normative v0.1 JSON Schemas.
-- `conformance/` contains shared decision cases for current and future product
-  surfaces.
+- `conformance/` contains shared decision and approval-verification cases for
+  current and future product surfaces.
 - `dogfood/` contains the non-enforcing repository-development shadow pilot.
-- `examples/policies/` and `examples/requests/` contain executable examples.
-- `tests/` contains policy, decision, CLI, and repository-contract tests.
+- `examples/policies/`, `examples/requests/`, `examples/approvals/`, and
+  `examples/approval_states/` contain executable examples.
+- `tests/` contains policy, decision, approval, CLI, and repository-contract
+  tests.
 - `docs/` contains product contracts, architecture, project status, reference
   guidance, templates, and research drafts.
 

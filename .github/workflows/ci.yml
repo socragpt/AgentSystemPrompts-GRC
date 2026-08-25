@@ -51,3 +51,4 @@ jobs:
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy validate "${{ github.workspace }}/examples/policies/multi_agent_operations.json"
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy compile "${{ github.workspace }}/examples/policies/multi_agent_operations.json" --output-dir compiled-policy
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy evaluate "${{ github.workspace }}/examples/policies/multi_agent_operations.json" "${{ github.workspace }}/examples/requests/browser_read_allowed.json" --trusted-identity-boundary identity.reference > allowed-decision.json
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" approval verify --help > approval-verify-help.txt
