@@ -4,7 +4,7 @@
 - **Status date:** 2026-08-24
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `d74173d7b8663273b2f0f802f4a2b02717a1fa40`
+- **Verified `main`:** `2ce10f5c6ae2c0e7b4e011a575e9c13164a49ac5`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -27,12 +27,11 @@ authorizes execution.
 Dogfood 0 is complete through 25 material actions. The final sanitized findings
 and next-build ranking are in the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
-Approval Grant v0.1 contract and verifier, now implemented locally on
-`codex/approval-grant-v0.1`. Pull request
-[#26](https://github.com/socragpt/agent-governance-harness/pull/26) published
-the post-dogfood status checkpoint and verified `main`. The next implementation
-milestone is an MCP request-normalization profile and explicitly non-enforcing
-shadow reference that preserves the framework-neutral core.
+Approval Grant v0.1 contract and verifier, now merged through pull request
+[#27](https://github.com/socragpt/agent-governance-harness/pull/27). Verified
+`main` includes that milestone, and there are no open pull requests. The next
+implementation milestone is an MCP request-normalization profile and explicitly
+non-enforcing shadow reference that preserves the framework-neutral core.
 
 ## Verified Current State
 
@@ -196,6 +195,17 @@ Post-merge
 passed on Python 3.9, 3.11, and 3.13, including wheel builds and installed-wheel
 smoke tests.
 
+Pull request
+[#27](https://github.com/socragpt/agent-governance-harness/pull/27) merged
+Approval Grant v0.1 into `main` as `2ce10f5c` on 2026-08-25 UTC. It delivered
+the normative grant, verification-state, and verification-result contracts;
+the deterministic SDK and CLI verifier; portable conformance examples;
+fail-closed tests; and aligned public documentation. Pull-request
+[CI run 32786290069](https://github.com/socragpt/agent-governance-harness/actions/runs/32786290069)
+and post-merge
+[`main` CI run 32804325065](https://github.com/socragpt/agent-governance-harness/actions/runs/32804325065)
+passed on Python 3.9, 3.11, and 3.13. Each job built and smoke-tested the wheel.
+
 ## Completed Milestone: Dogfood 0
 
 The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) records the
@@ -243,9 +253,9 @@ v0.2 records classify their decisions as useful. See the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md) for metrics, evidence limits, the
 ranked gaps, and the selected next milestone.
 
-## Completed Local Milestone: Approval Grant v0.1
+## Completed Milestone: Approval Grant v0.1
 
-The `codex/approval-grant-v0.1` branch implements the first ranked post-pilot
+The merged Approval Grant v0.1 milestone implements the first ranked post-pilot
 gap under `APR-002` through `APR-005`. It adds strict versioned contracts for
 Approval Grant, Approval Verification State, Approval Verification Result, and
 embedded proposal-only verification evidence. One deterministic verifier is
@@ -396,19 +406,17 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` at `d74173d7` contains 74 tests. Pull-request and post-merge CI
+Verified `main` at `2ce10f5c` contains 85 tests. Pull-request and post-merge CI
 passed the full Python 3.9, 3.11, and 3.13 matrix. Each job performed a clean
 installation, byte compilation, compatibility XML validation, example policy
-validation, and reference evaluation. All 13 documentation-recall examples and
-74 tests passed. Each job also built and smoke-tested the wheel.
+validation, reference evaluation, all 13 documentation-recall examples, and
+all 85 tests. Each job also built and smoke-tested the wheel, including the
+installed Approval Grant CLI surface.
 
-The local `codex/approval-grant-v0.1` branch passes editable installation,
-byte compilation, compatibility and example policy validation, reference
-evaluation, dogfood policy validation, all 13 documentation-recall examples,
-Markdown link checks, diff checks, and all 85 tests. The installed CLI returns
-`0` for the valid approval example and `5` for the stale example. A clean wheel
-build and installed-wheel smoke test from outside the repository also pass,
-including an exact valid approval verification.
+The completed local milestone baseline also covered dogfood policy validation,
+valid and stale approval CLI exit codes `0` and `5`, JSON validation, Markdown
+link checks, diff checks, and an exact valid approval verification from an
+installed wheel outside the repository.
 
 The supported reporter also verified the maintainer's ignored local records
 through `observation.dogfood.039`: 39 observations, 32 material actions, 100%
