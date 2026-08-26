@@ -276,4 +276,6 @@ Revocation and reuse examples pair the grant with explicit state under
 Approval collection, workflow user interfaces, Slack or webhook delivery,
 cryptographic assertion verification, a grant registry, atomic consumption,
 pre-dispatch enforcement, execution-result linkage, and durable evidence
-retention remain outside Approval Grant v0.1.
+retention remain outside Approval Grant v0.1. The separate
+[MCP Shadow v0.1](MCP_SHADOW_V0.1.md) profile may embed this verifier's exact
+result but does not change its outcome, consume the grant, or dispatch.

@@ -1,10 +1,11 @@
 # Project Status
 
 - **Project:** Agent Governance Harness
-- **Status date:** 2026-08-24
+- **Status date:** 2026-08-25
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `2ce10f5c6ae2c0e7b4e011a575e9c13164a49ac5`
+- **Verified `main`:** `7c6bab7a58a793efce68e5e5ea412fce095be1f2`
+- **Development branch:** `codex/mcp-shadow-v0.1` from verified `main`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -24,14 +25,21 @@ proposal-only evidence. Approval Grant v0.1 separately returns `satisfied` or
 trust, freshness, revocation, and reuse state. Neither result dispatches or
 authorizes execution.
 
+MCP Shadow v0.1 is implemented on the local development branch. It converts a
+caller-attributed MCP `tools/call` proposal into Action Request v0.1 through a
+versioned exact mapping, then embeds the unchanged evaluator and optional
+approval-verifier results in a mandatory non-enforcing, proposal-only envelope.
+It performs no MCP networking or dispatch.
+
 Dogfood 0 is complete through 25 material actions. The final sanitized findings
 and next-build ranking are in the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
 Approval Grant v0.1 contract and verifier, now merged through pull request
 [#27](https://github.com/socragpt/agent-governance-harness/pull/27). Verified
-`main` includes that milestone, and there are no open pull requests. The next
-implementation milestone is an MCP request-normalization profile and explicitly
-non-enforcing shadow reference that preserves the framework-neutral core.
+`main` includes that milestone, and there were no open pull requests when this
+branch was cut. The next recommended product step after MCP Shadow v0.1 is a
+small provider-neutral selector proposal derived from the concrete
+normalization gaps, not a pre-dispatch adapter yet.
 
 ## Verified Current State
 
@@ -63,8 +71,23 @@ The alpha foundation implements:
 - equivalent approval verification through the Python SDK and CLI, with
   portable valid and fail-closed conformance examples.
 - minimized proposal-only evidence for every approval-verification outcome.
+- strict MCP Call Proposal, Adapter Mapping, Normalization Result, and Shadow
+  Result v0.1 contracts with unknown-field rejection.
+- deterministic MCP argument binding through the existing canonical parameter
+  digest without coercion.
+- exact caller-assigned `(server_id, tool_name)` mapping to framework-neutral
+  Action Request classification fields, including duplicate-key and lifecycle
+  validation.
+- identical MCP normalization and shadow behavior through the SDK and CLI,
+  including stable invalid-input and normalization-rejection exit codes.
+- unchanged embedded Decision Result and optional Approval Verification Result
+  contracts in a mandatory `mode: "shadow"`, `proposal_only: true` envelope.
+- portable MCP allow, deny, approval, satisfied-grant, annotation-spoofing,
+  unmapped, ambiguous, malformed, floating-point, stale, missing-context, and
+  determinism fixtures.
 - deterministic JSONL documentation-recall evaluation utilities.
-- repository-contract, decision, policy, prompt, and evaluation tests.
+- repository-contract, decision, approval, MCP, policy, prompt, dogfood, and
+  evaluation tests.
 - a human-first documentation path for users, policy authors, integrators,
   contributors, maintainers, and coding agents.
 
@@ -80,6 +103,8 @@ The alpha foundation does **not** implement:
 - append-only, integrity-protected decision evidence.
 - policy publication, activation, revocation, or rollback.
 - provider-neutral agent-framework adapters.
+- authenticated or transport-bound MCP connection identity, MCP proxying, or
+  MCP tool dispatch.
 - behavioral or adversarial model evaluation.
 - certification or compliance guarantees.
 
@@ -279,6 +304,55 @@ serves the named governance problem, reuses the shared core, preserves exact
 fail-closed contracts, keeps trust inputs explicit, remains framework-neutral,
 and does not claim enforcement or compliance.
 
+## Completed Local Milestone: MCP Shadow v0.1
+
+The `codex/mcp-shadow-v0.1` branch implements the first versioned MCP
+integration profile under `INT-001` through `INT-003`, `DX-003`, `DX-005`,
+`DX-009`, `AUT-001`, existing `DEC-001`/`003`/`005`/`006`, existing
+`APR-002` through `APR-004`, `EVD-001`, and `TST-001`.
+
+One pure normalizer combines an MCP Call Proposal v0.1 and an MCP Adapter
+Mapping v0.1. Caller identity, acting actor, goal, time, connection ID, tool
+name, and arguments remain distinct from mapping-owned policy classification.
+Unknown, duplicate, ambiguous, not-yet-effective, stale, unmapped,
+uncanonicalizable, or incomplete inputs fail closed with sorted `mcp.*` reasons
+and JSON Pointer paths. The constructed Action Request passes the existing
+validator and produces byte-identical decisions to its hand-authored
+equivalent.
+
+The shadow evaluator calls the unchanged decision evaluator and optional
+approval verifier. A satisfied approval stays nested while the disposition and
+CLI exit remain `require_approval`. The envelope and its minimized evidence are
+always proposal-only and never retain raw arguments or raw annotations.
+
+The Product Charter anti-drift review passes:
+
+1. It serves the named request-construction gap for tool-using agents.
+2. It strengthens the path from caller-attributed intent to a reproducible
+   decision and minimized evidence proposal.
+3. It preserves fail-closed behavior, least privilege, and existing delegation
+   semantics.
+4. It makes principal, acting actor, goal, connection identity, mapping
+   provenance, and lifecycle explicit instead of inferring them from MCP
+   metadata.
+5. MCP details remain in versioned adapter artifacts; the core Action Request,
+   Decision Result, Approval Verification Result, and policy semantics remain
+   provider-neutral.
+6. Portable fixtures and SDK/CLI parity tests reproduce every outcome.
+7. Documentation labels the entire reference as shadow, proposal-only, and
+   non-enforcing.
+8. The implementation reuses one normalizer, evaluator, verifier, reason
+   vocabulary, and evidence boundary instead of creating competing policy
+   semantics.
+
+Observed normalization gaps are now concrete. Action Request v0.1 binds the
+complete argument object by digest but Policy Bundle v0.1 cannot match values
+inside it. One exact tool mapping therefore cannot safely distinguish URLs,
+recipients, paths, commands, branches, remotes, or argument-selected resources.
+Policy also cannot verify mapping-declared side effects against capability
+metadata. These findings inform `DEC-008`, `PTH-001`, and `AUT-002`; the branch
+does not implement those target requirements or any `ENF-*` requirement.
+
 ## Decisions That Should Survive Handoffs
 
 1. **Govern the institution around the model.** The project models delegated
@@ -331,6 +405,16 @@ and does not claim enforcement or compliance.
     integration normalizes MCP call proposals in non-enforcing shadow mode.
     Core request, decision, approval, and evidence contracts remain framework-
     neutral, and MCP metadata is not authority by default.
+22. **Keep acting actor context caller-supplied.** MCP does not establish the
+    relationship between an authorizing principal and acting actor. Mapping
+    that relationship would invent authority, so MCP Call Proposal v0.1 carries
+    a separate caller-attributed `actor_id`.
+23. **Digest annotations without trusting them.** The full proposal digest
+    changes when annotations change, but request construction excludes them so
+    the Action Request and decision stay byte-identical.
+24. **Do not hide selector gaps in argument parsing.** v0.1 binds arguments by
+    digest and records exact mapping gaps; it does not infer destinations,
+    resources, or side effects from free-form values.
 
 ## Open Design Questions and Findings
 
@@ -367,8 +451,13 @@ and does not claim enforcement or compliance.
   and atomic consumption remain integration work.
 - After the pilot, how should resource selectors and constraint operators be
   versioned?
-- Which MCP fields can be normalized without loss into Action Request v0.1,
-  and which mappings require a future selector or request-contract version?
+- MCP server and tool keys, arguments digest, caller principal and actor, goal,
+  time, constraints, and mapping-owned classification normalize without loss.
+  Concrete values within arguments require a future selector or request-
+  contract version when policy must distinguish them.
+- Which smallest selector vocabulary can cover observed destinations,
+  recipients, paths, commands, branches, and remotes without adding a general
+  expression language or MCP-specific semantics to the core?
 - Which identity assertion verifier should become the first trusted reference
   after the MCP shadow profile exposes its concrete trust-boundary needs?
 
@@ -377,15 +466,12 @@ and tests. Do not embed unstated assumptions in an adapter.
 
 ## Next Recommended Action
 
-Implement a versioned MCP request-normalization profile and explicitly
-non-enforcing shadow reference. Map concrete server, tool, argument, identity,
-and goal inputs into the existing framework-neutral Action Request contract;
-reuse the shared evaluator and Approval Grant verifier; reject incomplete,
-unknown, ambiguous, or lossy mappings; and retain only proposal-only shadow
-artifacts. Use observed mapping gaps to scope the smallest selector changes
-before attempting a trusted pre-dispatch adapter. Do not proxy or dispatch MCP
-calls, authenticate sessions, collect approvals, consume grants, or claim
-enforcement in this milestone.
+Specify the smallest provider-neutral selector or request-contract change
+needed for concrete values inside tool arguments, using the MCP v0.1 fixtures
+as evidence. Map each proposed field to `DEC-008` or `PTH-001`, define exact and
+fail-closed matching, and preserve v0.1 compatibility. Do not attempt a trusted
+pre-dispatch adapter until the selected fields can be represented and tested
+without free-form inference.
 
 ## Verification Baseline
 
@@ -401,17 +487,43 @@ agent-governance policy evaluate \
   examples/requests/browser_read_allowed.json \
   --trusted-identity-boundary identity.reference
 agent-governance approval verify --help
+agent-governance mcp normalize \
+  examples/mcp/mapping.json \
+  examples/mcp/proposals/browser-read.json
+agent-governance mcp shadow \
+  examples/policies/multi_agent_operations.json \
+  examples/mcp/mapping.json \
+  examples/mcp/proposals/browser-read.json \
+  --trusted-identity-boundary identity.reference
 agent-governance policy validate dogfood/policy.json
 python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` at `2ce10f5c` contains 85 tests. Pull-request and post-merge CI
-passed the full Python 3.9, 3.11, and 3.13 matrix. Each job performed a clean
-installation, byte compilation, compatibility XML validation, example policy
-validation, reference evaluation, all 13 documentation-recall examples, and
-all 85 tests. Each job also built and smoke-tested the wheel, including the
-installed Approval Grant CLI surface.
+Verified `main` at `7c6bab7a` contains 85 tests. Post-merge CI run
+`32805097492` passed the full Python 3.9, 3.11, and 3.13 matrix. Earlier
+Approval Grant pull-request and post-merge CI also passed that matrix. Each job
+performed a clean installation, byte compilation, compatibility XML
+validation, example policy validation, reference evaluation, all 13
+documentation-recall examples, and all 85 tests. Each job also built and
+smoke-tested the wheel, including the installed Approval Grant CLI surface.
+The MCP branch adds 15 tests, bringing the full local count to 100.
+
+The complete local baseline passed on 2026-08-25: editable install, byte
+compilation, compatibility XML strict validation, example and dogfood policy
+validation, reference evaluation, approval help, both MCP commands, all 13
+documentation-recall examples, and all 100 unit tests. The macOS system Python
+attempted to place bytecode in a sandbox-blocked user cache, so the successful
+compile used `PYTHONPYCACHEPREFIX=/tmp/agh-baseline-pyc`; source coverage was
+unchanged.
+
+Wheel `agent_governance_harness-0.1.0-py3-none-any.whl` was built with SHA-256
+`0427f897f5732a17ac863114e1b2a178f257e8ee4b2a3593814258c660293fc1`,
+installed into an isolated environment outside the repository, and smoke-
+tested there. XML strict validation exited `0`; MCP normalize exited `0`; MCP
+allow shadow exited `0`; and satisfied-approval shadow exited `3` while keeping
+the embedded disposition `require_approval` and verification outcome
+`satisfied`. JSON parsing, Markdown links, and `git diff --check` also passed.
 
 The completed local milestone baseline also covered dogfood policy validation,
 valid and stale approval CLI exit codes `0` and `5`, JSON validation, Markdown

@@ -15,9 +15,11 @@ a proposal-only evidence record.
 > deterministic compilation, and the side-effect-free Decision Contract v0.1
 > evaluator are implemented. Approval Grant v0.1 adds exact-bound,
 > side-effect-free verification with explicit caller-supplied trust,
-> revocation, reuse, and time state. Dogfood 0 and local observation hardening
-> are complete. Identity verification, approval collection, pre-dispatch
-> enforcement, and durable evidence storage are not implemented.
+> revocation, reuse, and time state. MCP Shadow v0.1 adds deterministic
+> request normalization and explicitly non-enforcing shadow evaluation.
+> Dogfood 0 and local observation hardening are complete. Identity
+> verification, approval collection, pre-dispatch enforcement, and durable
+> evidence storage are not implemented.
 
 ## Run the Current Alpha
 
@@ -37,6 +39,23 @@ agent-governance policy evaluate \
 
 The evaluation command returns Decision Result v0.1 JSON. It does not dispatch
 or block the proposed action.
+
+To normalize and shadow-evaluate one MCP `tools/call` proposal:
+
+```bash
+agent-governance mcp normalize \
+  examples/mcp/mapping.json \
+  examples/mcp/proposals/browser-read.json
+
+agent-governance mcp shadow \
+  examples/policies/multi_agent_operations.json \
+  examples/mcp/mapping.json \
+  examples/mcp/proposals/browser-read.json \
+  --trusted-identity-boundary identity.reference
+```
+
+Both commands emit proposal-only JSON. They do not connect to an MCP server or
+change whether any tool call dispatches.
 
 To compile the policy into deterministic artifacts:
 
@@ -76,6 +95,10 @@ The current alpha can:
 - fail closed for malformed, stale, revoked, reused, insufficient,
   self-approved, untrusted, or differently bound grants using explicit
   caller-supplied verification state.
+- normalize caller-attributed MCP tool-call proposals through exact,
+  versioned `(server_id, tool_name)` mappings into Action Request v0.1.
+- shadow-evaluate normalized MCP proposals through the unchanged evaluator and
+  optional approval verifier while remaining explicitly non-enforcing.
 - validate deterministic repository-development shadow scenarios, create
   minimized local pilot records, and verify aggregate pilot metrics without
   enforcing actions.
@@ -87,6 +110,8 @@ The current alpha cannot:
 - obtain authoritative revocation or reuse state, or atomically consume a
   single-use grant.
 - prevent a tool, API, or agent framework from dispatching an action.
+- authenticate an MCP connection, bind caller-assigned server identity to a
+  transport, or proxy an MCP tool call.
 - enforce returned constraints during execution.
 - retain append-only or tamper-evident evidence.
 
@@ -97,6 +122,7 @@ The current alpha cannot:
 | Understand or author policy | [Policy Bundle v0.1](docs/POLICY_BUNDLE_V0.1.md) and the [example policy](examples/policies/multi_agent_operations.json) |
 | Integrate the evaluator | [Decision Contract v0.1](docs/DECISION_CONTRACT_V0.1.md) and the [conformance fixture](conformance/decision-contract-v0.1.json) |
 | Verify approval requirements | [Approval Grant v0.1](docs/APPROVAL_GRANT_V0.1.md) and the [approval conformance fixture](conformance/approval-grant-v0.1.json) |
+| Normalize MCP tool calls in shadow mode | [MCP Shadow v0.1](docs/MCP_SHADOW_V0.1.md) and the [MCP conformance fixture](conformance/mcp-shadow-v0.1.json) |
 | Review completed dogfood evidence | [Dogfood 0 Pilot Report](docs/DOGFOOD_REPORT.md) |
 | Contribute code or documentation | [Contributing](CONTRIBUTING.md) |
 | Understand product direction | [Product Charter](docs/PRODUCT_CHARTER.md), [Product Specification](docs/PRODUCT_SPEC.md), and [Project Status](docs/PROJECT_STATUS.md) |
@@ -123,8 +149,8 @@ tool execution and policy-linked evidence
 ```
 
 This repository currently implements policy definition, compilation, the
-side-effect-free decision, and exact-bound approval verification portions of
-that flow. See the
+side-effect-free decision, exact-bound approval verification, and an explicitly
+non-enforcing MCP normalization/shadow portion of that flow. See the
 [architecture](docs/ARCHITECTURE.md) and [roadmap](ROADMAP.md) for the target
 enforcement path.
 
@@ -133,11 +159,11 @@ enforcement path.
 - `src/agent_governance/` contains the installable library and
   `agent-governance` CLI.
 - `schemas/` contains the normative v0.1 JSON Schemas.
-- `conformance/` contains shared decision and approval-verification cases for
-  current and future product surfaces.
+- `conformance/` contains shared decision, approval-verification, and MCP
+  normalization/shadow cases for current and future product surfaces.
 - `dogfood/` contains the non-enforcing repository-development shadow pilot.
-- `examples/policies/`, `examples/requests/`, `examples/approvals/`, and
-  `examples/approval_states/` contain executable examples.
+- `examples/policies/`, `examples/requests/`, `examples/approvals/`,
+  `examples/approval_states/`, and `examples/mcp/` contain executable examples.
 - `tests/` contains policy, decision, approval, CLI, and repository-contract
   tests.
 - `docs/` contains product contracts, architecture, project status, reference

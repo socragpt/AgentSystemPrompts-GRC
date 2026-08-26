@@ -8,9 +8,11 @@ filesystems, browsers, and communication systems. Governance applies before an
 action is dispatched and continues through evidence collection and monitoring.
 
 This alpha provides deterministic, side-effect-free decision and exact-bound
-approval-verification contracts. It does not authenticate identity, collect
-approvals, source authoritative revocation or reuse state, atomically consume
-grants, dispatch actions, enforce returned constraints, or persist evidence.
+approval-verification contracts plus MCP request normalization in explicit
+proposal-only shadow mode. It does not authenticate identity or MCP transport
+origin, collect approvals, source authoritative revocation or reuse state,
+atomically consume grants, dispatch actions, enforce returned constraints, or
+persist evidence.
 
 ## Instruction Hierarchy
 

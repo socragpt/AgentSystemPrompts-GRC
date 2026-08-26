@@ -1,0 +1,184 @@
+{
+  "schema_version": "0.1",
+  "policy_path": "examples/policies/multi_agent_operations.json",
+  "mapping_path": "examples/mcp/mapping.json",
+  "trusted_identity_boundaries": [
+    "identity.reference"
+  ],
+  "cases": [
+    {
+      "id": "allow",
+      "proposal_path": "examples/mcp/proposals/browser-read.json",
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "allow",
+        "reason_codes": [
+          "mcp.shadow.evaluated"
+        ]
+      }
+    },
+    {
+      "id": "deny",
+      "proposal_path": "examples/mcp/proposals/denied.json",
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "deny",
+        "reason_codes": [
+          "mcp.shadow.evaluated"
+        ]
+      }
+    },
+    {
+      "id": "require-approval",
+      "proposal_path": "examples/mcp/proposals/email-send.json",
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "require_approval",
+        "reason_codes": [
+          "mcp.shadow.evaluated"
+        ]
+      }
+    },
+    {
+      "id": "approved-grant",
+      "proposal_path": "examples/mcp/proposals/email-send.json",
+      "grant_path": "examples/mcp/approval-grant.json",
+      "state_path": "examples/approval_states/current.json",
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "require_approval",
+        "approval_outcome": "satisfied",
+        "reason_codes": [
+          "mcp.shadow.approval_verification_embedded",
+          "mcp.shadow.evaluated"
+        ]
+      }
+    },
+    {
+      "id": "spoofed-annotation",
+      "proposal_path": "examples/mcp/proposals/browser-read-spoofed-annotations.json",
+      "equivalent_action_and_decision_to": "allow",
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "allow",
+        "reason_codes": [
+          "mcp.shadow.evaluated"
+        ]
+      }
+    },
+    {
+      "id": "unmapped-tool",
+      "proposal_path": "examples/mcp/proposals/unmapped-tool.json",
+      "expected": {
+        "shadow_outcome": "normalization_rejected",
+        "normalization_outcome": "rejected",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.mapping.unmapped_tool"
+        ]
+      }
+    },
+    {
+      "id": "unknown-server",
+      "proposal_path": "examples/mcp/proposals/unknown-server.json",
+      "expected": {
+        "shadow_outcome": "normalization_rejected",
+        "normalization_outcome": "rejected",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.mapping.unknown_server"
+        ]
+      }
+    },
+    {
+      "id": "ambiguous-mapping",
+      "proposal_path": "examples/mcp/proposals/browser-read.json",
+      "mapping_mutation": {
+        "operation": "duplicate_entry",
+        "entry_index": 0
+      },
+      "expected": {
+        "shadow_outcome": "invalid_input",
+        "normalization_outcome": "invalid_input",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.mapping.ambiguous_key"
+        ]
+      }
+    },
+    {
+      "id": "malformed-proposal",
+      "proposal_path": "examples/mcp/proposals/malformed.json",
+      "expected": {
+        "shadow_outcome": "invalid_input",
+        "normalization_outcome": "invalid_input",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.proposal.schema.required"
+        ]
+      }
+    },
+    {
+      "id": "uncanonicalizable-arguments",
+      "proposal_path": "examples/mcp/proposals/float-arguments.json",
+      "expected": {
+        "shadow_outcome": "normalization_rejected",
+        "normalization_outcome": "rejected",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.arguments.uncanonicalizable"
+        ]
+      }
+    },
+    {
+      "id": "stale-mapping",
+      "proposal_path": "examples/mcp/proposals/browser-read.json",
+      "mapping_mutation": {
+        "operation": "replace",
+        "path": "/mapping/review_at",
+        "value": "2026-08-20T00:00:00Z"
+      },
+      "expected": {
+        "shadow_outcome": "normalization_rejected",
+        "normalization_outcome": "rejected",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.mapping.stale"
+        ]
+      }
+    },
+    {
+      "id": "missing-context",
+      "proposal_path": "examples/mcp/proposals/missing-context.json",
+      "expected": {
+        "shadow_outcome": "normalization_rejected",
+        "normalization_outcome": "rejected",
+        "disposition": null,
+        "reason_codes": [
+          "mcp.context.missing_constraints"
+        ]
+      }
+    },
+    {
+      "id": "determinism-reordering",
+      "proposal_path": "examples/mcp/proposals/browser-read.json",
+      "comparison": {
+        "reverse_mapping_entries": true,
+        "reverse_provenance_actor_lists": true
+      },
+      "expected": {
+        "shadow_outcome": "evaluated",
+        "normalization_outcome": "normalized",
+        "disposition": "allow",
+        "reason_codes": [
+          "mcp.shadow.evaluated"
+        ]
+      }
+    }
+  ]
+}

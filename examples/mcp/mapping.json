@@ -1,0 +1,101 @@
+{
+  "schema_version": "0.1",
+  "mapping": {
+    "id": "mapping.mcp-reference",
+    "version": "0.1.0",
+    "title": "Reference MCP tools/call mapping",
+    "effective_at": "2026-08-01T00:00:00Z",
+    "review_at": "2026-11-01T00:00:00Z",
+    "provenance": {
+      "source_uri": "https://github.com/socragpt/agent-governance-harness/blob/main/examples/mcp/mapping.json",
+      "revision": "mcp-shadow-v0.1",
+      "authored_by": [
+        "human.operations-owner"
+      ],
+      "approved_by": [
+        "human.risk-approver"
+      ]
+    }
+  },
+  "entries": [
+    {
+      "server_id": "mcp.reference",
+      "tool_name": "browser_read",
+      "capability_id": "capability.browser-read",
+      "resource_id": "tool.browser",
+      "action": "browser.read",
+      "channel_id": null,
+      "data_classification": "public",
+      "expected_side_effects": [
+        "read"
+      ],
+      "reversible": true,
+      "requested_constraints": {
+        "max_cost": {
+          "amount_minor": 0,
+          "currency": "USD"
+        },
+        "max_duration_seconds": 600,
+        "max_action_count": 1,
+        "max_delegation_depth": 0
+      }
+    },
+    {
+      "server_id": "mcp.reference",
+      "tool_name": "send_email",
+      "capability_id": "capability.email-send",
+      "resource_id": "tool.email",
+      "action": "email.send",
+      "channel_id": null,
+      "data_classification": "internal",
+      "expected_side_effects": [
+        "external_communication"
+      ],
+      "reversible": false,
+      "requested_constraints": {
+        "max_cost": {
+          "amount_minor": 0,
+          "currency": "USD"
+        },
+        "max_duration_seconds": 300,
+        "max_action_count": 1,
+        "max_delegation_depth": 0
+      }
+    },
+    {
+      "server_id": "mcp.reference",
+      "tool_name": "unsupported_action",
+      "capability_id": "capability.unknown",
+      "resource_id": "tool.browser",
+      "action": "unknown.execute",
+      "channel_id": null,
+      "data_classification": "public",
+      "expected_side_effects": [
+        "read"
+      ],
+      "reversible": true,
+      "requested_constraints": {
+        "max_cost": {
+          "amount_minor": 0,
+          "currency": "USD"
+        },
+        "max_duration_seconds": 60,
+        "max_action_count": 1,
+        "max_delegation_depth": 0
+      }
+    },
+    {
+      "server_id": "mcp.reference",
+      "tool_name": "no_constraints",
+      "capability_id": "capability.browser-read",
+      "resource_id": "tool.browser",
+      "action": "browser.read",
+      "channel_id": null,
+      "data_classification": "public",
+      "expected_side_effects": [
+        "read"
+      ],
+      "reversible": true
+    }
+  ]
+}

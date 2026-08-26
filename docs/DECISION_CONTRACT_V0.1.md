@@ -231,4 +231,6 @@ Approval Grant v0.1 is a separate contract layered on unresolved
 `require_approval` results. Approval collection, policy registries, action
 dispatch, trusted enforcement, execution-result linkage, evidence retention,
 shadow mode, and framework or tool adapters remain outside Decision Contract
-v0.1.
+v0.1. The separate [MCP Shadow v0.1](MCP_SHADOW_V0.1.md) profile constructs
+this unchanged request and embeds this unchanged result in a mandatory non-
+enforcing envelope.
