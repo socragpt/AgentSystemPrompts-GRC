@@ -36,6 +36,14 @@ jobs:
             examples/policies/multi_agent_operations.json \
             examples/requests/browser_read_allowed.json \
             --trusted-identity-boundary identity.reference > allowed-decision.json
+          agent-governance mcp normalize \
+            examples/mcp/mapping.json \
+            examples/mcp/proposals/browser-read.json > normalized-mcp.json
+          agent-governance mcp shadow \
+            examples/policies/multi_agent_operations.json \
+            examples/mcp/mapping.json \
+            examples/mcp/proposals/browser-read.json \
+            --trusted-identity-boundary identity.reference > mcp-shadow.json
           python evals/run_eval.py
       - name: Run tests
         run: python -m unittest discover -v
@@ -52,3 +60,5 @@ jobs:
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy compile "${{ github.workspace }}/examples/policies/multi_agent_operations.json" --output-dir compiled-policy
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" policy evaluate "${{ github.workspace }}/examples/policies/multi_agent_operations.json" "${{ github.workspace }}/examples/requests/browser_read_allowed.json" --trusted-identity-boundary identity.reference > allowed-decision.json
           "${{ runner.temp }}/wheel-smoke/bin/agent-governance" approval verify --help > approval-verify-help.txt
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" mcp normalize "${{ github.workspace }}/examples/mcp/mapping.json" "${{ github.workspace }}/examples/mcp/proposals/browser-read.json" > normalized-mcp.json
+          "${{ runner.temp }}/wheel-smoke/bin/agent-governance" mcp shadow "${{ github.workspace }}/examples/policies/multi_agent_operations.json" "${{ github.workspace }}/examples/mcp/mapping.json" "${{ github.workspace }}/examples/mcp/proposals/browser-read.json" --trusted-identity-boundary identity.reference > mcp-shadow.json

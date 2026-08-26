@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/mcp-shadow-result-v0.1.schema.json",
+  "title": "Agent Governance MCP Shadow Result v0.1",
+  "description": "A mandatory non-enforcing, proposal-only envelope around MCP normalization and unchanged shared-core decision and approval-verification results.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "shadow_result_id",
+    "outcome",
+    "mode",
+    "proposal_only",
+    "reasons",
+    "proposal",
+    "mapping",
+    "normalization",
+    "action_request",
+    "decision_result",
+    "approval_verification_result",
+    "proposed_evidence_record"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "shadow_result_id": {
+      "$ref": "#/$defs/shadow_result_id"
+    },
+    "outcome": {
+      "enum": [
+        "evaluated",
+        "invalid_input",
+        "normalization_rejected"
+      ]
+    },
+    "mode": {
+      "const": "shadow"
+    },
+    "proposal_only": {
+      "const": true
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/reason"
+      }
+    },
+    "proposal": {
+      "$ref": "#/$defs/proposal_summary"
+    },
+    "mapping": {
+      "$ref": "#/$defs/mapping_summary"
+    },
+    "normalization": {
+      "$ref": "#/$defs/normalization_summary"
+    },
+    "action_request": {
+      "oneOf": [
+        {
+          "$ref": "action-request-v0.1.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "decision_result": {
+      "oneOf": [
+        {
+          "$ref": "decision-result-v0.1.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approval_verification_result": {
+      "oneOf": [
+        {
+          "$ref": "approval-verification-result-v0.1.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "proposed_evidence_record": {
+      "$ref": "#/$defs/proposed_evidence"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "evaluated"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalization": {
+            "properties": {
+              "outcome": {
+                "const": "normalized"
+              }
+            }
+          },
+          "action_request": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "decision_result": {
+            "not": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "normalization_rejected"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "normalization": {
+            "properties": {
+              "outcome": {
+                "const": "rejected"
+              }
+            }
+          },
+          "action_request": {
+            "type": "null"
+          },
+          "decision_result": {
+            "type": "null"
+          },
+          "approval_verification_result": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nullable_string": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullable_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullable_parameters_digest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "shadow_result_id": {
+      "type": "string",
+      "pattern": "^mcp-shadow\\.[0-9a-f]{64}$"
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^mcp\\.[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^mcp\\.[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+      }
+    },
+    "proposal_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_id",
+        "proposal_sha256"
+      ],
+      "properties": {
+        "proposal_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "proposal_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "mapping_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapping_id",
+        "mapping_version",
+        "mapping_sha256"
+      ],
+      "properties": {
+        "mapping_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "mapping_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "mapping_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "normalization_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normalization_id",
+        "outcome",
+        "reasons"
+      ],
+      "properties": {
+        "normalization_id": {
+          "type": "string",
+          "pattern": "^mcp-normalization\\.[0-9a-f]{64}$"
+        },
+        "outcome": {
+          "enum": [
+            "normalized",
+            "invalid_input",
+            "rejected"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/reason"
+          }
+        }
+      }
+    },
+    "normalization_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normalization_id",
+        "outcome",
+        "reason_codes"
+      ],
+      "properties": {
+        "normalization_id": {
+          "type": "string",
+          "pattern": "^mcp-normalization\\.[0-9a-f]{64}$"
+        },
+        "outcome": {
+          "enum": [
+            "normalized",
+            "invalid_input",
+            "rejected"
+          ]
+        },
+        "reason_codes": {
+          "$ref": "#/$defs/reason_codes"
+        }
+      }
+    },
+    "request_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "request_sha256",
+        "parameters_digest"
+      ],
+      "properties": {
+        "request_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "request_sha256": {
+          "$ref": "#/$defs/nullable_sha256"
+        },
+        "parameters_digest": {
+          "$ref": "#/$defs/nullable_parameters_digest"
+        }
+      }
+    },
+    "decision_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "disposition"
+      ],
+      "properties": {
+        "decision_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "disposition": {
+          "oneOf": [
+            {
+              "enum": [
+                "allow",
+                "deny",
+                "require_approval"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "verification_summary": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "verification_id",
+            "outcome"
+          ],
+          "properties": {
+            "verification_id": {
+              "$ref": "#/$defs/nullable_string"
+            },
+            "outcome": {
+              "oneOf": [
+                {
+                  "enum": [
+                    "satisfied",
+                    "not_satisfied"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "proposed_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "evidence_id",
+        "record_type",
+        "mode",
+        "proposal_only",
+        "shadow_result_id",
+        "proposal",
+        "mapping",
+        "normalization",
+        "request",
+        "decision",
+        "approval_verification"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "0.1"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^evidence\\.[0-9a-f]{64}$"
+        },
+        "record_type": {
+          "const": "proposed_mcp_shadow"
+        },
+        "mode": {
+          "const": "shadow"
+        },
+        "proposal_only": {
+          "const": true
+        },
+        "shadow_result_id": {
+          "$ref": "#/$defs/shadow_result_id"
+        },
+        "proposal": {
+          "$ref": "#/$defs/proposal_summary"
+        },
+        "mapping": {
+          "$ref": "#/$defs/mapping_summary"
+        },
+        "normalization": {
+          "$ref": "#/$defs/normalization_evidence"
+        },
+        "request": {
+          "$ref": "#/$defs/request_summary"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision_summary"
+        },
+        "approval_verification": {
+          "$ref": "#/$defs/verification_summary"
+        }
+      }
+    }
+  }
+}

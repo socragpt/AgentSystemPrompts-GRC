@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1",
+  "proposal_id": "proposal.email-send-001",
+  "server_id": "mcp.reference",
+  "tool_name": "send_email",
+  "arguments": {},
+  "principal": {
+    "actor_id": "human.operations-owner",
+    "authentication": {
+      "trust_boundary_id": "identity.reference",
+      "assertion_id": "assertion.email-send-001",
+      "authenticated_at": "2026-08-21T19:55:00Z",
+      "expires_at": "2026-08-21T20:55:00Z"
+    }
+  },
+  "actor_id": "agent.communicator",
+  "authorized_goal_id": "goal.customer-update-001",
+  "requested_at": "2026-08-21T20:00:00Z"
+}

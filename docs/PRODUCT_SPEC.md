@@ -247,7 +247,7 @@ thought is not a required governance artifact.
 
 | ID | Requirement | Delivery |
 | --- | --- | --- |
-| AUT-001 | Every request must identify an authenticated principal, acting actor, authorized goal, capability, and concrete resource. | Slice B contract |
+| AUT-001 | Every request must identify an authenticated principal, acting actor, authorized goal, capability, and concrete resource. | Slice B contract; MCP Shadow v0.1 construction |
 | AUT-002 | Authentication evidence must be consumed from an explicit trust boundary; the harness must not treat self-asserted actor fields as authenticated. | Target |
 | AUT-003 | Eligibility must be derived from current role assignments and valid delegation paths. Possessing a tool or credential is insufficient. | Slice B |
 | AUT-004 | Delegation must be acyclic, time-bounded, depth-bounded, and unable to expand capability, resource, data, budget, duration, reversibility, or channel scope. | Validation foundation; Slice B runtime subset |
@@ -301,7 +301,7 @@ thought is not a required governance artifact.
 
 | ID | Requirement | Delivery |
 | --- | --- | --- |
-| EVD-001 | Every decision outcome, including validation failure and denial, must create or propose a structured evidence record. | Slice B proposal |
+| EVD-001 | Every decision outcome, including validation failure and denial, must create or propose a structured evidence record. | Slice B and MCP Shadow v0.1 proposals |
 | EVD-002 | Evidence must link request, actor and authority context, policy, controls, decision, approval, enforcement point, execution, and outcome using stable identifiers and digests. | Target |
 | EVD-003 | Retained evidence must be append-only or tamper-evident, access-controlled, and redacted according to explicit policy. | Target |
 | EVD-004 | Evidence must be sufficient to reproduce the governance decision without requiring secrets, unnecessary personal data, or model chain of thought. | Target |
@@ -315,9 +315,9 @@ thought is not a required governance artifact.
 | TST-001 | CI must test policy shape, graph semantics, determinism, failure behavior, package installation, and stable CLI or API contracts. | Alpha foundation |
 | TST-002 | Behavioral scenarios must cover prompt injection, confused-deputy behavior, authority amplification, approval bypass, stale policy, data leakage, resource exhaustion, path violation, collusion pressure, and fail-open behavior. | Target |
 | TST-003 | Regression thresholds and fixtures must make governance behavior changes visible before release. | Target |
-| INT-001 | Core policy, request, decision, approval, and evidence contracts must remain provider- and framework-neutral. | Target |
-| INT-002 | Vendor-specific identity, tool, workflow, and evidence details must remain in versioned adapters. | Target |
-| INT-003 | Reference artifacts must use open, documented serialization formats and deterministic canonicalization. | Alpha foundation |
+| INT-001 | Core policy, request, decision, approval, and evidence contracts must remain provider- and framework-neutral. | MCP Shadow v0.1 integration proof; additional adapters target |
+| INT-002 | Vendor-specific identity, tool, workflow, and evidence details must remain in versioned adapters. | MCP Shadow v0.1 exact mapping; additional adapters target |
+| INT-003 | Reference artifacts must use open, documented serialization formats and deterministic canonicalization. | Alpha foundation and MCP Shadow v0.1 |
 
 ### Adoption and developer experience
 
@@ -325,13 +325,13 @@ thought is not a required governance artifact.
 | --- | --- | --- |
 | DX-001 | An interactive and non-interactive initializer must generate a valid starter policy, representative requests, and starter tests from explicit organizational inputs. | Target |
 | DX-002 | Starter profiles and control packs must remain editable policy-as-code and must not claim universal applicability or certification. | Target |
-| DX-003 | The embedded SDK, CLI evaluator, and decision service must return equivalent outcomes and reason codes for equivalent normalized inputs. | SDK/CLI in Slice B; service target |
+| DX-003 | The embedded SDK, CLI evaluator, and decision service must return equivalent outcomes and reason codes for equivalent normalized inputs. | SDK/CLI in Slice B, Approval Grant v0.1, and MCP Shadow v0.1; service target |
 | DX-004 | A supported adapter must intercept a framework or tool call, normalize it, enforce the decision, and report the result without requiring an application rewrite. | Target |
-| DX-005 | Shadow mode must produce decisions and evidence without changing whether the existing application dispatches, and must be unmistakably labeled non-enforcing. | Target |
+| DX-005 | Shadow mode must produce decisions and evidence without changing whether the existing application dispatches, and must be unmistakably labeled non-enforcing. | MCP Shadow v0.1 reference; broader runtime integration target |
 | DX-006 | Validation and simulation errors must identify the exact policy or request location, stable reason code, and actionable remediation. | Alpha foundation onward |
 | DX-007 | Generated configurations must include deny, approval, stale-input, and unmapped-action scenarios rather than only successful examples. | Target |
 | DX-008 | An organization must be able to move from embedded to service deployment without changing core policy semantics. | Target |
-| DX-009 | Adapters and control packs must declare supported contract versions and fail closed on incompatible versions. | Target |
+| DX-009 | Adapters and control packs must declare supported contract versions and fail closed on incompatible versions. | MCP Shadow v0.1 adapter profile; control packs target |
 | DX-010 | A clean reference quickstart must demonstrate first policy validation in minutes and a governed tool call in one focused integration session. | Target; benchmark before release |
 
 ## Non-Functional Requirements
@@ -404,10 +404,11 @@ implemented in the current alpha.
 
 ### Slice C — Approval and enforcement reference
 
-Exact-bound approval-grant verification is implemented. Interactive
-initialization, trusted request normalization, MCP shadow mode, one trusted
-pre-dispatch adapter, denial and approval blocking, execution linkage, and
-failure-mode tests remain in this slice.
+Exact-bound approval-grant verification and the first versioned MCP request-
+normalization profile in explicitly non-enforcing shadow mode are implemented.
+Interactive initialization, trusted identity/origin binding, one trusted pre-
+dispatch adapter, denial and approval blocking, execution linkage, and
+enforcement failure-mode tests remain in this slice.
 
 ### Slice D — Evidence and controlled operations
 

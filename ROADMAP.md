@@ -44,9 +44,9 @@ format may change before the first stable release.
 
 ## 3. Enforcement and Evidence
 
-**Status:** the Slice B decision contract, Dogfood 0, and Approval Grant v0.1
-are complete. Identity verification, trusted request normalization,
-pre-dispatch enforcement, and durable evidence remain planned.
+**Status:** the Slice B decision contract, Dogfood 0, Approval Grant v0.1, and
+MCP Shadow v0.1 are complete. Identity verification, trusted pre-dispatch
+enforcement, and durable evidence remain planned.
 
 Implemented:
 
@@ -61,11 +61,14 @@ Implemented:
 - Retain valid and schema-invalid Action Request objects in local v0.2 shadow
   observations, verify them against the shared evaluator, and report explicit
   pilot metrics.
+- Normalize MCP `tools/call` proposals through a versioned exact-key mapping
+  and evaluate them through the shared core in unmistakably non-enforcing
+  shadow envelopes.
+- Fail closed for malformed, unknown, ambiguous, stale, uncanonicalizable, or
+  incomplete MCP normalization context with portable SDK/CLI fixtures.
 
 Remaining:
 
-- Build trusted request-normalization profiles and exercise the first MCP
-  reference profile in explicitly non-enforcing shadow mode.
 - Extend policy selectors only from observed normalization requirements.
 - Expose the shared evaluator through a language-neutral sidecar or service.
 - Add a guided initializer, generated scenarios, and explicitly non-enforcing
@@ -122,7 +125,7 @@ grant verifies as satisfying a `require_approval` decision and every
 mismatched or invalid grant fails closed without changing Decision Result
 semantics or dispatching an action.
 
-### Next milestone — MCP request normalization and shadow reference
+### Completed milestone — MCP request normalization and shadow reference
 
 Build the first versioned integration profile at the MCP boundary while
 keeping all authority, policy, decision, approval, and evidence semantics in
@@ -146,10 +149,24 @@ collect approvals, atomically consume grants, or claim enforcement. Mapping
 findings should determine the smallest selector changes needed before a
 trusted pre-dispatch adapter is attempted.
 
-**Exit criteria:** representative MCP call proposals deterministically produce
+**Exit criteria:** met. Representative MCP call proposals deterministically produce
 the expected normalized request, decision, and optional approval-verification
 result; incomplete or unsupported calls fail closed; and no path dispatches a
 tool or treats MCP metadata as authority.
+
+### Next milestone — selector scope from MCP shadow findings
+
+Use the MCP v0.1 conformance findings to specify the smallest provider-neutral
+selector or request-contract change needed for concrete values inside tool
+arguments, such as destinations, recipients, repository paths, commands,
+branches, and remotes. Preserve exact mapping and fail-closed behavior, add no
+MCP-specific semantics to the core, and do not attempt enforcement until the
+selected fields can be represented and tested without free-form inference.
+
+**Exit criteria:** one reviewable contract proposal maps every new field to
+`DEC-008` or `PTH-001`, defines conservative matching and compatibility
+behavior, and is backed by fixtures derived from observed MCP normalization
+gaps. It must not dispatch actions or weaken existing v0.1 contracts.
 
 **Section exit criteria:** denied actions cannot dispatch and every outcome
 cites the controls that produced it.

@@ -7,7 +7,9 @@ current early alpha parses, validates, and renders an XML governance baseline.
 It also validates and deterministically compiles Policy Bundle v0.1. One shared
 Python SDK/CLI decision core evaluates Action Request v0.1. The alpha also
 provides a shared SDK/CLI Approval Grant v0.1 verifier with explicit
-caller-supplied trust, time, revocation, and reuse state, plus deterministic
+caller-supplied trust, time, revocation, and reuse state. MCP Shadow v0.1 adds
+one deterministic request normalizer and explicitly non-enforcing shadow
+envelope around those shared contracts. The alpha also includes deterministic
 documentation-recall evaluation utilities. It does not authenticate identity,
 collect approvals, source or atomically update grant state, gate tool dispatch,
 expose a decision service, or persist evidence.
@@ -139,7 +141,7 @@ An enforcement adapter has three responsibilities:
 Adapters do not grant authority, resolve policy differently, or silently
 convert unsupported fields into permissive defaults.
 
-The first reference wedge will target Model Context Protocol (MCP) call
+The first reference wedge implements Model Context Protocol (MCP) call
 normalization and explicitly non-enforcing shadow evaluation. MCP is an
 integration surface, not a source of core policy semantics: server names, tool
 names, arguments, annotations, and session identity remain adapter input until
@@ -213,6 +215,7 @@ approval, effective date, validation result, and rollback path.
 | Compilation | Plain-text XML rendering plus deterministic v0.1 policy artifacts | Stable artifacts consumed by enforcement integrations |
 | Decisions | Side-effect-free Action Request v0.1 evaluator through Python SDK and CLI | The same evaluator exposed through a trusted decision service and adapters |
 | Approvals | Exact-bound, side-effect-free grant verifier using explicit caller-supplied state | Trusted collection, authoritative revocation and atomic consumption integrated with enforcement |
+| Request normalization | MCP `tools/call` proposals mapped by exact caller-assigned server and tool keys in proposal-only shadow mode | Trusted identity/origin binding and additional provider-neutral profiles derived from observed mapping needs |
 | Enforcement | Not implemented | Pre-dispatch tool and action gating |
 | Evidence | Proposal-only structured records for decision and approval-verification outcomes | Append-only, redacted decision, approval, and execution evidence |
 | Evaluation | Documentation recall | Behavioral and adversarial governance scenarios |

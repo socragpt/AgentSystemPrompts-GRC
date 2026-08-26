@@ -1,4 +1,4 @@
-"""Command-line interface for prompt, policy, decision, and approval workflows."""
+"""Command-line interface for prompt, policy, decision, approval, and MCP workflows."""
 
 import argparse
 from importlib import resources
@@ -9,6 +9,7 @@ from typing import List, Optional
 
 from .approval import verify_approval_grant_files
 from .decision import evaluate_action_files
+from .mcp import evaluate_mcp_shadow_files, normalize_mcp_call_files
 from .policy import (
     PolicyBundleError,
     load_policy_bundle,
@@ -108,6 +109,39 @@ def build_parser() -> argparse.ArgumentParser:
         dest="state_path",
         help="caller-supplied Approval Verification State v0.1 path",
     )
+
+    mcp = subparsers.add_parser(
+        "mcp", help="normalize or shadow-evaluate an MCP tools/call proposal"
+    )
+    mcp_commands = mcp.add_subparsers(dest="mcp_command", required=True)
+    mcp_normalize = mcp_commands.add_parser(
+        "normalize", help="normalize an MCP proposal without dispatching it"
+    )
+    mcp_normalize.add_argument("mapping_path", help="MCP Adapter Mapping v0.1 path")
+    mcp_normalize.add_argument("proposal_path", help="MCP Call Proposal v0.1 path")
+    mcp_shadow = mcp_commands.add_parser(
+        "shadow", help="evaluate an MCP proposal in non-enforcing shadow mode"
+    )
+    mcp_shadow.add_argument("policy_path", help="Policy Bundle v0.1 path")
+    mcp_shadow.add_argument("mapping_path", help="MCP Adapter Mapping v0.1 path")
+    mcp_shadow.add_argument("proposal_path", help="MCP Call Proposal v0.1 path")
+    mcp_shadow.add_argument(
+        "--trusted-identity-boundary",
+        action="append",
+        default=[],
+        metavar="BOUNDARY_ID",
+        help="identity boundary accepted for this evaluation; repeatable",
+    )
+    mcp_shadow.add_argument(
+        "--grant",
+        dest="grant_path",
+        help="optional Approval Grant v0.1 path",
+    )
+    mcp_shadow.add_argument(
+        "--state",
+        dest="state_path",
+        help="optional Approval Verification State v0.1 path; requires --grant",
+    )
     return parser
 
 
@@ -121,6 +155,29 @@ def _approval_main(args: argparse.Namespace) -> int:
     )
     print(result.to_json(), end="")
     return 0 if result.outcome == "satisfied" else 5
+
+
+def _mcp_main(args: argparse.Namespace) -> int:
+    if args.mcp_command == "normalize":
+        result = normalize_mcp_call_files(args.mapping_path, args.proposal_path)
+        print(result.to_json(), end="")
+        return {"normalized": 0, "invalid_input": 2, "rejected": 6}[result.outcome]
+
+    result = evaluate_mcp_shadow_files(
+        args.policy_path,
+        args.mapping_path,
+        args.proposal_path,
+        trusted_identity_boundaries=args.trusted_identity_boundary,
+        grant_path=args.grant_path,
+        state_path=args.state_path,
+    )
+    print(result.to_json(), end="")
+    if result.outcome == "invalid_input":
+        return 2
+    if result.outcome == "normalization_rejected":
+        return 6
+    disposition = result.disposition
+    return {"allow": 0, "require_approval": 3, "deny": 4}[disposition]
 
 
 def _policy_main(args: argparse.Namespace) -> int:
@@ -207,6 +264,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return _policy_main(args)
     if args.command == "approval":
         return _approval_main(args)
+    if args.command == "mcp":
+        return _mcp_main(args)
     return _prompt_main(args)
 
 

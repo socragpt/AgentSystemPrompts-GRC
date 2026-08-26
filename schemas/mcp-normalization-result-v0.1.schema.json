@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/socragpt/agent-governance-harness/schemas/mcp-normalization-result-v0.1.schema.json",
+  "title": "Agent Governance MCP Normalization Result v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "normalization_id",
+    "outcome",
+    "proposal_only",
+    "reasons",
+    "proposal",
+    "mapping",
+    "action_request"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "normalization_id": {
+      "type": "string",
+      "pattern": "^mcp-normalization\\.[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "normalized",
+        "invalid_input",
+        "rejected"
+      ]
+    },
+    "proposal_only": {
+      "const": true
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/reason"
+      }
+    },
+    "proposal": {
+      "$ref": "#/$defs/proposal_summary"
+    },
+    "mapping": {
+      "$ref": "#/$defs/mapping_summary"
+    },
+    "action_request": {
+      "oneOf": [
+        {
+          "$ref": "action-request-v0.1.schema.json"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "normalized"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "properties": {
+          "action_request": {
+            "not": {
+              "type": "null"
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "action_request": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nullable_string": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^mcp\\.[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "proposal_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_id",
+        "proposal_sha256"
+      ],
+      "properties": {
+        "proposal_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "proposal_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "mapping_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapping_id",
+        "mapping_version",
+        "mapping_sha256"
+      ],
+      "properties": {
+        "mapping_id": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "mapping_version": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "mapping_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}
