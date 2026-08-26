@@ -1,11 +1,10 @@
 # Project Status
 
 - **Project:** Agent Governance Harness
-- **Status date:** 2026-08-25
+- **Status date:** 2026-08-26
 - **Lifecycle:** early alpha
 - **Repository:** <https://github.com/socragpt/agent-governance-harness>
-- **Verified `main`:** `7c6bab7a58a793efce68e5e5ea412fce095be1f2`
-- **Development branch:** `codex/mcp-shadow-v0.1` from verified `main`
+- **Verified `main`:** `677b039a9bbcfddb91c40d8b768f836630c68279`
 
 This document records verified project state, current decisions, active work,
 and the next recommended action. Implementation and tests are authoritative if
@@ -25,21 +24,22 @@ proposal-only evidence. Approval Grant v0.1 separately returns `satisfied` or
 trust, freshness, revocation, and reuse state. Neither result dispatches or
 authorizes execution.
 
-MCP Shadow v0.1 is implemented on the local development branch. It converts a
-caller-attributed MCP `tools/call` proposal into Action Request v0.1 through a
-versioned exact mapping, then embeds the unchanged evaluator and optional
+MCP Shadow v0.1 is merged through pull request
+[#29](https://github.com/socragpt/agent-governance-harness/pull/29). It converts
+a caller-attributed MCP `tools/call` proposal into Action Request v0.1 through
+a versioned exact mapping, then embeds the unchanged evaluator and optional
 approval-verifier results in a mandatory non-enforcing, proposal-only envelope.
-It performs no MCP networking or dispatch.
+It performs no MCP networking or dispatch and does not authorize execution.
+Verified `main` includes the milestone, and there are no open pull requests.
 
 Dogfood 0 is complete through 25 material actions. The final sanitized findings
 and next-build ranking are in the
 [Dogfood 0 Pilot Report](DOGFOOD_REPORT.md). The pilot selected an exact-bound
 Approval Grant v0.1 contract and verifier, now merged through pull request
-[#27](https://github.com/socragpt/agent-governance-harness/pull/27). Verified
-`main` includes that milestone, and there were no open pull requests when this
-branch was cut. The next recommended product step after MCP Shadow v0.1 is a
-small provider-neutral selector proposal derived from the concrete
-normalization gaps, not a pre-dispatch adapter yet.
+[#27](https://github.com/socragpt/agent-governance-harness/pull/27). The next
+recommended product step after MCP Shadow v0.1 is a small provider-neutral
+selector proposal derived from the concrete normalization gaps, not a pre-
+dispatch adapter yet.
 
 ## Verified Current State
 
@@ -231,6 +231,19 @@ and post-merge
 [`main` CI run 32804325065](https://github.com/socragpt/agent-governance-harness/actions/runs/32804325065)
 passed on Python 3.9, 3.11, and 3.13. Each job built and smoke-tested the wheel.
 
+Pull request
+[#29](https://github.com/socragpt/agent-governance-harness/pull/29) merged MCP
+Shadow v0.1 into `main` as `677b039a` on 2026-08-26 UTC. It delivered the MCP
+Call Proposal, Adapter Mapping, Normalization Result, and Shadow Result v0.1
+contracts; the deterministic normalizer and non-enforcing shadow evaluator;
+SDK and CLI parity with new `mcp` commands; portable conformance fixtures;
+examples; documentation; and 15 tests. Pull-request
+[CI run #34 (32917273861)](https://github.com/socragpt/agent-governance-harness/actions/runs/32917273861)
+and post-merge
+[`main` CI run 32925145064](https://github.com/socragpt/agent-governance-harness/actions/runs/32925145064)
+passed on Python 3.9, 3.11, and 3.13. Each job built a wheel and smoke-tested
+the installed package, including the MCP CLI.
+
 ## Completed Milestone: Dogfood 0
 
 The [Repository Development Dogfooding Plan](DOGFOOD_PLAN.md) records the
@@ -304,12 +317,12 @@ serves the named governance problem, reuses the shared core, preserves exact
 fail-closed contracts, keeps trust inputs explicit, remains framework-neutral,
 and does not claim enforcement or compliance.
 
-## Completed Local Milestone: MCP Shadow v0.1
+## Completed Milestone: MCP Shadow v0.1
 
-The `codex/mcp-shadow-v0.1` branch implements the first versioned MCP
+The merged MCP Shadow v0.1 milestone implements the first versioned MCP
 integration profile under `INT-001` through `INT-003`, `DX-003`, `DX-005`,
-`DX-009`, `AUT-001`, existing `DEC-001`/`003`/`005`/`006`, existing
-`APR-002` through `APR-004`, `EVD-001`, and `TST-001`.
+`DX-009`, `AUT-001`, existing `DEC-001`/`003`/`005`/`006`, existing `APR-002`
+through `APR-004`, `EVD-001`, and `TST-001`.
 
 One pure normalizer combines an MCP Call Proposal v0.1 and an MCP Adapter
 Mapping v0.1. Caller identity, acting actor, goal, time, connection ID, tool
@@ -350,8 +363,9 @@ complete argument object by digest but Policy Bundle v0.1 cannot match values
 inside it. One exact tool mapping therefore cannot safely distinguish URLs,
 recipients, paths, commands, branches, remotes, or argument-selected resources.
 Policy also cannot verify mapping-declared side effects against capability
-metadata. These findings inform `DEC-008`, `PTH-001`, and `AUT-002`; the branch
-does not implement those target requirements or any `ENF-*` requirement.
+metadata. These findings inform `DEC-008`, `PTH-001`, and `AUT-002`; the
+milestone does not implement those target requirements or any `ENF-*`
+requirement.
 
 ## Decisions That Should Survive Handoffs
 
@@ -500,14 +514,14 @@ python evals/run_eval.py
 python -m unittest discover -s tests -v
 ```
 
-Verified `main` at `7c6bab7a` contains 85 tests. Post-merge CI run
-`32805097492` passed the full Python 3.9, 3.11, and 3.13 matrix. Earlier
-Approval Grant pull-request and post-merge CI also passed that matrix. Each job
-performed a clean installation, byte compilation, compatibility XML
-validation, example policy validation, reference evaluation, all 13
-documentation-recall examples, and all 85 tests. Each job also built and
-smoke-tested the wheel, including the installed Approval Grant CLI surface.
-The MCP branch adds 15 tests, bringing the full local count to 100.
+Verified `main` at `677b039a` contains 100 tests. Post-merge
+[`main` CI run 32925145064](https://github.com/socragpt/agent-governance-harness/actions/runs/32925145064)
+passed the full Python 3.9, 3.11, and 3.13 matrix. Each job performed a clean
+installation, byte compilation, compatibility XML validation, example policy
+validation, reference evaluation, all 13 documentation-recall examples, and
+all 100 tests. Each job also built and smoke-tested the wheel, including the
+installed Approval Grant and MCP CLI surfaces. Pull-request CI run #34 passed
+the same matrix on the exact MCP pull-request head.
 
 The complete local baseline passed on 2026-08-25: editable install, byte
 compilation, compatibility XML strict validation, example and dogfood policy
